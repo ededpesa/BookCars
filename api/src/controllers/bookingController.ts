@@ -43,10 +43,7 @@ export const create = async (req: Request, res: Response) => {
     await booking.save();
     return res.json(booking);
   } catch (err) {
-    logger.error(
-      `[booking.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err
-    );
+    logger.error(`[booking.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -61,12 +58,7 @@ export const create = async (req: Request, res: Response) => {
  * @param {boolean} notificationMessage
  * @returns {void}
  */
-export const notify = async (
-  driver: env.User,
-  bookingId: string,
-  user: env.User,
-  notificationMessage: string
-) => {
+export const notify = async (driver: env.User, bookingId: string, user: env.User, notificationMessage: string) => {
   i18n.locale = user.language;
 
   // notification
@@ -114,13 +106,9 @@ export const notify = async (
  * @param {boolean} payLater
  * @returns {unknown}
  */
-export const confirm = async (
-  user: env.User,
-  booking: env.Booking,
-  payLater: boolean
-) => {
+export const confirm = async (user: env.User, booking: env.Booking, payLater: boolean) => {
   const { language } = user;
-  const locale = language === "fr" ? "fr-FR" : "en-US";
+  const locale = language === "fr" ? "fr-FR" : language === "es" ? "es-VE" : "en-US";
   const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     month: "long",
@@ -131,64 +119,44 @@ export const confirm = async (
   };
   const from = booking.from.toLocaleString(locale, options);
   const to = booking.to.toLocaleString(locale, options);
-  const car = await Car.findById(booking.car).populate<{ supplier: env.User }>(
-    "supplier"
-  );
+  const car = await Car.findById(booking.car).populate<{ supplier: env.User }>("supplier");
   if (!car) {
     logger.info(`Car ${booking.car} not found`);
     return false;
   }
-  const pickupLocation = await Location.findById(
-    booking.pickupLocation
-  ).populate<{ values: env.LocationValue[] }>("values");
+  const pickupLocation = await Location.findById(booking.pickupLocation).populate<{ values: env.LocationValue[] }>("values");
   if (!pickupLocation) {
     logger.info(`Pickup location ${booking.pickupLocation} not found`);
     return false;
   }
 
-  const pickupLocationName = pickupLocation.values.filter(
-    (value) => value.language === language
-  )[0].value;
-  const dropOffLocation = await Location.findById(
-    booking.dropOffLocation
-  ).populate<{ values: env.LocationValue[] }>("values");
+  const pickupLocationName = pickupLocation.values.filter((value) => value.language === language)[0].value;
+  const dropOffLocation = await Location.findById(booking.dropOffLocation).populate<{ values: env.LocationValue[] }>("values");
   if (!dropOffLocation) {
     logger.info(`Drop-off location ${booking.pickupLocation} not found`);
     return false;
   }
-  const dropOffLocationName = dropOffLocation.values.filter(
-    (value) => value.language === language
-  )[0].value;
+  const dropOffLocationName = dropOffLocation.values.filter((value) => value.language === language)[0].value;
 
   const mailOptions: nodemailer.SendMailOptions = {
     from: env.SMTP_FROM,
     to: user.email,
-    subject: `${i18n.t("BOOKING_CONFIRMED_SUBJECT_PART1")} ${
-      booking._id
-    } ${i18n.t("BOOKING_CONFIRMED_SUBJECT_PART2")}`,
+    subject: `${i18n.t("BOOKING_CONFIRMED_SUBJECT_PART1")} ${booking._id} ${i18n.t("BOOKING_CONFIRMED_SUBJECT_PART2")}`,
     html:
       `<p>
         ${i18n.t("HELLO")}${user.fullName},<br><br>
-        ${
-          !payLater
-            ? `${i18n.t("BOOKING_CONFIRMED_PART1")} ${booking._id} ${i18n.t(
-                "BOOKING_CONFIRMED_PART2"
-              )}<br><br>`
-            : ""
-        }
-        ${i18n.t("BOOKING_CONFIRMED_PART3")}${car.supplier.fullName}${i18n.t(
-        "BOOKING_CONFIRMED_PART4"
-      )}${pickupLocationName}${i18n.t("BOOKING_CONFIRMED_PART5")}` +
+        ${!payLater ? `${i18n.t("BOOKING_CONFIRMED_PART1")} ${booking._id} ${i18n.t("BOOKING_CONFIRMED_PART2")}<br><br>` : ""}
+        ${i18n.t("BOOKING_CONFIRMED_PART3")}${car.supplier.fullName}${i18n.t("BOOKING_CONFIRMED_PART4")}${pickupLocationName}${i18n.t(
+        "BOOKING_CONFIRMED_PART5"
+      )}` +
       `${from} ${i18n.t("BOOKING_CONFIRMED_PART6")}` +
       `${car.name}${i18n.t("BOOKING_CONFIRMED_PART7")}` +
       `<br><br>${i18n.t("BOOKING_CONFIRMED_PART8")}<br><br>` +
-      `${i18n.t("BOOKING_CONFIRMED_PART9")}${car.supplier.fullName}${i18n.t(
-        "BOOKING_CONFIRMED_PART10"
-      )}${dropOffLocationName}${i18n.t("BOOKING_CONFIRMED_PART11")}` +
+      `${i18n.t("BOOKING_CONFIRMED_PART9")}${car.supplier.fullName}${i18n.t("BOOKING_CONFIRMED_PART10")}${dropOffLocationName}${i18n.t(
+        "BOOKING_CONFIRMED_PART11"
+      )}` +
       `${to} ${i18n.t("BOOKING_CONFIRMED_PART12")}` +
-      `<br><br>${i18n.t("BOOKING_CONFIRMED_PART13")}<br><br>${i18n.t(
-        "BOOKING_CONFIRMED_PART14"
-      )}${env.FRONTEND_HOST}<br><br>
+      `<br><br>${i18n.t("BOOKING_CONFIRMED_PART13")}<br><br>${i18n.t("BOOKING_CONFIRMED_PART14")}${env.FRONTEND_HOST}<br><br>
         ${i18n.t("REGARDS")}<br>
         </p>`,
   };
@@ -228,9 +196,7 @@ export const checkout = async (req: Request, res: Response) => {
       body.booking.customerId = body.customerId;
 
       if (paymentIntentId) {
-        const paymentIntent = await stripeAPI.paymentIntents.retrieve(
-          paymentIntentId
-        );
+        const paymentIntent = await stripeAPI.paymentIntents.retrieve(paymentIntentId);
         if (paymentIntent.status !== "succeeded") {
           const message = `Payment failed: ${paymentIntent.status}`;
           logger.error(message, body);
@@ -276,12 +242,9 @@ export const checkout = async (req: Request, res: Response) => {
         html: `<p>
         ${i18n.t("HELLO")}${user.fullName},<br><br>
         ${i18n.t("ACCOUNT_ACTIVATION_LINK")}<br><br>
-        ${helper.joinURL(
-          env.FRONTEND_HOST,
-          "activate"
-        )}/?u=${encodeURIComponent(user.id)}&e=${encodeURIComponent(
-          user.email
-        )}&t=${encodeURIComponent(token.token)}<br><br>
+        ${helper.joinURL(env.FRONTEND_HOST, "activate")}/?u=${encodeURIComponent(user.id)}&e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(
+          token.token
+        )}<br><br>
         ${i18n.t("REGARDS")}<br>
         </p>`,
       };
@@ -330,9 +293,7 @@ export const checkout = async (req: Request, res: Response) => {
         return res.sendStatus(204);
       }
       i18n.locale = supplier.language;
-      let message = body.payLater
-        ? i18n.t("BOOKING_PAY_LATER_NOTIFICATION")
-        : i18n.t("BOOKING_PAID_NOTIFICATION");
+      let message = body.payLater ? i18n.t("BOOKING_PAY_LATER_NOTIFICATION") : i18n.t("BOOKING_PAID_NOTIFICATION");
       await notify(user, booking._id.toString(), supplier, message);
 
       // Notify admin
@@ -344,9 +305,7 @@ export const checkout = async (req: Request, res: Response) => {
         }));
       if (admin) {
         i18n.locale = admin.language;
-        message = body.payLater
-          ? i18n.t("BOOKING_PAY_LATER_NOTIFICATION")
-          : i18n.t("BOOKING_PAID_NOTIFICATION");
+        message = body.payLater ? i18n.t("BOOKING_PAY_LATER_NOTIFICATION") : i18n.t("BOOKING_PAID_NOTIFICATION");
         await notify(user, booking._id.toString(), admin, message);
       }
     }
@@ -374,9 +333,7 @@ const notifyDriver = async (booking: env.Booking) => {
 
   i18n.locale = driver.language;
 
-  const message = `${i18n.t("BOOKING_UPDATED_NOTIFICATION_PART1")} ${
-    booking._id
-  } ${i18n.t("BOOKING_UPDATED_NOTIFICATION_PART2")}`;
+  const message = `${i18n.t("BOOKING_UPDATED_NOTIFICATION_PART1")} ${booking._id} ${i18n.t("BOOKING_UPDATED_NOTIFICATION_PART2")}`;
   const notification = new Notification({
     user: driver._id,
     message,
@@ -545,12 +502,8 @@ export const update = async (req: Request, res: Response) => {
       booking.supplier = new mongoose.Types.ObjectId(supplier as string);
       booking.car = new mongoose.Types.ObjectId(car as string);
       booking.driver = new mongoose.Types.ObjectId(driver as string);
-      booking.pickupLocation = new mongoose.Types.ObjectId(
-        pickupLocation as string
-      );
-      booking.dropOffLocation = new mongoose.Types.ObjectId(
-        dropOffLocation as string
-      );
+      booking.pickupLocation = new mongoose.Types.ObjectId(pickupLocation as string);
+      booking.dropOffLocation = new mongoose.Types.ObjectId(dropOffLocation as string);
       booking.from = from;
       booking.to = to;
       booking.status = status;
@@ -579,10 +532,7 @@ export const update = async (req: Request, res: Response) => {
     logger.error("[booking.update] Booking not found:", body.booking._id);
     return res.sendStatus(204);
   } catch (err) {
-    logger.error(
-      `[booking.update] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err
-    );
+    logger.error(`[booking.update] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -614,12 +564,7 @@ export const updateStatus = async (req: Request, res: Response) => {
 
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[booking.updateStatus] ${i18n.t("DB_ERROR")} ${JSON.stringify(
-        req.body
-      )}`,
-      err
-    );
+    logger.error(`[booking.updateStatus] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -644,19 +589,12 @@ export const deleteBookings = async (req: Request, res: Response) => {
     });
 
     await Booking.deleteMany({ _id: { $in: ids } });
-    const additionalDivers = bookings.map(
-      (booking) => new mongoose.Types.ObjectId(booking._additionalDriver)
-    );
+    const additionalDivers = bookings.map((booking) => new mongoose.Types.ObjectId(booking._additionalDriver));
     await AdditionalDriver.deleteMany({ _id: { $in: additionalDivers } });
 
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[booking.deleteBookings] ${i18n.t("DB_ERROR")} ${JSON.stringify(
-        req.body
-      )}`,
-      err
-    );
+    logger.error(`[booking.deleteBookings] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -729,9 +667,7 @@ export const getBooking = async (req: Request, res: Response) => {
           model: "LocationValue",
         },
       })
-      .populate<{ _additionalDriver: env.AdditionalDriver }>(
-        "_additionalDriver"
-      )
+      .populate<{ _additionalDriver: env.AdditionalDriver }>("_additionalDriver")
       .lean();
 
     if (booking) {
@@ -751,12 +687,8 @@ export const getBooking = async (req: Request, res: Response) => {
         payLater: booking.car.supplier.payLater,
       };
 
-      booking.pickupLocation.name = booking.pickupLocation.values.filter(
-        (value) => value.language === language
-      )[0].value;
-      booking.dropOffLocation.name = booking.dropOffLocation.values.filter(
-        (value) => value.language === language
-      )[0].value;
+      booking.pickupLocation.name = booking.pickupLocation.values.filter((value) => value.language === language)[0].value;
+      booking.dropOffLocation.name = booking.dropOffLocation.values.filter((value) => value.language === language)[0].value;
 
       return res.json(booking);
     }
@@ -783,26 +715,17 @@ export const getBookings = async (req: Request, res: Response) => {
     const { body }: { body: bookcarsTypes.GetBookingsPayload } = req;
     const page = Number.parseInt(req.params.page, 10);
     const size = Number.parseInt(req.params.size, 10);
-    const suppliers = body.suppliers.map(
-      (id) => new mongoose.Types.ObjectId(id)
-    );
+    const suppliers = body.suppliers.map((id) => new mongoose.Types.ObjectId(id));
     const { statuses, user, car } = body;
-    const from =
-      (body.filter && body.filter.from && new Date(body.filter.from)) || null;
-    const to =
-      (body.filter && body.filter.to && new Date(body.filter.to)) || null;
+    const from = (body.filter && body.filter.from && new Date(body.filter.from)) || null;
+    const to = (body.filter && body.filter.to && new Date(body.filter.to)) || null;
     const pickupLocation = (body.filter && body.filter.pickupLocation) || null;
-    const dropOffLocation =
-      (body.filter && body.filter.dropOffLocation) || null;
+    const dropOffLocation = (body.filter && body.filter.dropOffLocation) || null;
     let keyword = (body.filter && body.filter.keyword) || "";
     const options = "i";
 
     const $match: mongoose.FilterQuery<any> = {
-      $and: [
-        { "supplier._id": { $in: suppliers } },
-        { status: { $in: statuses } },
-        { expireAt: null },
-      ],
+      $and: [{ "supplier._id": { $in: suppliers } }, { status: { $in: statuses } }, { expireAt: null }],
     };
 
     if (user) {
@@ -910,10 +833,7 @@ export const getBookings = async (req: Request, res: Response) => {
                 pipeline: [
                   {
                     $match: {
-                      $and: [
-                        { $expr: { $in: ["$_id", "$$values"] } },
-                        { $expr: { $eq: ["$language", language] } },
-                      ],
+                      $and: [{ $expr: { $in: ["$_id", "$$values"] } }, { $expr: { $eq: ["$language", language] } }],
                     },
                   },
                 ],
@@ -945,10 +865,7 @@ export const getBookings = async (req: Request, res: Response) => {
                 pipeline: [
                   {
                     $match: {
-                      $and: [
-                        { $expr: { $in: ["$_id", "$$values"] } },
-                        { $expr: { $eq: ["$language", language] } },
-                      ],
+                      $and: [{ $expr: { $in: ["$_id", "$$values"] } }, { $expr: { $eq: ["$language", language] } }],
                     },
                   },
                 ],
@@ -973,11 +890,7 @@ export const getBookings = async (req: Request, res: Response) => {
       },
       {
         $facet: {
-          resultData: [
-            { $sort: { createdAt: -1, _id: 1 } },
-            { $skip: (page - 1) * size },
-            { $limit: size },
-          ],
+          resultData: [{ $sort: { createdAt: -1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
           pageInfo: [
             {
               $count: "totalRecords",
@@ -996,10 +909,7 @@ export const getBookings = async (req: Request, res: Response) => {
 
     return res.json(data);
   } catch (err) {
-    logger.error(
-      `[booking.getBookings] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err
-    );
+    logger.error(`[booking.getBookings] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -1058,12 +968,7 @@ export const cancelBooking = async (req: Request, res: Response) => {
       await booking.save();
 
       // Notify supplier
-      await notify(
-        booking.driver,
-        booking._id.toString(),
-        booking.supplier,
-        i18n.t("CANCEL_BOOKING_NOTIFICATION")
-      );
+      await notify(booking.driver, booking._id.toString(), booking.supplier, i18n.t("CANCEL_BOOKING_NOTIFICATION"));
 
       return res.sendStatus(200);
     }

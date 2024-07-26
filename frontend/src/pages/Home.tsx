@@ -252,7 +252,7 @@ const Home = () => {
         <div className="home-map">
           <Map
             title={strings.MAP_TITLE}
-            initialZoom={2.5}
+            initialZoom={3}
             onSelelectPickUpLocation={async (locationId) => {
               const location = await LocationService.getLocation(locationId);
               setSelectedPickupLocation(location);

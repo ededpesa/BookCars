@@ -1,20 +1,20 @@
-import validator from 'validator'
-import { Schema, model } from 'mongoose'
-import * as bookcarsTypes from ':bookcars-types'
-import * as env from '../config/env.config'
+import validator from "validator";
+import { Schema, model } from "mongoose";
+import * as bookcarsTypes from ":bookcars-types";
+import * as env from "../config/env.config";
 
 const userSchema = new Schema<env.User>(
   {
     supplier: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     email: {
       type: String,
       lowercase: true,
       unique: true,
       required: [true, "can't be blank"],
-      validate: [validator.isEmail, 'is not valid'],
+      validate: [validator.isEmail, "is not valid"],
       index: true,
       trim: true,
     },
@@ -24,13 +24,13 @@ const userSchema = new Schema<env.User>(
         validator: (value: string) => {
           // Check if value is empty then return true.
           if (!value) {
-            return true
+            return true;
           }
 
           // If value is empty will not validate for mobile phone.
-          return validator.isMobilePhone(value)
+          return validator.isMobilePhone(value);
         },
-        message: '{VALUE} is not valid',
+        message: "{VALUE} is not valid",
       },
       trim: true,
     },
@@ -83,11 +83,7 @@ const userSchema = new Schema<env.User>(
     },
     type: {
       type: String,
-      enum: [
-        bookcarsTypes.UserType.Admin,
-        bookcarsTypes.UserType.Supplier,
-        bookcarsTypes.UserType.User,
-      ],
+      enum: [bookcarsTypes.UserType.Admin, bookcarsTypes.UserType.Supplier, bookcarsTypes.UserType.User],
       default: bookcarsTypes.UserType.User,
     },
     blacklisted: {
@@ -101,14 +97,17 @@ const userSchema = new Schema<env.User>(
     customerId: {
       type: String,
     },
+    documentType: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
     strict: true,
-    collection: 'User',
-  },
-)
+    collection: "User",
+  }
+);
 
-const User = model<env.User>('User', userSchema)
+const User = model<env.User>("User", userSchema);
 
-export default User
+export default User;

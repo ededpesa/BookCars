@@ -352,6 +352,8 @@ export interface User extends Document {
   blacklisted?: boolean;
   payLater?: boolean;
   customerId?: string;
+  documentType?: number;
+  documentNumber?: string;
 }
 
 /**
@@ -558,6 +560,33 @@ export interface LocationInfo {
   _id?: Types.ObjectId;
   name?: string;
   values: LocationValue[];
+}
+
+/**
+ * Country Document.
+ *
+ * @export
+ * @interface Country
+ * @typedef {Country}
+ * @extends {Document}
+ */
+export interface Country extends Document {
+  code: string;
+  values: Types.ObjectId[];
+  name?: string;
+}
+
+/**
+ * CountryValue Document.
+ *
+ * @export
+ * @interface CountryValue
+ * @typedef {CountryValue}
+ * @extends {Document}
+ */
+export interface CountryValue extends Document {
+  language: string;
+  value: string;
 }
 
 /**

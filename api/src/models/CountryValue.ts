@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import * as env from "../config/env.config";
 
-const locationValueSchema = new Schema<env.LocationValue>(
+const countryValueSchema = new Schema<env.CountryValue>(
   {
     language: {
       type: String,
@@ -20,12 +20,11 @@ const locationValueSchema = new Schema<env.LocationValue>(
     },
   },
   {
-    timestamps: true,
     strict: true,
-    collection: "LocationValue",
+    collection: "CountryValue",
   }
 );
 
-const LocationValue = model<env.LocationValue>("LocationValue", locationValueSchema);
+const CountryValue = model<env.CountryValue>("CountryValue", countryValueSchema);
 
-export default LocationValue;
+export default CountryValue;

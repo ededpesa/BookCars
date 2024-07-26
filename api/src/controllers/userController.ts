@@ -496,7 +496,7 @@ export const signin = async (req: Request, res: Response) => {
       //
       const cookieName = authHelper.getAuthCookieName(req);
 
-      logger.info("login", { ...loggedUser, cookie: { cookieName, token, cookieOptions } });
+      // logger.info("login", { ...loggedUser, cookie: { cookieName, token, cookieOptions } });
       return res.clearCookie(cookieName).cookie(cookieName, token, cookieOptions).status(200).send(loggedUser);
     }
 
@@ -982,6 +982,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
     if (user) {
       if (user.avatar) {
         const avatar = path.join(env.CDN_USERS, user.avatar);
+        console.log("🚀 ~ updateAvatar ~ avatar:", avatar);
 
         if (await helper.exists(avatar)) {
           await fs.unlink(avatar);

@@ -21,11 +21,7 @@ import User from "../models/User";
  * @param {boolean} debug
  * @returns {Promise<boolean>}
  */
-export const connect = async (
-  uri: string,
-  ssl: boolean,
-  debug: boolean
-): Promise<boolean> => {
+export const connect = async (uri: string, ssl: boolean, debug: boolean): Promise<boolean> => {
   let options: ConnectOptions = {};
 
   if (ssl) {
@@ -128,11 +124,7 @@ export const initialize = async (): Promise<boolean> => {
     // Update Booking TTL index if configuration changes
     //
     const bookingIndexes = await Booking.collection.indexes();
-    const bookingIndex = bookingIndexes.find(
-      (index: any) =>
-        index.name === BOOKING_EXPIRE_AT_INDEX_NAME &&
-        index.expireAfterSeconds !== env.BOOKING_EXPIRE_AT
-    );
+    const bookingIndex = bookingIndexes.find((index: any) => index.name === BOOKING_EXPIRE_AT_INDEX_NAME && index.expireAfterSeconds !== env.BOOKING_EXPIRE_AT);
     if (bookingIndex) {
       try {
         await Booking.collection.dropIndex(bookingIndex.name!);
@@ -148,9 +140,7 @@ export const initialize = async (): Promise<boolean> => {
     // Update Token TTL index if configuration changes
     //
     const tokenIndexes = await Token.collection.indexes();
-    const tokenIndex = tokenIndexes.find((index: any) =>
-      index.name.includes(TOKEN_EXPIRE_AT_INDEX_NAME)
-    );
+    const tokenIndex = tokenIndexes.find((index: any) => index.name.includes(TOKEN_EXPIRE_AT_INDEX_NAME));
     if (tokenIndex) {
       try {
         await Token.collection.dropIndex(tokenIndex.name!);
@@ -168,6 +158,49 @@ export const initialize = async (): Promise<boolean> => {
     return false;
   }
 };
+
+// export const InitializeCountries = async () => {
+//   try {
+//     countriesEN.forEach(async (el) => {
+//       // const values = [];
+
+//       const countryValues = (await CountryValue.find({ value: el.name })).map((c) => new mongoose.Types.ObjectId(String(c.id)));
+//       const country = await Country.findOne({ code: el.code });
+//       if (country) country.values = country?.values.concat(countryValues);
+//       await country?.save();
+
+//       // const countryValue = new CountryValue({
+//       //   language: "es",
+//       //   value: el.name,
+//       // });
+//       // await countryValue.save();
+//       // values.push(countryValue._id);
+
+//       // countryValue = new CountryValue({
+//       //   language: "fr",
+//       //   value: el.name,
+//       // });
+//       // await countryValue.save();
+//       // values.push(countryValue._id);
+
+//       // countryValue = new CountryValue({
+//       //   language: "es",
+//       //   value: countriesES.filter((c) => c.code === el.code)[0].name,
+//       // });
+//       // await countryValue.save();
+//       // values.push(countryValue._id);
+
+//       // const newCountry = new Country({ values });
+//       // await newCountry.save();
+//     });
+
+//     logger.info("Countries initialized");
+//     return true;
+//   } catch (err) {
+//     logger.error("Error while initializing locations:", err);
+//     return false;
+//   }
+// };
 
 /**
  * Initialize locations.
@@ -189,9 +222,7 @@ export const InitializeLocations = async () => {
 
     // Add missing LocationValues in env.LANGUAGES
     for (const location of locations) {
-      const enLocationValue = location.values.find(
-        (val) => val.language === "en"
-      );
+      const enLocationValue = location.values.find((val) => val.language === "en");
 
       if (enLocationValue) {
         for (const lang of env.LANGUAGES) {
@@ -202,9 +233,7 @@ export const InitializeLocations = async () => {
             });
             await langLocationValue.save();
             const loc = await Location.findById(location.id);
-            loc?.values.push(
-              new mongoose.Types.ObjectId(String(langLocationValue.id))
-            );
+            loc?.values.push(new mongoose.Types.ObjectId(String(langLocationValue.id)));
             await loc?.save();
           }
         }
