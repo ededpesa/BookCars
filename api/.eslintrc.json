@@ -12,6 +12,10 @@
   "extends": ["airbnb-base", "eslint:recommended", "plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
   "ignorePatterns": ["dist/**"],
   "rules": {
+    "comma-dangle": "off",
+    "operator-linebreak": "off",
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off",
     "linebreak-style": "off",
     "no-underscore-dangle": "off",
     "no-restricted-syntax": "off",

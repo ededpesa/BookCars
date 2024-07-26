@@ -16,11 +16,19 @@ import {
   Radio,
   CircularProgress,
 } from "@mui/material";
-import { DirectionsCar as CarIcon, Person as DriverIcon, EventSeat as BookingIcon, Settings as PaymentOptionsIcon } from "@mui/icons-material";
+import {
+  DirectionsCar as CarIcon,
+  Person as DriverIcon,
+  EventSeat as BookingIcon,
+  Settings as PaymentOptionsIcon,
+} from "@mui/icons-material";
 import validator from "validator";
 import { format, intervalToDuration } from "date-fns";
 import { fr, enUS, es } from "date-fns/locale";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CarList from "../components/CarList";
 import * as bookcarsTypes from ":bookcars-types";
@@ -56,8 +64,10 @@ const Checkout = () => {
 
   const [user, setUser] = useState<bookcarsTypes.User>();
   const [car, setCar] = useState<bookcarsTypes.Car>();
-  const [pickupLocation, setPickupLocation] = useState<bookcarsTypes.Location>();
-  const [dropOffLocation, setDropOffLocation] = useState<bookcarsTypes.Location>();
+  const [pickupLocation, setPickupLocation] =
+    useState<bookcarsTypes.Location>();
+  const [dropOffLocation, setDropOffLocation] =
+    useState<bookcarsTypes.Location>();
   const [from, setFrom] = useState<Date>();
   const [to, setTo] = useState<Date>();
   const [visible, setVisible] = useState(false);
@@ -89,10 +99,14 @@ const Checkout = () => {
   const [addiontalDriverFullName, setAddiontalDriverFullName] = useState("");
   const [addiontalDriverEmail, setAddiontalDriverEmail] = useState("");
   const [addiontalDriverPhone, setAddiontalDriverPhone] = useState("");
-  const [addiontalDriverBirthDate, setAddiontalDriverBirthDate] = useState<Date>();
-  const [addiontalDriverEmailValid, setAddiontalDriverEmailValid] = useState(true);
-  const [addiontalDriverPhoneValid, setAddiontalDriverPhoneValid] = useState(true);
-  const [addiontalDriverBirthDateValid, setAddiontalDriverBirthDateValid] = useState(true);
+  const [addiontalDriverBirthDate, setAddiontalDriverBirthDate] =
+    useState<Date>();
+  const [addiontalDriverEmailValid, setAddiontalDriverEmailValid] =
+    useState(true);
+  const [addiontalDriverPhoneValid, setAddiontalDriverPhoneValid] =
+    useState(true);
+  const [addiontalDriverBirthDateValid, setAddiontalDriverBirthDateValid] =
+    useState(true);
   const [payLater, setPayLater] = useState(false);
   const [recaptchaError, setRecaptchaError] = useState(false);
 
@@ -114,7 +128,9 @@ const Checkout = () => {
     from &&
     to &&
     `
-  ${helper.getDaysShort(days)} (${bookcarsHelper.capitalize(format(from, _format, { locale: _locale }))} 
+  ${helper.getDaysShort(days)} (${bookcarsHelper.capitalize(
+      format(from, _format, { locale: _locale })
+    )} 
   - ${bookcarsHelper.capitalize(format(to, _format, { locale: _locale }))})`;
 
   const handleCancellationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,7 +169,9 @@ const Checkout = () => {
     }
   };
 
-  const handleTheftProtectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTheftProtectionChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (car && from && to) {
       const _theftProtection = e.target.checked;
       const options: bookcarsTypes.CarOptions = {
@@ -171,7 +189,9 @@ const Checkout = () => {
     }
   };
 
-  const handleCollisionDamageWaiverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCollisionDamageWaiverChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (car && from && to) {
       const _collisionDamageWaiver = e.target.checked;
       const options: bookcarsTypes.CarOptions = {
@@ -189,7 +209,9 @@ const Checkout = () => {
     }
   };
 
-  const handleFullInsuranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFullInsuranceChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (car && from && to) {
       const _fullInsurance = e.target.checked;
       const options: bookcarsTypes.CarOptions = {
@@ -207,7 +229,9 @@ const Checkout = () => {
     }
   };
 
-  const handleAdditionalDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAdditionalDriverChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (car && from && to) {
       const _additionalDriver = e.target.checked;
       const options: bookcarsTypes.CarOptions = {
@@ -485,12 +509,20 @@ const Checkout = () => {
           amount: price,
           currency: env.STRIPE_CURRENCY_CODE,
           locale: language,
-          receiptEmail: (!authenticated ? driver?.email : user?.email) as string,
+          receiptEmail: (!authenticated
+            ? driver?.email
+            : user?.email) as string,
           name: `${car.name} 
           - ${daysLabel} 
-          - ${pickupLocation._id === dropOffLocation._id ? pickupLocation.name : `${pickupLocation.name} - ${dropOffLocation.name}`}`,
+          - ${
+            pickupLocation._id === dropOffLocation._id
+              ? pickupLocation.name
+              : `${pickupLocation.name} - ${dropOffLocation.name}`
+          }`,
           description: "BookCars Web Service",
-          customerName: (!authenticated ? driver?.fullName : user?.fullName) as string,
+          customerName: (!authenticated
+            ? driver?.fullName
+            : user?.fullName) as string,
         };
         const res = await StripeService.createCheckoutSession(payload);
         setClientSecret(res.clientSecret);
@@ -507,7 +539,11 @@ const Checkout = () => {
         customerId: _customerId,
       };
 
-      const { status, bookingId: _bookingId } = await BookingService.checkout(payload);
+      console.log("payload", payload);
+
+      const { status, bookingId: _bookingId } = await BookingService.checkout(
+        payload
+      );
       setLoading(false);
 
       if (status === 200) {
@@ -605,7 +641,10 @@ const Checkout = () => {
         {visible && car && from && to && pickupLocation && dropOffLocation && (
           <div className="booking">
             <Paper className="booking-form" elevation={10}>
-              <h1 className="booking-form-title"> {strings.BOOKING_HEADING} </h1>
+              <h1 className="booking-form-title">
+                {" "}
+                {strings.BOOKING_HEADING}{" "}
+              </h1>
               <form onSubmit={handleSubmit}>
                 <div>
                   <CarList cars={[car]} hidePrice sizeAuto />
@@ -618,12 +657,29 @@ const Checkout = () => {
                     <div className="booking-options">
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.cancellation === -1 || car.cancellation === 0 || !!clientSecret}
-                          control={<Switch checked={cancellation} onChange={handleCancellationChange} color="primary" />}
+                          disabled={
+                            car.cancellation === -1 ||
+                            car.cancellation === 0 ||
+                            !!clientSecret
+                          }
+                          control={
+                            <Switch
+                              checked={cancellation}
+                              onChange={handleCancellationChange}
+                              color="primary"
+                            />
+                          }
                           label={
                             <span>
-                              <span className="booking-option-label">{csStrings.CANCELLATION}</span>
-                              <span className="booking-option-value">{helper.getCancellationOption(car.cancellation, language)}</span>
+                              <span className="booking-option-label">
+                                {csStrings.CANCELLATION}
+                              </span>
+                              <span className="booking-option-value">
+                                {helper.getCancellationOption(
+                                  car.cancellation,
+                                  language
+                                )}
+                              </span>
                             </span>
                           }
                         />
@@ -631,12 +687,29 @@ const Checkout = () => {
 
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.amendments === -1 || car.amendments === 0 || !!clientSecret}
-                          control={<Switch checked={amendments} onChange={handleAmendmentsChange} color="primary" />}
+                          disabled={
+                            car.amendments === -1 ||
+                            car.amendments === 0 ||
+                            !!clientSecret
+                          }
+                          control={
+                            <Switch
+                              checked={amendments}
+                              onChange={handleAmendmentsChange}
+                              color="primary"
+                            />
+                          }
                           label={
                             <span>
-                              <span className="booking-option-label">{csStrings.AMENDMENTS}</span>
-                              <span className="booking-option-value">{helper.getAmendmentsOption(car.amendments, language)}</span>
+                              <span className="booking-option-label">
+                                {csStrings.AMENDMENTS}
+                              </span>
+                              <span className="booking-option-value">
+                                {helper.getAmendmentsOption(
+                                  car.amendments,
+                                  language
+                                )}
+                              </span>
                             </span>
                           }
                         />
@@ -644,12 +717,30 @@ const Checkout = () => {
 
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.collisionDamageWaiver === -1 || car.collisionDamageWaiver === 0 || !!clientSecret}
-                          control={<Switch checked={collisionDamageWaiver} onChange={handleCollisionDamageWaiverChange} color="primary" />}
+                          disabled={
+                            car.collisionDamageWaiver === -1 ||
+                            car.collisionDamageWaiver === 0 ||
+                            !!clientSecret
+                          }
+                          control={
+                            <Switch
+                              checked={collisionDamageWaiver}
+                              onChange={handleCollisionDamageWaiverChange}
+                              color="primary"
+                            />
+                          }
                           label={
                             <span>
-                              <span className="booking-option-label">{csStrings.COLLISION_DAMAGE_WAVER}</span>
-                              <span className="booking-option-value">{helper.getCollisionDamageWaiverOption(car.collisionDamageWaiver, days, language)}</span>
+                              <span className="booking-option-label">
+                                {csStrings.COLLISION_DAMAGE_WAVER}
+                              </span>
+                              <span className="booking-option-value">
+                                {helper.getCollisionDamageWaiverOption(
+                                  car.collisionDamageWaiver,
+                                  days,
+                                  language
+                                )}
+                              </span>
                             </span>
                           }
                         />
@@ -657,12 +748,30 @@ const Checkout = () => {
 
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.theftProtection === -1 || car.theftProtection === 0 || !!clientSecret}
-                          control={<Switch checked={theftProtection} onChange={handleTheftProtectionChange} color="primary" />}
+                          disabled={
+                            car.theftProtection === -1 ||
+                            car.theftProtection === 0 ||
+                            !!clientSecret
+                          }
+                          control={
+                            <Switch
+                              checked={theftProtection}
+                              onChange={handleTheftProtectionChange}
+                              color="primary"
+                            />
+                          }
                           label={
                             <span>
-                              <span className="booking-option-label">{csStrings.THEFT_PROTECTION}</span>
-                              <span className="booking-option-value">{helper.getTheftProtectionOption(car.theftProtection, days, language)}</span>
+                              <span className="booking-option-label">
+                                {csStrings.THEFT_PROTECTION}
+                              </span>
+                              <span className="booking-option-value">
+                                {helper.getTheftProtectionOption(
+                                  car.theftProtection,
+                                  days,
+                                  language
+                                )}
+                              </span>
                             </span>
                           }
                         />
@@ -670,12 +779,30 @@ const Checkout = () => {
 
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.fullInsurance === -1 || car.fullInsurance === 0 || !!clientSecret}
-                          control={<Switch checked={fullInsurance} onChange={handleFullInsuranceChange} color="primary" />}
+                          disabled={
+                            car.fullInsurance === -1 ||
+                            car.fullInsurance === 0 ||
+                            !!clientSecret
+                          }
+                          control={
+                            <Switch
+                              checked={fullInsurance}
+                              onChange={handleFullInsuranceChange}
+                              color="primary"
+                            />
+                          }
                           label={
                             <span>
-                              <span className="booking-option-label">{csStrings.FULL_INSURANCE}</span>
-                              <span className="booking-option-value">{helper.getFullInsuranceOption(car.fullInsurance, days, language)}</span>
+                              <span className="booking-option-label">
+                                {csStrings.FULL_INSURANCE}
+                              </span>
+                              <span className="booking-option-value">
+                                {helper.getFullInsuranceOption(
+                                  car.fullInsurance,
+                                  days,
+                                  language
+                                )}
+                              </span>
                             </span>
                           }
                         />
@@ -683,12 +810,28 @@ const Checkout = () => {
 
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.additionalDriver === -1 || !!clientSecret}
-                          control={<Switch checked={additionalDriver} onChange={handleAdditionalDriverChange} color="primary" />}
+                          disabled={
+                            car.additionalDriver === -1 || !!clientSecret
+                          }
+                          control={
+                            <Switch
+                              checked={additionalDriver}
+                              onChange={handleAdditionalDriverChange}
+                              color="primary"
+                            />
+                          }
                           label={
                             <span>
-                              <span className="booking-option-label">{csStrings.ADDITIONAL_DRIVER}</span>
-                              <span className="booking-option-value">{helper.getAdditionalDriverOption(car.additionalDriver, days, language)}</span>
+                              <span className="booking-option-label">
+                                {csStrings.ADDITIONAL_DRIVER}
+                              </span>
+                              <span className="booking-option-value">
+                                {helper.getAdditionalDriverOption(
+                                  car.additionalDriver,
+                                  days,
+                                  language
+                                )}
+                              </span>
                             </span>
                           }
                         />
@@ -702,40 +845,89 @@ const Checkout = () => {
                       <span>{strings.BOOKING_DETAILS}</span>
                     </div>
                     <div className="booking-details">
-                      <div className="booking-detail" style={{ height: bookingDetailHeight }}>
-                        <span className="booking-detail-title">{strings.DAYS}</span>
+                      <div
+                        className="booking-detail"
+                        style={{ height: bookingDetailHeight }}
+                      >
+                        <span className="booking-detail-title">
+                          {strings.DAYS}
+                        </span>
                         <div className="booking-detail-value">{daysLabel}</div>
                       </div>
-                      <div className="booking-detail" style={{ height: bookingDetailHeight }}>
-                        <span className="booking-detail-title">{commonStrings.PICK_UP_LOCATION}</span>
-                        <div className="booking-detail-value">{pickupLocation.name}</div>
+                      <div
+                        className="booking-detail"
+                        style={{ height: bookingDetailHeight }}
+                      >
+                        <span className="booking-detail-title">
+                          {commonStrings.PICK_UP_LOCATION}
+                        </span>
+                        <div className="booking-detail-value">
+                          {pickupLocation.name}
+                        </div>
                       </div>
-                      <div className="booking-detail" style={{ height: bookingDetailHeight }}>
-                        <span className="booking-detail-title">{commonStrings.DROP_OFF_LOCATION}</span>
-                        <div className="booking-detail-value">{dropOffLocation.name}</div>
+                      <div
+                        className="booking-detail"
+                        style={{ height: bookingDetailHeight }}
+                      >
+                        <span className="booking-detail-title">
+                          {commonStrings.DROP_OFF_LOCATION}
+                        </span>
+                        <div className="booking-detail-value">
+                          {dropOffLocation.name}
+                        </div>
                       </div>
-                      <div className="booking-detail" style={{ height: bookingDetailHeight }}>
-                        <span className="booking-detail-title">{strings.CAR}</span>
-                        <div className="booking-detail-value">{`${car.name} (${bookcarsHelper.formatPrice(car.price, commonStrings.CURRENCY, language)}${
-                          commonStrings.DAILY
-                        })`}</div>
+                      <div
+                        className="booking-detail"
+                        style={{ height: bookingDetailHeight }}
+                      >
+                        <span className="booking-detail-title">
+                          {strings.CAR}
+                        </span>
+                        <div className="booking-detail-value">
+                          {`${car.name} (${bookcarsHelper.formatPrice(
+                            car.price,
+                            commonStrings.CURRENCY,
+                            language
+                          )}${commonStrings.DAILY})`}
+                        </div>
                       </div>
-                      <div className="booking-detail" style={{ height: bookingDetailHeight }}>
-                        <span className="booking-detail-title">{commonStrings.SUPPLIER}</span>
+                      <div
+                        className="booking-detail"
+                        style={{ height: bookingDetailHeight }}
+                      >
+                        <span className="booking-detail-title">
+                          {commonStrings.SUPPLIER}
+                        </span>
                         <div className="booking-detail-value">
                           <div className="car-supplier">
                             <img
-                              src={bookcarsHelper.joinURL(env.CDN_USERS, car.supplier.avatar)}
+                              src={bookcarsHelper.joinURL(
+                                env.CDN_USERS,
+                                car.supplier.avatar
+                              )}
                               alt={car.supplier.fullName}
                               style={{ height: env.SUPPLIER_IMAGE_HEIGHT }}
                             />
-                            <span className="car-supplier-name">{car.supplier.fullName}</span>
+                            <span className="car-supplier-name">
+                              {car.supplier.fullName}
+                            </span>
                           </div>
                         </div>
                       </div>
-                      <div className="booking-detail" style={{ height: bookingDetailHeight }}>
-                        <span className="booking-detail-title">{strings.COST}</span>
-                        <div className="booking-detail-value booking-price">{bookcarsHelper.formatPrice(price, commonStrings.CURRENCY, language)}</div>
+                      <div
+                        className="booking-detail"
+                        style={{ height: bookingDetailHeight }}
+                      >
+                        <span className="booking-detail-title">
+                          {strings.COST}
+                        </span>
+                        <div className="booking-detail-value booking-price">
+                          {bookcarsHelper.formatPrice(
+                            price,
+                            commonStrings.CURRENCY,
+                            language
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -748,11 +940,21 @@ const Checkout = () => {
                       </div>
                       <div className="driver-details-form">
                         <FormControl fullWidth margin="dense">
-                          <InputLabel className="required">{commonStrings.FULL_NAME}</InputLabel>
-                          <OutlinedInput type="text" label={commonStrings.FULL_NAME} required onChange={handleFullNameChange} autoComplete="off" />
+                          <InputLabel className="required">
+                            {commonStrings.FULL_NAME}
+                          </InputLabel>
+                          <OutlinedInput
+                            type="text"
+                            label={commonStrings.FULL_NAME}
+                            required
+                            onChange={handleFullNameChange}
+                            autoComplete="off"
+                          />
                         </FormControl>
                         <FormControl fullWidth margin="dense">
-                          <InputLabel className="required">{commonStrings.EMAIL}</InputLabel>
+                          <InputLabel className="required">
+                            {commonStrings.EMAIL}
+                          </InputLabel>
                           <OutlinedInput
                             type="text"
                             label={commonStrings.EMAIL}
@@ -763,13 +965,18 @@ const Checkout = () => {
                             autoComplete="off"
                           />
                           <FormHelperText error={!emailValid || emailRegitered}>
-                            {(!emailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                            {(!emailValid && commonStrings.EMAIL_NOT_VALID) ||
+                              ""}
                             {(emailRegitered && (
                               <span>
-                                <span>{commonStrings.EMAIL_ALREADY_REGISTERED}</span>
+                                <span>
+                                  {commonStrings.EMAIL_ALREADY_REGISTERED}
+                                </span>
                                 <span> </span>
                                 <a
-                                  href={`/sign-in?c=${car._id}&p=${pickupLocation._id}&d=${
+                                  href={`/sign-in?c=${car._id}&p=${
+                                    pickupLocation._id
+                                  }&d=${
                                     dropOffLocation._id
                                   }&f=${from.getTime()}&t=${to.getTime()}&from=checkout`}
                                 >
@@ -782,7 +989,9 @@ const Checkout = () => {
                           </FormHelperText>
                         </FormControl>
                         <FormControl fullWidth margin="dense">
-                          <InputLabel className="required">{commonStrings.PHONE}</InputLabel>
+                          <InputLabel className="required">
+                            {commonStrings.PHONE}
+                          </InputLabel>
                           <OutlinedInput
                             type="text"
                             label={commonStrings.PHONE}
@@ -793,7 +1002,8 @@ const Checkout = () => {
                             autoComplete="off"
                           />
                           <FormHelperText error={!phoneValid}>
-                            {(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}
+                            {(!phoneValid && commonStrings.PHONE_NOT_VALID) ||
+                              ""}
                             {(phoneInfo && strings.PHONE_INFO) || ""}
                           </FormHelperText>
                         </FormControl>
@@ -804,7 +1014,8 @@ const Checkout = () => {
                             required
                             onChange={(_birthDate) => {
                               if (_birthDate) {
-                                const _birthDateValid = validateBirthDate(_birthDate);
+                                const _birthDateValid =
+                                  validateBirthDate(_birthDate);
 
                                 setBirthDate(_birthDate);
                                 setBirthDateValid(_birthDateValid);
@@ -812,7 +1023,11 @@ const Checkout = () => {
                             }}
                             language={language}
                           />
-                          <FormHelperText error={!birthDateValid}>{(!birthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}</FormHelperText>
+                          <FormHelperText error={!birthDateValid}>
+                            {(!birthDateValid &&
+                              helper.getBirthDateError(car.minimumAge)) ||
+                              ""}
+                          </FormHelperText>
                         </FormControl>
 
                         {env.RECAPTCHA_ENABLED && (
@@ -826,10 +1041,18 @@ const Checkout = () => {
                             <tbody>
                               <tr>
                                 <td aria-label="tos">
-                                  <Checkbox checked={tosChecked} onChange={handleTosChange} color="primary" />
+                                  <Checkbox
+                                    checked={tosChecked}
+                                    onChange={handleTosChange}
+                                    color="primary"
+                                  />
                                 </td>
                                 <td>
-                                  <Link href="/tos" target="_blank" rel="noreferrer">
+                                  <Link
+                                    href="/tos"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
                                     {commonStrings.TOS}
                                   </Link>
                                 </td>
@@ -849,7 +1072,9 @@ const Checkout = () => {
                       </div>
                       <div className="driver-details-form">
                         <FormControl fullWidth margin="dense">
-                          <InputLabel className="required">{commonStrings.FULL_NAME}</InputLabel>
+                          <InputLabel className="required">
+                            {commonStrings.FULL_NAME}
+                          </InputLabel>
                           <OutlinedInput
                             type="text"
                             label={commonStrings.FULL_NAME}
@@ -861,7 +1086,9 @@ const Checkout = () => {
                           />
                         </FormControl>
                         <FormControl fullWidth margin="dense">
-                          <InputLabel className="required">{commonStrings.EMAIL}</InputLabel>
+                          <InputLabel className="required">
+                            {commonStrings.EMAIL}
+                          </InputLabel>
                           <OutlinedInput
                             type="text"
                             label={commonStrings.EMAIL}
@@ -880,11 +1107,15 @@ const Checkout = () => {
                             autoComplete="off"
                           />
                           <FormHelperText error={!addiontalDriverEmailValid}>
-                            {(!addiontalDriverEmailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                            {(!addiontalDriverEmailValid &&
+                              commonStrings.EMAIL_NOT_VALID) ||
+                              ""}
                           </FormHelperText>
                         </FormControl>
                         <FormControl fullWidth margin="dense">
-                          <InputLabel className="required">{commonStrings.PHONE}</InputLabel>
+                          <InputLabel className="required">
+                            {commonStrings.PHONE}
+                          </InputLabel>
                           <OutlinedInput
                             type="text"
                             label={commonStrings.PHONE}
@@ -903,7 +1134,9 @@ const Checkout = () => {
                             autoComplete="off"
                           />
                           <FormHelperText error={!addiontalDriverPhoneValid}>
-                            {(!addiontalDriverPhoneValid && commonStrings.PHONE_NOT_VALID) || ""}
+                            {(!addiontalDriverPhoneValid &&
+                              commonStrings.PHONE_NOT_VALID) ||
+                              ""}
                           </FormHelperText>
                         </FormControl>
                         <FormControl fullWidth margin="dense">
@@ -913,16 +1146,23 @@ const Checkout = () => {
                             required={adRequired}
                             onChange={(_birthDate) => {
                               if (_birthDate) {
-                                const _birthDateValid = _validateBirthDate(_birthDate);
+                                const _birthDateValid =
+                                  _validateBirthDate(_birthDate);
 
                                 setAddiontalDriverBirthDate(_birthDate);
-                                setAddiontalDriverBirthDateValid(_birthDateValid);
+                                setAddiontalDriverBirthDateValid(
+                                  _birthDateValid
+                                );
                               }
                             }}
                             language={language}
                           />
-                          <FormHelperText error={!addiontalDriverBirthDateValid}>
-                            {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}
+                          <FormHelperText
+                            error={!addiontalDriverBirthDateValid}
+                          >
+                            {(!addiontalDriverBirthDateValid &&
+                              helper.getBirthDateError(car.minimumAge)) ||
+                              ""}
                           </FormHelperText>
                         </FormControl>
                       </div>
@@ -971,15 +1211,28 @@ const Checkout = () => {
 
                   {(!car.supplier.payLater || !payLater) && clientSecret && (
                     <div className="payment-options-container">
-                      <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                      <EmbeddedCheckoutProvider
+                        stripe={stripePromise}
+                        options={{ clientSecret }}
+                      >
                         <EmbeddedCheckout />
                       </EmbeddedCheckoutProvider>
                     </div>
                   )}
                   <div className="booking-buttons">
                     {(!clientSecret || payLater) && (
-                      <Button type="submit" variant="contained" className="btn-checkout btn-margin-bottom" size="small" disabled={loading}>
-                        {loading ? <CircularProgress color="inherit" size={24} /> : strings.BOOK}
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        className="btn-checkout btn-margin-bottom"
+                        size="small"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <CircularProgress color="inherit" size={24} />
+                        ) : (
+                          strings.BOOK
+                        )}
                       </Button>
                     )}
                     <Button
@@ -994,7 +1247,10 @@ const Checkout = () => {
                             // Otherwise, temporary bookings are
                             // automatically deleted through a TTL index.
                             //
-                            await BookingService.deleteTempBooking(bookingId, sessionId);
+                            await BookingService.deleteTempBooking(
+                              bookingId,
+                              sessionId
+                            );
                           }
                         } catch (err) {
                           helper.error(err);
@@ -1011,14 +1267,20 @@ const Checkout = () => {
                   {tosError && <Error message={commonStrings.TOS_ERROR} />}
                   {error && <Error message={commonStrings.GENERIC_ERROR} />}
                   {paymentFailed && <Error message={strings.PAYMENT_FAILED} />}
-                  {recaptchaError && <Error message={commonStrings.RECAPTCHA_ERROR} />}
+                  {recaptchaError && (
+                    <Error message={commonStrings.RECAPTCHA_ERROR} />
+                  )}
                 </div>
               </form>
             </Paper>
           </div>
         )}
         {noMatch && <NoMatch hideHeader />}
-        {success && <Info message={payLater ? strings.PAY_LATER_SUCCESS : strings.SUCCESS} />}
+        {success && (
+          <Info
+            message={payLater ? strings.PAY_LATER_SUCCESS : strings.SUCCESS}
+          />
+        )}
       </Layout>
     </ReCaptchaProvider>
   );
