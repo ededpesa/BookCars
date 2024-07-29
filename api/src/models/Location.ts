@@ -8,6 +8,9 @@ const locationSchema = new Schema<env.Location>(
       ref: "LocationValue",
       validate: (value: any): boolean => Array.isArray(value) && value.length > 1,
     },
+    coordinates: {
+      type: [Number],
+    },
   },
   {
     timestamps: true,

@@ -534,6 +534,7 @@ export interface BookingInfo {
 export interface Location extends Document {
   values: Types.ObjectId[];
   name?: string;
+  coordinates: number[];
 }
 
 /**
