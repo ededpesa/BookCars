@@ -34,7 +34,7 @@ const Footer = () => {
           </ul>
           <div className="contact">
             <MailOutline className="icon" />
-            <a href="mailto:info@bookcars.ma">info@bookcars.ma</a>
+            <a href="mailto:info@qualitycars.ma">info@qualitycars.ma</a>
           </div>
         </div>
       </section>

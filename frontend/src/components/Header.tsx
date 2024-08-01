@@ -286,7 +286,9 @@ const Header = ({ user, hidden, hideSignin, headerTitle }: HeaderProps) => {
                 </IconButton>
 
                 <Link href="/" className="logo">
-                  QualityCars
+                  <i>
+                    <span style={{ color: "#b90202" }}>QUALITY</span>CARS
+                  </i>
                 </Link>
 
                 {!env.isMobile() && headerTitle && <div className="header-title">{headerTitle}</div>}

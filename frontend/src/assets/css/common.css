@@ -4,8 +4,12 @@
 }
 
 .btn-primary {
-  background-color: #232323 !important;
+  background-color: #b90202 !important;
   color: #fff !important;
+}
+
+.btn-primary.black {
+  background-color: black !important;
 }
 
 .btn-secondary {
@@ -38,7 +42,7 @@
 }
 
 .required::after {
-  content: ' *';
+  content: " *";
 }
 
 .form-error {

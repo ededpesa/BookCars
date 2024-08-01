@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import {
   AppBar,
   Toolbar,
@@ -13,8 +13,8 @@ import {
   List,
   ListItemButton,
   ListItemIcon,
-  ListItemText
-} from '@mui/material'
+  ListItemText,
+} from "@mui/material";
 import {
   Menu as MenuIcon,
   Mail as MailIcon,
@@ -30,48 +30,45 @@ import {
   InfoTwoTone as AboutIcon,
   DescriptionTwoTone as TosIcon,
   ExitToApp as SignoutIcon,
-} from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
-import * as bookcarsTypes from ':bookcars-types'
-import env from '../config/env.config'
-import { strings } from '../lang/header'
-import { strings as commonStrings } from '../lang/common'
-import * as UserService from '../services/UserService'
-import * as NotificationService from '../services/NotificationService'
-import Avatar from './Avatar'
-import * as langHelper from '../common/langHelper'
-import * as helper from '../common/helper'
-import { useGlobalContext, GlobalContextType } from '../context/GlobalContext'
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import * as bookcarsTypes from ":bookcars-types";
+import env from "../config/env.config";
+import { strings } from "../lang/header";
+import { strings as commonStrings } from "../lang/common";
+import * as UserService from "../services/UserService";
+import * as NotificationService from "../services/NotificationService";
+import Avatar from "./Avatar";
+import * as langHelper from "../common/langHelper";
+import * as helper from "../common/helper";
+import { useGlobalContext, GlobalContextType } from "../context/GlobalContext";
 
-import '../assets/css/header.css'
+import "../assets/css/header.css";
 
 interface HeaderProps {
-  user?: bookcarsTypes.User
-  hidden?: boolean
+  user?: bookcarsTypes.User;
+  hidden?: boolean;
 }
 
-const ListItemLink = (props: any) => <ListItemButton component="a" {...props} />
+const ListItemLink = (props: any) => <ListItemButton component="a" {...props} />;
 
-const Header = ({
-  user,
-  hidden,
-}: HeaderProps) => {
-  const navigate = useNavigate()
-  const { notificationCount, setNotificationCount } = useGlobalContext() as GlobalContextType
+const Header = ({ user, hidden }: HeaderProps) => {
+  const navigate = useNavigate();
+  const { notificationCount, setNotificationCount } = useGlobalContext() as GlobalContextType;
 
-  const [lang, setLang] = useState(helper.getLanguage(env.DEFAULT_LANGUAGE))
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const [langAnchorEl, setLangAnchorEl] = useState<HTMLElement | null>(null)
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<HTMLElement | null>(null)
-  const [sideAnchorEl, setSideAnchorEl] = useState<HTMLElement | null>(null)
-  const [isSignedIn, setIsSignedIn] = useState(false)
-  const [loading, setIsLoading] = useState(true)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [lang, setLang] = useState(helper.getLanguage(env.DEFAULT_LANGUAGE));
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [langAnchorEl, setLangAnchorEl] = useState<HTMLElement | null>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<HTMLElement | null>(null);
+  const [sideAnchorEl, setSideAnchorEl] = useState<HTMLElement | null>(null);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [loading, setIsLoading] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const isMenuOpen = Boolean(anchorEl)
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
-  const isLangMenuOpen = Boolean(langAnchorEl)
-  const isSideMenuOpen = Boolean(sideAnchorEl)
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isLangMenuOpen = Boolean(langAnchorEl);
+  const isSideMenuOpen = Boolean(sideAnchorEl);
 
   const classes = {
     list: {
@@ -90,124 +87,123 @@ const Header = ({
     menuButton: {
       marginRight: 2,
     },
-  }
+  };
 
   const handleAccountMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null)
-  }
+    setMobileMoreAnchorEl(null);
+  };
 
   const handleLangMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setLangAnchorEl(event.currentTarget)
-  }
+    setLangAnchorEl(event.currentTarget);
+  };
 
   const refreshPage = () => {
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(window.location.search);
 
-    if (params.has('l')) {
-      params.delete('l')
-      window.location.href = window.location.href.split('?')[0] + ([...params].length > 0 ? `?${params}` : '')
+    if (params.has("l")) {
+      params.delete("l");
+      window.location.href = window.location.href.split("?")[0] + ([...params].length > 0 ? `?${params}` : "");
     } else {
-      window.location.reload()
+      window.location.reload();
     }
-  }
+  };
 
   const handleLangMenuClose = async (event: React.MouseEvent<HTMLElement>) => {
-    setLangAnchorEl(null)
+    setLangAnchorEl(null);
 
-    const { code } = event.currentTarget.dataset
+    const { code } = event.currentTarget.dataset;
     if (code) {
-      setLang(helper.getLanguage(code))
-      const currentLang = UserService.getLanguage()
+      setLang(helper.getLanguage(code));
+      const currentLang = UserService.getLanguage();
       if (isSignedIn && user) {
         // Update user language
         const data: bookcarsTypes.UpdateLanguagePayload = {
           id: user._id as string,
           language: code,
-        }
-        const status = await UserService.updateLanguage(data)
+        };
+        const status = await UserService.updateLanguage(data);
         if (status === 200) {
-          UserService.setLanguage(code)
+          UserService.setLanguage(code);
           if (code && code !== currentLang) {
             // Refresh page
-            refreshPage()
+            refreshPage();
           }
         } else {
-          toast(commonStrings.CHANGE_LANGUAGE_ERROR, { type: 'error' })
+          toast(commonStrings.CHANGE_LANGUAGE_ERROR, { type: "error" });
         }
       } else {
-        UserService.setLanguage(code)
+        UserService.setLanguage(code);
         if (code && code !== currentLang) {
           // Refresh page
-          refreshPage()
+          refreshPage();
         }
       }
     }
-  }
+  };
 
   const handleMenuClose = () => {
-    setAnchorEl(null)
-    handleMobileMenuClose()
-  }
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
 
   const handleSettingsClick = () => {
-    navigate('/settings')
-  }
+    navigate("/settings");
+  };
 
   const handleSignout = async () => {
-    await UserService.signout()
-  }
+    await UserService.signout();
+  };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget)
-  }
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
 
   const handleSideMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setSideAnchorEl(event.currentTarget)
-  }
+    setSideAnchorEl(event.currentTarget);
+  };
 
   const handleSideMenuClose = () => {
-    setSideAnchorEl(null)
-  }
+    setSideAnchorEl(null);
+  };
 
   const handleNotificationsClick = () => {
-    navigate('/notifications')
-  }
+    navigate("/notifications");
+  };
 
   useEffect(() => {
-    const language = langHelper.getLanguage()
-    setLang(helper.getLanguage(language))
-    langHelper.setLanguage(strings, language)
-  }, [])
+    const language = langHelper.getLanguage();
+    setLang(helper.getLanguage(language));
+    langHelper.setLanguage(strings, language);
+  }, []);
 
   useEffect(() => {
     if (!hidden) {
       if (user) {
-        NotificationService.getNotificationCounter(user._id as string)
-          .then((notificationCounter) => {
-            setIsSignedIn(true)
-            setNotificationCount(notificationCounter.count)
-            setIsLoading(false)
-            setIsLoaded(true)
-          })
+        NotificationService.getNotificationCounter(user._id as string).then((notificationCounter) => {
+          setIsSignedIn(true);
+          setNotificationCount(notificationCounter.count);
+          setIsLoading(false);
+          setIsLoaded(true);
+        });
       } else {
-        setIsLoading(false)
-        setIsLoaded(true)
+        setIsLoading(false);
+        setIsLoaded(true);
       }
     }
-  }, [hidden, user, setNotificationCount])
+  }, [hidden, user, setNotificationCount]);
 
-  const menuId = 'primary-account-menu'
+  const menuId = "primary-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={menuId}
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={handleMenuClose}
       className="menu"
@@ -221,16 +217,16 @@ const Header = ({
         <Typography>{strings.SIGN_OUT}</Typography>
       </MenuItem>
     </Menu>
-  )
+  );
 
-  const mobileMenuId = 'mobile-menu'
+  const mobileMenuId = "mobile-menu";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
       className="menu"
@@ -248,33 +244,31 @@ const Header = ({
         <p>{strings.SIGN_OUT}</p>
       </MenuItem>
     </Menu>
-  )
+  );
 
-  const languageMenuId = 'language-menu'
+  const languageMenuId = "language-menu";
   const renderLanguageMenu = (
     <Menu
       anchorEl={langAnchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={languageMenuId}
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isLangMenuOpen}
       onClose={handleLangMenuClose}
       className="menu"
     >
-      {
-        env._LANGUAGES.map((language) => (
-          <MenuItem onClick={handleLangMenuClose} data-code={language.code} key={language.code}>
-            {language.label}
-          </MenuItem>
-        ))
-      }
+      {env._LANGUAGES.map((language) => (
+        <MenuItem onClick={handleLangMenuClose} data-code={language.code} key={language.code}>
+          {language.label}
+        </MenuItem>
+      ))}
     </Menu>
-  )
+  );
 
   return (
-    <div style={hidden ? { display: 'none' } : classes.grow} className="header">
-      <AppBar position="fixed" sx={{ bgcolor: '#121212' }}>
+    <div style={hidden ? { display: "none" } : classes.grow} className="header">
+      <AppBar position="fixed" sx={{ bgcolor: "#121212" }}>
         <Toolbar className="toolbar">
           {isLoaded && !loading && isSignedIn && (
             <IconButton edge="start" sx={classes.menuButton} color="inherit" aria-label="open drawer" onClick={handleSideMenuOpen}>
@@ -285,35 +279,51 @@ const Header = ({
             <Drawer open={isSideMenuOpen} onClose={handleSideMenuClose} className="menu">
               <List sx={classes.list}>
                 <ListItemLink href="/">
-                  <ListItemIcon><DashboardIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.DASHBOARD} />
                 </ListItemLink>
                 <ListItemLink href="/suppliers">
-                  <ListItemIcon><SuppliersIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <SuppliersIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.COMPANIES} />
                 </ListItemLink>
                 <ListItemLink href="/locations">
-                  <ListItemIcon><LocationsIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <LocationsIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.LOCATIONS} />
                 </ListItemLink>
                 <ListItemLink href="/cars">
-                  <ListItemIcon><CarsIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <CarsIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.CARS} />
                 </ListItemLink>
                 <ListItemLink href="/users">
-                  <ListItemIcon><UsersIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <UsersIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.USERS} />
                 </ListItemLink>
                 <ListItemLink href="/about">
-                  <ListItemIcon><AboutIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <AboutIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.ABOUT} />
                 </ListItemLink>
                 <ListItemLink href="/tos">
-                  <ListItemIcon><TosIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <TosIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.TOS} />
                 </ListItemLink>
                 <ListItemLink href="/contact">
-                  <ListItemIcon><MailIcon /></ListItemIcon>
+                  <ListItemIcon>
+                    <MailIcon />
+                  </ListItemIcon>
                   <ListItemText primary={strings.CONTACT} />
                 </ListItemLink>
               </List>
@@ -329,7 +339,7 @@ const Header = ({
               </IconButton>
             )}
             {isLoaded && !loading && (
-              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary">
+              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary black">
                 {lang?.label}
               </Button>
             )}
@@ -341,7 +351,7 @@ const Header = ({
           </div>
           <div className="header-mobile">
             {!isSignedIn && !loading && (
-              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary">
+              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary black">
                 {lang?.label}
               </Button>
             )}
@@ -365,7 +375,7 @@ const Header = ({
       {renderMenu}
       {renderLanguageMenu}
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
