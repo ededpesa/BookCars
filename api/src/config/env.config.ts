@@ -12,11 +12,7 @@ import * as helper from "../common/helper";
  * @param {?string} [defaultValue]
  * @returns {string}
  */
-export const __env__ = (
-  name: string,
-  required?: boolean,
-  defaultValue?: string
-): string => {
+export const __env__ = (name: string, required?: boolean, defaultValue?: string): string => {
   const value = process.env[name];
   if (required && !value) {
     throw new Error(`'${name} not found`);
@@ -33,7 +29,7 @@ export const __env__ = (
  *
  * @type {string[]}
  */
-export const LANGUAGES = ["en", "fr", "es"];
+export const LANGUAGES = ["en", "es"];
 
 /**
  * Server Port. Default is 4002.
@@ -75,20 +71,14 @@ export const CERTIFICATE = __env__("BC_CERTIFICATE", HTTPS);
  *
  * @type {string}
  */
-export const DB_URI = __env__(
-  "BC_DB_URI",
-  false,
-  "mongodb://127.0.0.1:27017/bookcars?authSource=admin&appName=bookcars"
-);
+export const DB_URI = __env__("BC_DB_URI", false, "mongodb://127.0.0.1:27017/bookcars?authSource=admin&appName=bookcars");
 
 /**
  * Indicate whether MongoDB SSL is enabled or not.
  *
  * @type {boolean}
  */
-export const DB_SSL = helper.StringToBoolean(
-  __env__("BC_DB_SSL", false, "false")
-);
+export const DB_SSL = helper.StringToBoolean(__env__("BC_DB_SSL", false, "false"));
 
 /**
  * MongoDB SSL certificate filepath.
@@ -109,9 +99,7 @@ export const DB_SSL_CA = __env__("BC_DB_SSL_CA", DB_SSL);
  *
  * @type {boolean}
  */
-export const DB_DEBUG = helper.StringToBoolean(
-  __env__("BC_DB_DEBUG", false, "false")
-);
+export const DB_DEBUG = helper.StringToBoolean(__env__("BC_DB_DEBUG", false, "false"));
 
 /**
  * Cookie secret. It should at least be 32 characters long, but the longer the better.
@@ -126,11 +114,7 @@ export const COOKIE_SECRET = __env__("BC_COOKIE_SECRET", false, "QualityCars");
  *
  * @type {string}
  */
-export const AUTH_COOKIE_DOMAIN = __env__(
-  "BC_AUTH_COOKIE_DOMAIN",
-  false,
-  "localhost"
-);
+export const AUTH_COOKIE_DOMAIN = __env__("BC_AUTH_COOKIE_DOMAIN", false, "localhost");
 
 /**
  * Cookie options.
@@ -184,20 +168,14 @@ export const JWT_SECRET = __env__("BC_JWT_SECRET", false, "QualityCars");
  *
  * @type {number}
  */
-export const JWT_EXPIRE_AT = Number.parseInt(
-  __env__("BC_JWT_EXPIRE_AT", false, "86400"),
-  10
-);
+export const JWT_EXPIRE_AT = Number.parseInt(__env__("BC_JWT_EXPIRE_AT", false, "86400"), 10);
 
 /**
  * Validation Token expiration in seconds. Default is 86400 seconds (1 day).
  *
  * @type {number}
  */
-export const TOKEN_EXPIRE_AT = Number.parseInt(
-  __env__("BC_TOKEN_EXPIRE_AT", false, "86400"),
-  10
-);
+export const TOKEN_EXPIRE_AT = Number.parseInt(__env__("BC_TOKEN_EXPIRE_AT", false, "86400"), 10);
 
 /**
  * SMTP host.
@@ -291,21 +269,18 @@ export const FRONTEND_HOST = __env__("BC_FRONTEND_HOST", true);
 export const FRONTEND_DOMAIN = __env__("BC_FRONTEND_DOMAIN", true);
 
 /**
- * Default language. Default is en. Available options: en, fr.
+ * Default language. Default is en. Available options: en, es.
  *
  * @type {string}
  */
-export const DEFAULT_LANGUAGE = __env__("BC_DEFAULT_LANGUAGE", false, "en");
+export const DEFAULT_LANGUAGE = __env__("BC_DEFAULT_LANGUAGE", false, "es");
 
 /**
  * Default Minimum age for rental. Default is 21 years.
  *
  * @type {number}
  */
-export const MINIMUM_AGE = Number.parseInt(
-  __env__("BC_MINIMUM_AGE", false, "21"),
-  10
-);
+export const MINIMUM_AGE = Number.parseInt(__env__("BC_MINIMUM_AGE", false, "21"), 10);
 
 /**
  * Expo push access token.
@@ -319,20 +294,11 @@ export const EXPO_ACCESS_TOKEN = __env__("BC_EXPO_ACCESS_TOKEN", false);
  *
  * @type {string}
  */
-export const STRIPE_SECRET_KEY = __env__(
-  "BC_STRIPE_SECRET_KEY",
-  false,
-  "STRIPE_SECRET_KEY"
-);
+export const STRIPE_SECRET_KEY = __env__("BC_STRIPE_SECRET_KEY", false, "STRIPE_SECRET_KEY");
 
-let stripeSessionExpireAt = Number.parseInt(
-  __env__("BC_STRIPE_SESSION_EXPIRE_AT", false, "82800"),
-  10
-);
-stripeSessionExpireAt =
-  stripeSessionExpireAt < 1800 ? 1800 : stripeSessionExpireAt;
-stripeSessionExpireAt =
-  stripeSessionExpireAt <= 82800 ? stripeSessionExpireAt : 82800;
+let stripeSessionExpireAt = Number.parseInt(__env__("BC_STRIPE_SESSION_EXPIRE_AT", false, "82800"), 10);
+stripeSessionExpireAt = stripeSessionExpireAt < 1800 ? 1800 : stripeSessionExpireAt;
+stripeSessionExpireAt = stripeSessionExpireAt <= 82800 ? stripeSessionExpireAt : 82800;
 
 /**
  * Stripe Checkout Session expiration in seconds. Should be at least 1800 seconds (30min) and max 82800 seconds. Default is 82800 seconds (~23h).

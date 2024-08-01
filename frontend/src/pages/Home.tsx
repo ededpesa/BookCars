@@ -250,6 +250,15 @@ const Home = () => {
         </div> */}
 
         <div className="home-map">
+          <h1 className="title">{strings.OUR_CARS}</h1>
+          <div className="car-slide">
+            <img src="https://qualitycars.legendsoft.com/cdn/cars/628b4c1207188687127f3128_1653296146453.jpg" />
+            <img src="https://qualitycars.legendsoft.com/cdn/cars/628b4aa007188687127f3094_1653295776619.jpg" />
+            <img src="https://qualitycars.legendsoft.com/cdn/cars/628bd18107188687127f3e2c_1653330305177.jpg" />
+          </div>
+        </div>
+
+        {/* <div className="home-map">
           <Map
             title={strings.MAP_TITLE}
             initialZoom={3}
@@ -272,7 +281,7 @@ const Home = () => {
               helper.info(strings.MAP_DROP_OFF_SELECTED);
             }}
           />
-        </div>
+        </div> */}
       </div>
 
       <Footer />

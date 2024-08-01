@@ -6,6 +6,10 @@ div.home {
   overflow: hidden auto;
 }
 
+div.home h1 {
+  text-align: center;
+}
+
 div.home footer {
   width: 100%;
   height: 50px;
@@ -30,6 +34,12 @@ div.home footer div.copyright span.part2 {
   font-size: 10px;
   position: relative;
   top: -5px;
+}
+
+div.car-slide {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Device width is less than or equal to 960px */
@@ -100,7 +110,7 @@ div.home footer div.copyright span.part2 {
     vertical-align: top;
   }
 
-  div.home div.home-content .chk-same-location input[type='checkbox'] {
+  div.home div.home-content .chk-same-location input[type="checkbox"] {
     cursor: pointer;
   }
 
@@ -127,7 +137,7 @@ div.home div.home-content {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url('/cover.jpg');
+  background-image: url("/cover.jpg");
   background-size: cover;
   background-position: bottom;
   width: 100%;
@@ -140,7 +150,7 @@ div.home div.home-content::before {
   height: 100%;
   width: 100%;
   content: "";
-  background: rgba(51, 51, 51, .22);
+  background: rgba(51, 51, 51, 0.22);
   clear: both;
   z-index: 1;
 }
@@ -149,12 +159,12 @@ div.home div.home-cover {
   z-index: 2;
   color: #fff;
   text-align: center;
-  letter-spacing: -.03em;
+  letter-spacing: -0.03em;
   -webkit-font-smoothing: antialiased;
 }
 
 div.home div.home-content div.home-search {
-  box-shadow: 0px 3px 5px -1px #00000033, 0px 1px 18px 0px #0000001F, 0px 6px 10px 0px #00000024;
+  box-shadow: 0px 3px 5px -1px #00000033, 0px 1px 18px 0px #0000001f, 0px 6px 10px 0px #00000024;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -163,7 +173,7 @@ div.home div.home-content div.home-search {
 }
 
 div.home div.home-content div.home-search .btn-search {
-  background: #024DAF;
+  background: #024daf;
 }
 
 div.home div.suppliers {
@@ -259,7 +269,7 @@ div.home div.home-map {
     vertical-align: top;
   }
 
-  div.home div.home-content .chk-same-location input[type='checkbox'] {
+  div.home div.home-content .chk-same-location input[type="checkbox"] {
     cursor: pointer;
   }
 

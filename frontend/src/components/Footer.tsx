@@ -1,36 +1,36 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { MailOutline } from '@mui/icons-material'
-import { strings } from '../lang/footer'
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { MailOutline } from "@mui/icons-material";
+import { strings } from "../lang/footer";
 
-import SecurePayment from '../assets/img/secure-payment.png'
-import '../assets/css/footer.css'
+import SecurePayment from "../assets/img/secure-payment.png";
+import "../assets/css/footer.css";
 
 const Footer = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="footer">
-      <div className="header">BookCars</div>
+      <div className="header">QualityCars</div>
       <section className="main">
         <div className="main-section">
           <div className="title">{strings.CORPORATE}</div>
           <ul className="links">
-            <li onClick={() => navigate('/about')}>{strings.ABOUT}</li>
-            <li onClick={() => navigate('/tos')}>{strings.TOS}</li>
+            <li onClick={() => navigate("/about")}>{strings.ABOUT}</li>
+            <li onClick={() => navigate("/tos")}>{strings.TOS}</li>
           </ul>
         </div>
         <div className="main-section">
           <div className="title">{strings.RENT}</div>
           <ul className="links">
-            <li onClick={() => navigate('/suppliers')}>{strings.SUPPLIERS}</li>
-            <li onClick={() => navigate('/locations')}>{strings.LOCATIONS}</li>
+            <li onClick={() => navigate("/suppliers")}>{strings.SUPPLIERS}</li>
+            <li onClick={() => navigate("/locations")}>{strings.LOCATIONS}</li>
           </ul>
         </div>
         <div className="main-section">
           <div className="title">{strings.SUPPORT}</div>
           <ul className="links">
-            <li onClick={() => navigate('/contact')}>{strings.CONTACT}</li>
+            <li onClick={() => navigate("/contact")}>{strings.CONTACT}</li>
           </ul>
           <div className="contact">
             <MailOutline className="icon" />
@@ -49,6 +49,6 @@ const Footer = () => {
         </div>
       </section>
     </div>
-  )
-}
-export default Footer
+  );
+};
+export default Footer;
