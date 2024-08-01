@@ -1,72 +1,72 @@
-import 'dotenv/config'
-import request from 'supertest'
-import mongoose from 'mongoose'
-import * as bookcarsTypes from ':bookcars-types'
-import app from '../src/app'
-import * as databaseHelper from '../src/common/databaseHelper'
-import * as testHelper from './testHelper'
-import stripeAPI from '../src/stripe'
-import * as env from '../src/config/env.config'
-import Booking from '../src/models/Booking'
+import "dotenv/config";
+import request from "supertest";
+import mongoose from "mongoose";
+import * as bookcarsTypes from ":bookcars-types";
+import app from "../src/app";
+import * as databaseHelper from "../src/common/databaseHelper";
+import * as testHelper from "./testHelper";
+import stripeAPI from "../src/stripe";
+import * as env from "../src/config/env.config";
+import Booking from "../src/models/Booking";
 
 //
 // Connecting and initializing the database before running the test suite
 //
 beforeAll(async () => {
-  testHelper.initializeLogger()
+  testHelper.initializeLogger();
 
-  const res = await databaseHelper.connect(env.DB_URI, false, false)
-  expect(res).toBeTruthy()
-})
+  const res = await databaseHelper.connect(env.DB_URI, false, false);
+  expect(res).toBeTruthy();
+});
 
 //
 // Closing and cleaning the database connection after running the test suite
 //
 afterAll(async () => {
   if (mongoose.connection.readyState) {
-    await databaseHelper.close()
+    await databaseHelper.close();
   }
-})
+});
 
-describe('POST /api/create-checkout-session', () => {
-  it('should create checkout session', async () => {
+describe("POST /api/create-checkout-session", () => {
+  it("should create checkout session", async () => {
     //
     // Test create checkout session whith non existant user
     //
-    const receiptEmail = testHelper.GetRandomEmail()
+    const receiptEmail = testHelper.GetRandomEmail();
     const payload: bookcarsTypes.CreatePaymentPayload = {
       amount: 234,
-      currency: 'usd',
+      currency: "usd",
       receiptEmail,
-      customerName: 'John Doe',
-      locale: 'en',
-      name: 'BMW X1',
-      description: 'BookCars Testing Service',
-    }
+      customerName: "John Doe",
+      locale: "en",
+      name: "BMW X1",
+      description: "QualityCars Testing Service",
+    };
     let res = await request(app)
-      .post('/api/create-checkout-session')
-      .send(payload)
-    expect(res.statusCode).toBe(200)
-    expect(res.body.sessionId).not.toBeNull()
-    expect(res.body.customerId).not.toBeNull()
+      .post("/api/create-checkout-session")
+      .send(payload);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.sessionId).not.toBeNull();
+    expect(res.body.customerId).not.toBeNull();
 
     //
     // Test create checkout session whith existant user
     //
     try {
       res = await request(app)
-        .post('/api/create-checkout-session')
-        .send(payload)
-      expect(res.statusCode).toBe(200)
-      expect(res.body.sessionId).not.toBeNull()
-      expect(res.body.customerId).not.toBeNull()
+        .post("/api/create-checkout-session")
+        .send(payload);
+      expect(res.statusCode).toBe(200);
+      expect(res.body.sessionId).not.toBeNull();
+      expect(res.body.customerId).not.toBeNull();
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      const customers = await stripeAPI.customers.list({ email: receiptEmail })
+      const customers = await stripeAPI.customers.list({ email: receiptEmail });
       if (customers.data.length > 0) {
         for (const customer of customers.data) {
-          await stripeAPI.customers.del(customer.id)
+          await stripeAPI.customers.del(customer.id);
         }
       }
     }
@@ -74,57 +74,51 @@ describe('POST /api/create-checkout-session', () => {
     //
     // Test create checkout sessions failure
     //
-    payload.receiptEmail = 'xxxxxxxxxxxxxxx'
-    res = await request(app)
-      .post('/api/create-checkout-session')
-      .send(payload)
-    expect(res.statusCode).toBe(400)
-    expect(res.body).toStrictEqual({})
-  })
-})
+    payload.receiptEmail = "xxxxxxxxxxxxxxx";
+    res = await request(app).post("/api/create-checkout-session").send(payload);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toStrictEqual({});
+  });
+});
 
-describe('POST /api/check-checkout-session/:sessionId', () => {
-  it('should check checkout session', async () => {
+describe("POST /api/check-checkout-session/:sessionId", () => {
+  it("should check checkout session", async () => {
     //
     // Checkout session does not exist
     //
-    let res = await request(app)
-      .post('/api/check-checkout-session/xxxxxxxxxx')
-    expect(res.statusCode).toBe(204)
+    let res = await request(app).post("/api/check-checkout-session/xxxxxxxxxx");
+    expect(res.statusCode).toBe(204);
 
     //
     // Checkout session exists but booking does not exist
     //
-    const receiptEmail = testHelper.GetRandomEmail()
+    const receiptEmail = testHelper.GetRandomEmail();
     const payload: bookcarsTypes.CreatePaymentPayload = {
       amount: 234,
-      currency: 'usd',
+      currency: "usd",
       receiptEmail,
-      customerName: 'John Doe',
-      locale: 'en',
-      name: 'BMW X1',
-      description: 'BookCars Testing Service',
-    }
-    res = await request(app)
-      .post('/api/create-checkout-session')
-      .send(payload)
-    expect(res.statusCode).toBe(200)
-    const { sessionId } = res.body
-    expect(sessionId).not.toBeNull()
-    expect(res.body.customerId).not.toBeNull()
-    res = await request(app)
-      .post(`/api/check-checkout-session/${sessionId}`)
-    expect(res.statusCode).toBe(204)
+      customerName: "John Doe",
+      locale: "en",
+      name: "BMW X1",
+      description: "QualityCars Testing Service",
+    };
+    res = await request(app).post("/api/create-checkout-session").send(payload);
+    expect(res.statusCode).toBe(200);
+    const { sessionId } = res.body;
+    expect(sessionId).not.toBeNull();
+    expect(res.body.customerId).not.toBeNull();
+    res = await request(app).post(`/api/check-checkout-session/${sessionId}`);
+    expect(res.statusCode).toBe(204);
 
     //
     // Checkout session exists and booking exists and payment failed
     //
-    const expireAt = new Date()
-    expireAt.setSeconds(expireAt.getSeconds() + env.BOOKING_EXPIRE_AT)
-    const from = new Date()
-    from.setDate(from.getDate() + 1)
-    const to = new Date(from)
-    to.setDate(to.getDate() + 3)
+    const expireAt = new Date();
+    expireAt.setSeconds(expireAt.getSeconds() + env.BOOKING_EXPIRE_AT);
+    const from = new Date();
+    from.setDate(from.getDate() + 1);
+    const to = new Date(from);
+    to.setDate(to.getDate() + 3);
 
     const booking = new Booking({
       supplier: testHelper.GetRandromObjectId(),
@@ -144,75 +138,71 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
       fullInsurance: false,
       price: 312,
       additionalDriver: true,
-    })
+    });
     try {
-      await booking.save()
+      await booking.save();
 
-      res = await request(app)
-        .post(`/api/check-checkout-session/${sessionId}`)
-      expect(res.statusCode).toBe(400)
+      res = await request(app).post(`/api/check-checkout-session/${sessionId}`);
+      expect(res.statusCode).toBe(400);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      await booking.deleteOne()
+      await booking.deleteOne();
     }
 
     //
     // Test database failure
     //
     try {
-      databaseHelper.close()
-      res = await request(app)
-        .post(`/api/check-checkout-session/${sessionId}`)
-      expect(res.statusCode).toBe(400)
+      databaseHelper.close();
+      res = await request(app).post(`/api/check-checkout-session/${sessionId}`);
+      expect(res.statusCode).toBe(400);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      const dbRes = await databaseHelper.connect(env.DB_URI, false, false)
-      expect(dbRes).toBeTruthy()
+      const dbRes = await databaseHelper.connect(env.DB_URI, false, false);
+      expect(dbRes).toBeTruthy();
     }
-  })
-})
+  });
+});
 
-describe('POST /api/create-payment-intent', () => {
-  it('should create payment intents', async () => {
+describe("POST /api/create-payment-intent", () => {
+  it("should create payment intents", async () => {
     //
     // Test create payment intent whith non existant user
     //
-    const receiptEmail = testHelper.GetRandomEmail()
+    const receiptEmail = testHelper.GetRandomEmail();
     const payload: bookcarsTypes.CreatePaymentPayload = {
       amount: 234,
-      currency: 'usd',
+      currency: "usd",
       receiptEmail,
-      customerName: 'John Doe',
-      locale: 'en',
-      name: 'BookCars Testing Service',
-      description: '',
-    }
+      customerName: "John Doe",
+      locale: "en",
+      name: "QualityCars Testing Service",
+      description: "",
+    };
     let res = await request(app)
-      .post('/api/create-payment-intent')
-      .send(payload)
-    expect(res.statusCode).toBe(200)
-    expect(res.body.paymentIntentId).not.toBeNull()
-    expect(res.body.customerId).not.toBeNull()
+      .post("/api/create-payment-intent")
+      .send(payload);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.paymentIntentId).not.toBeNull();
+    expect(res.body.customerId).not.toBeNull();
 
     //
     // Test create payment intent whith existant user
     //
     try {
-      res = await request(app)
-        .post('/api/create-payment-intent')
-        .send(payload)
-      expect(res.statusCode).toBe(200)
-      expect(res.body.paymentIntentId).not.toBeNull()
-      expect(res.body.customerId).not.toBeNull()
+      res = await request(app).post("/api/create-payment-intent").send(payload);
+      expect(res.statusCode).toBe(200);
+      expect(res.body.paymentIntentId).not.toBeNull();
+      expect(res.body.customerId).not.toBeNull();
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      const customers = await stripeAPI.customers.list({ email: receiptEmail })
+      const customers = await stripeAPI.customers.list({ email: receiptEmail });
       if (customers.data.length > 0) {
         for (const customer of customers.data) {
-          await stripeAPI.customers.del(customer.id)
+          await stripeAPI.customers.del(customer.id);
         }
       }
     }
@@ -220,11 +210,9 @@ describe('POST /api/create-payment-intent', () => {
     //
     // Test create payment intent failure
     //
-    payload.receiptEmail = 'xxxxxxxxxxxxxxx'
-    res = await request(app)
-      .post('/api/create-payment-intent')
-      .send(payload)
-    expect(res.statusCode).toBe(400)
-    expect(res.body).toStrictEqual({})
-  })
-})
+    payload.receiptEmail = "xxxxxxxxxxxxxxx";
+    res = await request(app).post("/api/create-payment-intent").send(payload);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toStrictEqual({});
+  });
+});

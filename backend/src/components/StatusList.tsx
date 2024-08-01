@@ -1,25 +1,25 @@
-import React, { useState, useEffect, CSSProperties } from 'react'
+import React, { useState, useEffect, CSSProperties } from "react";
 import {
   InputLabel,
   Select,
   MenuItem,
   SelectChangeEvent,
-  TextFieldVariants
-} from '@mui/material'
-import * as bookcarsTypes from ':bookcars-types'
-import { strings as commonStrings } from '../lang/common'
-import * as helper from '../common/helper'
+  TextFieldVariants,
+} from "@mui/material";
+import * as bookcarsTypes from ":bookcars-types";
+import { strings as commonStrings } from "../lang/common";
+import * as helper from "../common/helper";
 
-import '../assets/css/status-list.css'
+import "../assets/css/status-list.css";
 
 interface StatusListProps {
-  value?: string
-  label?: string
-  required?: boolean
-  variant?: TextFieldVariants
-  disabled?: boolean
-  style?: CSSProperties
-  onChange?: (value: bookcarsTypes.BookingStatus) => void
+  value?: string;
+  label?: string;
+  required?: boolean;
+  variant?: TextFieldVariants;
+  disabled?: boolean;
+  style?: CSSProperties;
+  onChange?: (value: bookcarsTypes.BookingStatus) => void;
 }
 
 const StatusList = ({
@@ -29,23 +29,23 @@ const StatusList = ({
   variant,
   disabled,
   style,
-  onChange
+  onChange,
 }: StatusListProps) => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     if (statusListValue && statusListValue !== value) {
-      setValue(statusListValue)
+      setValue(statusListValue);
     }
-  }, [statusListValue, value])
+  }, [statusListValue, value]);
 
   const handleChange = (e: SelectChangeEvent<string>) => {
-    setValue(e.target.value)
+    setValue(e.target.value);
 
     if (onChange) {
-      onChange(e.target.value as bookcarsTypes.BookingStatus)
+      onChange(e.target.value as bookcarsTypes.BookingStatus);
     }
-  }
+  };
 
   return (
     <div style={style || {}}>
@@ -55,12 +55,14 @@ const StatusList = ({
         </span>
       ) : (
         <>
-          <InputLabel className={required ? 'required' : ''}>{label}</InputLabel>
+          <InputLabel className={required ? "required" : ""}>
+            {label}
+          </InputLabel>
           <Select
             label={label}
             value={value}
             onChange={handleChange}
-            variant={variant || 'standard'}
+            variant={variant || "standard"}
             required={required}
             fullWidth
             renderValue={(_value) => (
@@ -69,29 +71,47 @@ const StatusList = ({
               </span>
             )}
           >
-            <MenuItem value={bookcarsTypes.BookingStatus.Void} className="bs-s bs-s-void">
+            <MenuItem
+              value={bookcarsTypes.BookingStatus.Void}
+              className="bs-s bs-s-void bold"
+            >
               {commonStrings.BOOKING_STATUS_VOID}
             </MenuItem>
-            <MenuItem value={bookcarsTypes.BookingStatus.Pending} className="bs-s bs-s-pending">
+            <MenuItem
+              value={bookcarsTypes.BookingStatus.Pending}
+              className="bs-s bs-s-pending"
+            >
               {commonStrings.BOOKING_STATUS_PENDING}
             </MenuItem>
-            <MenuItem value={bookcarsTypes.BookingStatus.Deposit} className="bs-s bs-s-deposit">
+            <MenuItem
+              value={bookcarsTypes.BookingStatus.Deposit}
+              className="bs-s bs-s-deposit"
+            >
               {commonStrings.BOOKING_STATUS_DEPOSIT}
             </MenuItem>
-            <MenuItem value={bookcarsTypes.BookingStatus.Paid} className="bs-s bs-s-paid">
+            <MenuItem
+              value={bookcarsTypes.BookingStatus.Paid}
+              className="bs-s bs-s-paid"
+            >
               {commonStrings.BOOKING_STATUS_PAID}
             </MenuItem>
-            <MenuItem value={bookcarsTypes.BookingStatus.Reserved} className="bs-s bs-s-reserved">
+            <MenuItem
+              value={bookcarsTypes.BookingStatus.Reserved}
+              className="bs-s bs-s-reserved"
+            >
               {commonStrings.BOOKING_STATUS_RESERVED}
             </MenuItem>
-            <MenuItem value={bookcarsTypes.BookingStatus.Cancelled} className="bs-s bs-s-cancelled">
+            <MenuItem
+              value={bookcarsTypes.BookingStatus.Cancelled}
+              className="bs-s bs-s-cancelled"
+            >
               {commonStrings.BOOKING_STATUS_CANCELLED}
             </MenuItem>
           </Select>
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default StatusList
+export default StatusList;

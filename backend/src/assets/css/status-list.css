@@ -1,7 +1,7 @@
 li.bs-s {
   padding: 7px;
   text-align: center;
-  font-weight: 200;
+  font-weight: 500;
   color: #fff;
   margin: 1px;
   display: flex;
@@ -46,7 +46,7 @@ li.bs-s {
 .bs-s-sv {
   display: inherit;
   text-align: center;
-  font-weight: 200;
+  font-weight: 500;
   color: #fff;
   padding: 3px;
   opacity: 0.93;

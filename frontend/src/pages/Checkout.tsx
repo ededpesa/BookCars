@@ -15,6 +15,10 @@ import {
   RadioGroup,
   Radio,
   CircularProgress,
+  Select,
+  TextField,
+  MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import {
   DirectionsCar as CarIcon,
@@ -76,6 +80,8 @@ const Checkout = () => {
   const [noMatch, setNoMatch] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [documentType, setDocumentType] = useState(1);
+  const [documentNumber, setDocumentNumber] = useState("");
   const [phone, setPhone] = useState("");
   const [birthDate, setBirthDate] = useState<Date>();
   const [birthDateValid, setBirthDateValid] = useState(true);
@@ -252,6 +258,10 @@ const Checkout = () => {
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value);
+  };
+
+  const handleDocumentTypeChange = (e: SelectChangeEvent<number>) => {
+    setDocumentType(e.target.value as number);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -987,6 +997,29 @@ const Checkout = () => {
                               ""}
                             {(emailInfo && strings.EMAIL_INFO) || ""}
                           </FormHelperText>
+                        </FormControl>
+                        <FormControl fullWidth margin="dense">
+                          <InputLabel htmlFor="outlined-documentType-native-simple">
+                            {commonStrings.DOCUMENT_TYPE}
+                          </InputLabel>
+                          <Select
+                            native
+                            required
+                            // value={state.age}
+                            // onChange={handleChange}
+                            onChange={handleDocumentTypeChange}
+                            label={commonStrings.DOCUMENT_TYPE}
+                            inputProps={{
+                              name: "documentType",
+                              id: "outlined-documentType-native-simple",
+                            }}
+                          >
+                            {/* <option aria-label="None" value="" /> */}
+                            <option value={1}>
+                              {commonStrings.IDENTIFICATION_CARD}
+                            </option>
+                            <option value={2}>{commonStrings.PASSPORT}</option>
+                          </Select>
                         </FormControl>
                         <FormControl fullWidth margin="dense">
                           <InputLabel className="required">
