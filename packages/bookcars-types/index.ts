@@ -66,7 +66,10 @@ export interface Booking {
   to: Date;
   status: BookingStatus;
   cancellation?: boolean;
-  amendments?: boolean;
+  //amendments?: boolean;
+  gps?: boolean;
+  homeDelivery?: boolean;
+  babyChair?: boolean;
   theftProtection?: boolean;
   collisionDamageWaiver?: boolean;
   fullInsurance?: boolean;
@@ -439,7 +442,10 @@ export type CarFilterSubmitEvent = (filter: CarFilter) => void;
 
 export interface CarOptions {
   cancellation?: boolean;
-  amendments?: boolean;
+  // amendments?: boolean;
+  gps?: boolean;
+  homeDelivery?: boolean;
+  babyChair?: boolean;
   theftProtection?: boolean;
   collisionDamageWaiver?: boolean;
   fullInsurance?: boolean;

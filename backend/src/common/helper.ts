@@ -13,8 +13,7 @@ import env from "../config/env.config";
  * @param {string} code
  * @returns {*}
  */
-export const getLanguage = (code: string) =>
-  env._LANGUAGES.find((l) => l.code === code);
+export const getLanguage = (code: string) => env._LANGUAGES.find((l) => l.code === code);
 
 /**
  * Toast info message.
@@ -199,8 +198,7 @@ export const getGearboxTooltip = (type: string) => {
  * @param {number} seats
  * @returns {string}
  */
-export const getSeatsTooltip = (seats: number) =>
-  `${strings.SEATS_TOOLTIP_1}${seats} ${strings.SEATS_TOOLTIP_2}`;
+export const getSeatsTooltip = (seats: number) => `${strings.SEATS_TOOLTIP_1}${seats} ${strings.SEATS_TOOLTIP_2}`;
 
 /**
  * Get doors tooltip.
@@ -208,8 +206,7 @@ export const getSeatsTooltip = (seats: number) =>
  * @param {number} doors
  * @returns {string}
  */
-export const getDoorsTooltip = (doors: number) =>
-  `${strings.DOORS_TOOLTIP_1}${doors} ${strings.DOORS_TOOLTIP_2}`;
+export const getDoorsTooltip = (doors: number) => `${strings.DOORS_TOOLTIP_1}${doors} ${strings.DOORS_TOOLTIP_2}`;
 
 /**
  * Get fuel policy tooltip.
@@ -267,10 +264,7 @@ export const getMileageTooltip = (mileage: number, language: string) => {
  * @param {string} language
  * @returns {string}
  */
-export const getAdditionalDriver = (
-  additionalDriver: number,
-  language: string,
-) => {
+export const getAdditionalDriver = (additionalDriver: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (additionalDriver === -1) {
@@ -310,10 +304,7 @@ export const getFullInsurance = (fullInsurance: number, language: string) => {
  * @param {string} language
  * @returns {string}
  */
-export const getCollisionDamageWaiver = (
-  collisionDamageWaiver: number,
-  language: string,
-) => {
+export const getCollisionDamageWaiver = (collisionDamageWaiver: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (collisionDamageWaiver === -1) {
@@ -334,10 +325,7 @@ export const getCollisionDamageWaiver = (
  * @param {string} language
  * @returns {string}
  */
-export const getTheftProtection = (
-  theftProtection: number,
-  language: string,
-) => {
+export const getTheftProtection = (theftProtection: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (theftProtection === -1) {
@@ -452,8 +440,7 @@ export const getCancellation = (cancellation: number, language: string) => {
  * @param {?bookcarsTypes.User} [user]
  * @returns {boolean}
  */
-export const admin = (user?: bookcarsTypes.User): boolean =>
-  (user && user.type === bookcarsTypes.RecordType.Admin) ?? false;
+export const admin = (user?: bookcarsTypes.User): boolean => (user && user.type === bookcarsTypes.RecordType.Admin) ?? false;
 
 /**
  * Get booking status label.
@@ -532,10 +519,9 @@ export const price = async (
   booking: bookcarsTypes.Booking,
   car: bookcarsTypes.Car | undefined | null,
   onSucess: (_price: number) => void,
-  onError: (err: unknown) => void,
+  onError: (err: unknown) => void
 ) => {
-  const totalDays = (date1: Date, date2: Date) =>
-    Math.ceil((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
+  const totalDays = (date1: Date, date2: Date) => Math.ceil((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
 
   try {
     if (!car) {
@@ -551,8 +537,17 @@ export const price = async (
       if (booking.cancellation && car.cancellation > 0) {
         _price += car.cancellation;
       }
-      if (booking.amendments && car.amendments > 0) {
-        _price += car.amendments;
+      // if (booking.amendments && car.amendments > 0) {
+      //   _price += car.amendments;
+      // }
+      if (booking.gps && car.gps > 0) {
+        _price += car.gps * days;
+      }
+      if (booking.homeDelivery && car.homeDelivery > 0) {
+        _price += car.homeDelivery * days;
+      }
+      if (booking.babyChair && car.babyChair > 0) {
+        _price += car.babyChair * days;
       }
       if (booking.theftProtection && car.theftProtection > 0) {
         _price += car.theftProtection * days;
@@ -628,8 +623,7 @@ export const getUserType = (status?: bookcarsTypes.UserType) => {
  * @param {number} days
  * @returns {string}
  */
-export const getDays = (days: number) =>
-  `${strings.PRICE_DAYS_PART_1} ${days} ${strings.PRICE_DAYS_PART_2}${days > 1 ? "s" : ""}`;
+export const getDays = (days: number) => `${strings.PRICE_DAYS_PART_1} ${days} ${strings.PRICE_DAYS_PART_2}${days > 1 ? "s" : ""}`;
 
 /**
  * Get short days label.
@@ -637,8 +631,7 @@ export const getDays = (days: number) =>
  * @param {number} days
  * @returns {string}
  */
-export const getDaysShort = (days: number) =>
-  `${days} ${strings.PRICE_DAYS_PART_2}${days > 1 ? "s" : ""}`;
+export const getDaysShort = (days: number) => `${days} ${strings.PRICE_DAYS_PART_2}${days > 1 ? "s" : ""}`;
 
 /**
  * Get cancellation option label.
@@ -648,11 +641,7 @@ export const getDaysShort = (days: number) =>
  * @param {boolean} hidePlus
  * @returns {string}
  */
-export const getCancellationOption = (
-  cancellation: number,
-  language: string,
-  hidePlus: boolean,
-) => {
+export const getCancellationOption = (cancellation: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (cancellation === -1) {
@@ -672,11 +661,7 @@ export const getCancellationOption = (
  * @param {boolean} hidePlus
  * @returns {string}
  */
-export const getAmendmentsOption = (
-  amendments: number,
-  language: string,
-  hidePlus: boolean,
-) => {
+export const getAmendmentsOption = (amendments: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (amendments === -1) {
@@ -689,6 +674,63 @@ export const getAmendmentsOption = (
 };
 
 /**
+ * Get gps option label.
+ *
+ * @param {number} gps
+ * @param {string} language
+ * @returns {string}
+ */
+export const getGpsOption = (gps: number, language: string) => {
+  const fr = bookcarsHelper.isFrench(language);
+
+  if (gps === -1) {
+    return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+  }
+  if (gps === 0) {
+    return `${strings.INCLUDED}${fr ? "es" : ""}`;
+  }
+  return `+ ${bookcarsHelper.formatPrice(gps, commonStrings.CURRENCY, language)}`;
+};
+
+/**
+ * Get homeDelivery option label.
+ *
+ * @param {number} homeDelivery
+ * @param {string} language
+ * @returns {string}
+ */
+export const getHomeDeliveryOption = (homeDelivery: number, language: string) => {
+  const fr = bookcarsHelper.isFrench(language);
+
+  if (homeDelivery === -1) {
+    return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+  }
+  if (homeDelivery === 0) {
+    return `${strings.INCLUDED}${fr ? "es" : ""}`;
+  }
+  return `+ ${bookcarsHelper.formatPrice(homeDelivery, commonStrings.CURRENCY, language)}`;
+};
+
+/**
+ * Get babyChair option label.
+ *
+ * @param {number} babyChair
+ * @param {string} language
+ * @returns {string}
+ */
+export const getBabyChairOption = (babyChair: number, language: string) => {
+  const fr = bookcarsHelper.isFrench(language);
+
+  if (babyChair === -1) {
+    return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+  }
+  if (babyChair === 0) {
+    return `${strings.INCLUDED}${fr ? "es" : ""}`;
+  }
+  return `+ ${bookcarsHelper.formatPrice(babyChair, commonStrings.CURRENCY, language)}`;
+};
+
+/**
  * Get collision damage waiver option label.
  *
  * @param {number} collisionDamageWaiver
@@ -697,12 +739,7 @@ export const getAmendmentsOption = (
  * @param {boolean} hidePlus
  * @returns {string}
  */
-export const getCollisionDamageWaiverOption = (
-  collisionDamageWaiver: number,
-  days: number,
-  language: string,
-  hidePlus: boolean,
-) => {
+export const getCollisionDamageWaiverOption = (collisionDamageWaiver: number, days: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (collisionDamageWaiver === -1) {
@@ -714,7 +751,7 @@ export const getCollisionDamageWaiverOption = (
   return `${hidePlus ? "" : "+ "}${bookcarsHelper.formatPrice(collisionDamageWaiver * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     collisionDamageWaiver,
     commonStrings.CURRENCY,
-    language,
+    language
   )}${commonStrings.DAILY})`;
 };
 
@@ -727,12 +764,7 @@ export const getCollisionDamageWaiverOption = (
  * @param {boolean} hidePlus
  * @returns {string}
  */
-export const getTheftProtectionOption = (
-  theftProtection: number,
-  days: number,
-  language: string,
-  hidePlus: boolean,
-) => {
+export const getTheftProtectionOption = (theftProtection: number, days: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (theftProtection === -1) {
@@ -744,7 +776,7 @@ export const getTheftProtectionOption = (
   return `${hidePlus ? "" : "+ "}${bookcarsHelper.formatPrice(theftProtection * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     theftProtection,
     commonStrings.CURRENCY,
-    language,
+    language
   )}${commonStrings.DAILY})`;
 };
 
@@ -757,12 +789,7 @@ export const getTheftProtectionOption = (
  * @param {boolean} hidePlus
  * @returns {string}
  */
-export const getFullInsuranceOption = (
-  fullInsurance: number,
-  days: number,
-  language: string,
-  hidePlus: boolean,
-) => {
+export const getFullInsuranceOption = (fullInsurance: number, days: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (fullInsurance === -1) {
@@ -774,7 +801,7 @@ export const getFullInsuranceOption = (
   return `${hidePlus ? "" : "+ "}${bookcarsHelper.formatPrice(fullInsurance * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     fullInsurance,
     commonStrings.CURRENCY,
-    language,
+    language
   )}${commonStrings.DAILY})`;
 };
 
@@ -787,12 +814,7 @@ export const getFullInsuranceOption = (
  * @param {boolean} hidePlus
  * @returns {string}
  */
-export const getAdditionalDriverOption = (
-  additionalDriver: number,
-  days: number,
-  language: string,
-  hidePlus: boolean,
-) => {
+export const getAdditionalDriverOption = (additionalDriver: number, days: number, language: string, hidePlus: boolean) => {
   if (additionalDriver === -1) {
     return strings.UNAVAILABLE;
   }
@@ -802,7 +824,7 @@ export const getAdditionalDriverOption = (
   return `${hidePlus ? "" : "+ "}${bookcarsHelper.formatPrice(additionalDriver * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     additionalDriver,
     commonStrings.CURRENCY,
-    language,
+    language
   )}${commonStrings.DAILY})`;
 };
 
@@ -822,10 +844,7 @@ export const getBirthDateError = (minimumAge: number) =>
  * @param {string} option
  * @returns {boolean}
  */
-export const carOptionAvailable = (
-  car: bookcarsTypes.Car | undefined,
-  option: string,
-) => car && option in car && (car[option] as number) > -1;
+export const carOptionAvailable = (car: bookcarsTypes.Car | undefined, option: string) => car && option in car && (car[option] as number) > -1;
 
 /**
  * Validate URL string.
@@ -833,5 +852,4 @@ export const carOptionAvailable = (
  * @param {string} url
  * @returns {boolean}
  */
-export const isValidURL = (url: string) =>
-  validator.isURL(url, { protocols: ["http", "https"] });
+export const isValidURL = (url: string) => validator.isURL(url, { protocols: ["http", "https"] });
