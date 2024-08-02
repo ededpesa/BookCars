@@ -35,7 +35,7 @@ const SignIn = () => {
   };
 
   const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLElement>
+    e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLElement>,
   ) => {
     try {
       e.preventDefault();

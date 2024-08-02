@@ -50,16 +50,20 @@ interface HeaderProps {
   hidden?: boolean;
 }
 
-const ListItemLink = (props: any) => <ListItemButton component="a" {...props} />;
+const ListItemLink = (props: any) => (
+  <ListItemButton component="a" {...props} />
+);
 
 const Header = ({ user, hidden }: HeaderProps) => {
   const navigate = useNavigate();
-  const { notificationCount, setNotificationCount } = useGlobalContext() as GlobalContextType;
+  const { notificationCount, setNotificationCount } =
+    useGlobalContext() as GlobalContextType;
 
   const [lang, setLang] = useState(helper.getLanguage(env.DEFAULT_LANGUAGE));
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [langAnchorEl, setLangAnchorEl] = useState<HTMLElement | null>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<HTMLElement | null>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    useState<HTMLElement | null>(null);
   const [sideAnchorEl, setSideAnchorEl] = useState<HTMLElement | null>(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [loading, setIsLoading] = useState(true);
@@ -106,7 +110,9 @@ const Header = ({ user, hidden }: HeaderProps) => {
 
     if (params.has("l")) {
       params.delete("l");
-      window.location.href = window.location.href.split("?")[0] + ([...params].length > 0 ? `?${params}` : "");
+      window.location.href =
+        window.location.href.split("?")[0] +
+        ([...params].length > 0 ? `?${params}` : "");
     } else {
       window.location.reload();
     }
@@ -183,12 +189,14 @@ const Header = ({ user, hidden }: HeaderProps) => {
   useEffect(() => {
     if (!hidden) {
       if (user) {
-        NotificationService.getNotificationCounter(user._id as string).then((notificationCounter) => {
-          setIsSignedIn(true);
-          setNotificationCount(notificationCounter.count);
-          setIsLoading(false);
-          setIsLoaded(true);
-        });
+        NotificationService.getNotificationCounter(user._id as string).then(
+          (notificationCounter) => {
+            setIsSignedIn(true);
+            setNotificationCount(notificationCounter.count);
+            setIsLoading(false);
+            setIsLoaded(true);
+          },
+        );
       } else {
         setIsLoading(false);
         setIsLoaded(true);
@@ -259,7 +267,11 @@ const Header = ({ user, hidden }: HeaderProps) => {
       className="menu"
     >
       {env._LANGUAGES.map((language) => (
-        <MenuItem onClick={handleLangMenuClose} data-code={language.code} key={language.code}>
+        <MenuItem
+          onClick={handleLangMenuClose}
+          data-code={language.code}
+          key={language.code}
+        >
           {language.label}
         </MenuItem>
       ))}
@@ -271,12 +283,22 @@ const Header = ({ user, hidden }: HeaderProps) => {
       <AppBar position="fixed" sx={{ bgcolor: "#121212" }}>
         <Toolbar className="toolbar">
           {isLoaded && !loading && isSignedIn && (
-            <IconButton edge="start" sx={classes.menuButton} color="inherit" aria-label="open drawer" onClick={handleSideMenuOpen}>
+            <IconButton
+              edge="start"
+              sx={classes.menuButton}
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleSideMenuOpen}
+            >
               <MenuIcon />
             </IconButton>
           )}
           <>
-            <Drawer open={isSideMenuOpen} onClose={handleSideMenuClose} className="menu">
+            <Drawer
+              open={isSideMenuOpen}
+              onClose={handleSideMenuClose}
+              className="menu"
+            >
               <List sx={classes.list}>
                 <ListItemLink href="/">
                   <ListItemIcon>
@@ -332,38 +354,79 @@ const Header = ({ user, hidden }: HeaderProps) => {
           <div style={classes.grow} />
           <div className="header-desktop">
             {isSignedIn && (
-              <IconButton aria-label="" color="inherit" onClick={handleNotificationsClick}>
-                <Badge badgeContent={notificationCount > 0 ? notificationCount : null} color="error">
+              <IconButton
+                aria-label=""
+                color="inherit"
+                onClick={handleNotificationsClick}
+              >
+                <Badge
+                  badgeContent={
+                    notificationCount > 0 ? notificationCount : null
+                  }
+                  color="error"
+                >
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
             )}
             {isLoaded && !loading && (
-              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary black">
+              <Button
+                variant="contained"
+                startIcon={<LanguageIcon />}
+                onClick={handleLangMenuOpen}
+                disableElevation
+                fullWidth
+                className="btn-primary black"
+              >
                 {lang?.label}
               </Button>
             )}
             {isSignedIn && user && (
-              <IconButton edge="end" aria-label="account" aria-controls={menuId} aria-haspopup="true" onClick={handleAccountMenuOpen} color="inherit">
+              <IconButton
+                edge="end"
+                aria-label="account"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleAccountMenuOpen}
+                color="inherit"
+              >
                 <Avatar record={user} type={user.type} size="small" readonly />
               </IconButton>
             )}
           </div>
           <div className="header-mobile">
             {!isSignedIn && !loading && (
-              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary black">
+              <Button
+                variant="contained"
+                startIcon={<LanguageIcon />}
+                onClick={handleLangMenuOpen}
+                disableElevation
+                fullWidth
+                className="btn-primary black"
+              >
                 {lang?.label}
               </Button>
             )}
             {isSignedIn && (
               <IconButton color="inherit" onClick={handleNotificationsClick}>
-                <Badge badgeContent={notificationCount > 0 ? notificationCount : null} color="error">
+                <Badge
+                  badgeContent={
+                    notificationCount > 0 ? notificationCount : null
+                  }
+                  color="error"
+                >
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
             )}
             {isSignedIn && (
-              <IconButton aria-label="show more" aria-controls={mobileMenuId} aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">
+              <IconButton
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
                 <MoreIcon />
               </IconButton>
             )}

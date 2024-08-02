@@ -105,7 +105,7 @@ const Booking = () => {
         booking.car as bookcarsTypes.Car,
         new Date(booking.from),
         new Date(booking.to),
-        booking as bookcarsTypes.CarOptions
+        booking as bookcarsTypes.CarOptions,
       );
       setBooking(booking);
       setPrice(_price);
@@ -121,7 +121,7 @@ const Booking = () => {
         booking.car as bookcarsTypes.Car,
         new Date(booking.from),
         new Date(booking.to),
-        booking as bookcarsTypes.CarOptions
+        booking as bookcarsTypes.CarOptions,
       );
       setBooking(booking);
       setPrice(_price);
@@ -130,7 +130,7 @@ const Booking = () => {
   };
 
   const handleCollisionDamageWaiverChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (booking && booking.car) {
       booking.collisionDamageWaiver = e.target.checked;
@@ -139,7 +139,7 @@ const Booking = () => {
         booking.car as bookcarsTypes.Car,
         new Date(booking.from),
         new Date(booking.to),
-        booking as bookcarsTypes.CarOptions
+        booking as bookcarsTypes.CarOptions,
       );
       setBooking(booking);
       setPrice(_price);
@@ -148,7 +148,7 @@ const Booking = () => {
   };
 
   const handleTheftProtectionChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (booking && booking.car) {
       booking.theftProtection = e.target.checked;
@@ -157,7 +157,7 @@ const Booking = () => {
         booking.car as bookcarsTypes.Car,
         new Date(booking.from),
         new Date(booking.to),
-        booking as bookcarsTypes.CarOptions
+        booking as bookcarsTypes.CarOptions,
       );
       setBooking(booking);
       setPrice(_price);
@@ -166,7 +166,7 @@ const Booking = () => {
   };
 
   const handleFullInsuranceChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (booking && booking.car) {
       booking.fullInsurance = e.target.checked;
@@ -175,7 +175,7 @@ const Booking = () => {
         booking.car as bookcarsTypes.Car,
         new Date(booking.from),
         new Date(booking.to),
-        booking as bookcarsTypes.CarOptions
+        booking as bookcarsTypes.CarOptions,
       );
       setBooking(booking);
       setPrice(_price);
@@ -184,7 +184,7 @@ const Booking = () => {
   };
 
   const handleAdditionalDriverChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (booking && booking.car) {
       booking.additionalDriver = e.target.checked;
@@ -193,7 +193,7 @@ const Booking = () => {
         booking.car as bookcarsTypes.Car,
         new Date(booking.from),
         new Date(booking.to),
-        booking as bookcarsTypes.CarOptions
+        booking as bookcarsTypes.CarOptions,
       );
       setBooking(booking);
       setPrice(_price);
@@ -300,7 +300,7 @@ const Booking = () => {
             setFullInsurance(_booking.fullInsurance || false);
             setAdditionalDriver(
               (_booking.additionalDriver && !!_booking._additionalDriver) ||
-                false
+                false,
             );
           } else {
             setLoading(false);
@@ -388,7 +388,7 @@ const Booking = () => {
                         booking.car as bookcarsTypes.Car,
                         new Date(booking.from),
                         new Date(booking.to),
-                        booking as bookcarsTypes.CarOptions
+                        booking as bookcarsTypes.CarOptions,
                       );
                       booking.price = _price;
                       setBooking(booking);
@@ -415,7 +415,7 @@ const Booking = () => {
                         booking.car as bookcarsTypes.Car,
                         new Date(booking.from),
                         new Date(booking.to),
-                        booking as bookcarsTypes.CarOptions
+                        booking as bookcarsTypes.CarOptions,
                       );
                       booking.price = _price;
                       setBooking(booking);
@@ -583,7 +583,7 @@ const Booking = () => {
                   {bookcarsHelper.formatPrice(
                     price as number,
                     commonStrings.CURRENCY,
-                    language
+                    language,
                   )}
                 </span>
                 <span className="price-day">{`${
@@ -591,7 +591,7 @@ const Booking = () => {
                 } ${bookcarsHelper.formatPrice(
                   Math.floor((price as number) / days),
                   commonStrings.CURRENCY,
-                  language
+                  language,
                 )}`}</span>
               </div>
             </div>

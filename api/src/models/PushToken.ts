@@ -1,12 +1,12 @@
-import { Schema, model } from 'mongoose'
-import * as env from '../config/env.config'
+import { Schema, model } from "mongoose";
+import * as env from "../config/env.config";
 
 const pushTokenSchema = new Schema<env.PushToken>(
   {
     user: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'User',
+      ref: "User",
       index: true,
     },
     token: {
@@ -17,10 +17,10 @@ const pushTokenSchema = new Schema<env.PushToken>(
   {
     timestamps: true,
     strict: true,
-    collection: 'PushToken',
+    collection: "PushToken",
   },
-)
+);
 
-const PushToken = model<env.PushToken>('PushToken', pushTokenSchema)
+const PushToken = model<env.PushToken>("PushToken", pushTokenSchema);
 
-export default PushToken
+export default PushToken;

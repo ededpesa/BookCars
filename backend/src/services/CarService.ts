@@ -1,6 +1,6 @@
-import * as bookcarsTypes from ':bookcars-types'
-import axiosInstance from './axiosInstance'
-import * as UserService from './UserService'
+import * as bookcarsTypes from ":bookcars-types";
+import axiosInstance from "./axiosInstance";
+import * as UserService from "./UserService";
 
 /**
  * Create a Car.
@@ -8,14 +8,12 @@ import * as UserService from './UserService'
  * @param {bookcarsTypes.CreateCarPayload} data
  * @returns {Promise<bookcarsTypes.Car>}
  */
-export const create = (data: bookcarsTypes.CreateCarPayload): Promise<bookcarsTypes.Car> =>
+export const create = (
+  data: bookcarsTypes.CreateCarPayload,
+): Promise<bookcarsTypes.Car> =>
   axiosInstance
-    .post(
-      '/api/create-car',
-      data,
-      { withCredentials: true }
-    )
-    .then((res) => res.data)
+    .post("/api/create-car", data, { withCredentials: true })
+    .then((res) => res.data);
 
 /**
  * Update a Car.
@@ -25,12 +23,8 @@ export const create = (data: bookcarsTypes.CreateCarPayload): Promise<bookcarsTy
  */
 export const update = (data: bookcarsTypes.UpdateCarPayload): Promise<number> =>
   axiosInstance
-    .put(
-      '/api/update-car',
-      data,
-      { withCredentials: true }
-    )
-    .then((res) => res.status)
+    .put("/api/update-car", data, { withCredentials: true })
+    .then((res) => res.status);
 
 /**
  * Check if a Car is related to a booking.
@@ -40,11 +34,8 @@ export const update = (data: bookcarsTypes.UpdateCarPayload): Promise<number> =>
  */
 export const check = (id: string): Promise<number> =>
   axiosInstance
-    .get(
-      `/api/check-car/${encodeURIComponent(id)}`,
-      { withCredentials: true }
-    )
-    .then((res) => res.status)
+    .get(`/api/check-car/${encodeURIComponent(id)}`, { withCredentials: true })
+    .then((res) => res.status);
 
 /**
  * Delete a Car.
@@ -54,11 +45,10 @@ export const check = (id: string): Promise<number> =>
  */
 export const deleteCar = (id: string): Promise<number> =>
   axiosInstance
-    .delete(
-      `/api/delete-car/${encodeURIComponent(id)}`,
-      { withCredentials: true }
-    )
-    .then((res) => res.status)
+    .delete(`/api/delete-car/${encodeURIComponent(id)}`, {
+      withCredentials: true,
+    })
+    .then((res) => res.status);
 
 /**
  * Create a temporary Car image.
@@ -67,20 +57,16 @@ export const deleteCar = (id: string): Promise<number> =>
  * @returns {Promise<string>}
  */
 export const createImage = (file: Blob): Promise<string> => {
-  const formData = new FormData()
-  formData.append('image', file)
+  const formData = new FormData();
+  formData.append("image", file);
 
   return axiosInstance
-    .post(
-      '/api/create-car-image',
-      formData,
-      {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      },
-    )
-    .then((res) => res.data)
-}
+    .post("/api/create-car-image", formData, {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((res) => res.data);
+};
 
 /**
  * Update a Car image.
@@ -90,20 +76,16 @@ export const createImage = (file: Blob): Promise<string> => {
  * @returns {Promise<number>}
  */
 export const updateImage = (id: string, file: Blob): Promise<number> => {
-  const formData = new FormData()
-  formData.append('image', file)
+  const formData = new FormData();
+  formData.append("image", file);
 
   return axiosInstance
-    .post(
-      `/api/update-car-image/${encodeURIComponent(id)}`,
-      formData,
-      {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      },
-    )
-    .then((res) => res.status)
-}
+    .post(`/api/update-car-image/${encodeURIComponent(id)}`, formData, {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((res) => res.status);
+};
 
 /**
  * Delete a Car image.
@@ -113,12 +95,10 @@ export const updateImage = (id: string, file: Blob): Promise<number> => {
  */
 export const deleteImage = (id: string): Promise<number> =>
   axiosInstance
-    .post(
-      `/api/delete-car-image/${encodeURIComponent(id)}`,
-      null,
-      { withCredentials: true }
-    )
-    .then((res) => res.status)
+    .post(`/api/delete-car-image/${encodeURIComponent(id)}`, null, {
+      withCredentials: true,
+    })
+    .then((res) => res.status);
 
 /**
  * Delete a temporary Car image.
@@ -128,12 +108,10 @@ export const deleteImage = (id: string): Promise<number> =>
  */
 export const deleteTempImage = (image: string): Promise<number> =>
   axiosInstance
-    .post(
-      `/api/delete-temp-car-image/${encodeURIComponent(image)}`,
-      null,
-      { withCredentials: true }
-    )
-    .then((res) => res.status)
+    .post(`/api/delete-temp-car-image/${encodeURIComponent(image)}`, null, {
+      withCredentials: true,
+    })
+    .then((res) => res.status);
 
 /**
  * Get a Car by ID.
@@ -143,11 +121,10 @@ export const deleteTempImage = (image: string): Promise<number> =>
  */
 export const getCar = (id: string): Promise<bookcarsTypes.Car> =>
   axiosInstance
-    .get(
-      `/api/car/${encodeURIComponent(id)}/${UserService.getLanguage()}`,
-      { withCredentials: true }
-    )
-    .then((res) => res.data)
+    .get(`/api/car/${encodeURIComponent(id)}/${UserService.getLanguage()}`, {
+      withCredentials: true,
+    })
+    .then((res) => res.data);
 
 /**
  * Get Cars.
@@ -158,14 +135,17 @@ export const getCar = (id: string): Promise<bookcarsTypes.Car> =>
  * @param {number} size
  * @returns {Promise<bookcarsTypes.Result<bookcarsTypes.Car>>}
  */
-export const getCars = (keyword: string, data: bookcarsTypes.GetCarsPayload, page: number, size: number): Promise<bookcarsTypes.Result<bookcarsTypes.Car>> =>
+export const getCars = (
+  keyword: string,
+  data: bookcarsTypes.GetCarsPayload,
+  page: number,
+  size: number,
+): Promise<bookcarsTypes.Result<bookcarsTypes.Car>> =>
   axiosInstance
-    .post(
-      `/api/cars/${page}/${size}/?s=${encodeURIComponent(keyword)}`,
-      data,
-      { withCredentials: true }
-    )
-    .then((res) => res.data)
+    .post(`/api/cars/${page}/${size}/?s=${encodeURIComponent(keyword)}`, data, {
+      withCredentials: true,
+    })
+    .then((res) => res.data);
 
 /**
  * Get Cars by supplier and location.
@@ -176,11 +156,16 @@ export const getCars = (keyword: string, data: bookcarsTypes.GetCarsPayload, pag
  * @param {number} size
  * @returns {Promise<bookcarsTypes.Car[]>}
  */
-export const getBookingCars = (keyword: string, data: bookcarsTypes.GetBookingCarsPayload, page: number, size: number): Promise<bookcarsTypes.Car[]> =>
+export const getBookingCars = (
+  keyword: string,
+  data: bookcarsTypes.GetBookingCarsPayload,
+  page: number,
+  size: number,
+): Promise<bookcarsTypes.Car[]> =>
   axiosInstance
     .post(
       `/api/booking-cars/${page}/${size}/?s=${encodeURIComponent(keyword)}`,
       data,
-      { withCredentials: true }
+      { withCredentials: true },
     )
-    .then((res) => res.data)
+    .then((res) => res.data);

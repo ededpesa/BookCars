@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose'
-import * as env from '../config/env.config'
+import { Schema, model } from "mongoose";
+import * as env from "../config/env.config";
 
 const notificationCounterSchema = new Schema<env.NotificationCounter>(
   {
@@ -7,7 +7,7 @@ const notificationCounterSchema = new Schema<env.NotificationCounter>(
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
       unique: true,
-      ref: 'User',
+      ref: "User",
       index: true,
     },
     count: {
@@ -15,17 +15,20 @@ const notificationCounterSchema = new Schema<env.NotificationCounter>(
       default: 0,
       validate: {
         validator: Number.isInteger,
-        message: '{VALUE} is not an integer value',
+        message: "{VALUE} is not an integer value",
       },
     },
   },
   {
     timestamps: true,
     strict: true,
-    collection: 'NotificationCounter',
+    collection: "NotificationCounter",
   },
-)
+);
 
-const NotificationCounter = model<env.NotificationCounter>('NotificationCounter', notificationCounterSchema)
+const NotificationCounter = model<env.NotificationCounter>(
+  "NotificationCounter",
+  notificationCounterSchema,
+);
 
-export default NotificationCounter
+export default NotificationCounter;

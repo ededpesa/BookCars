@@ -7,7 +7,8 @@ const strings = new LocalizedStrings({
       "Un e-mail de validation a été envoyé à votre adresse e-mail. Veuillez vérifier votre boîte aux lettres et valider votre compte en cliquant sur le lien dans l'e-mail. Il expirera au bout d'un jour. Si vous n'avez pas reçu d'e-mail de validation, cliquez sur renvoyer.",
     RESEND: "Renvoyer",
     VALIDATION_EMAIL_SENT: "E-mail de validation envoyé.",
-    VALIDATION_EMAIL_ERROR: "Une erreur s'est produite lors de l'envoi de l'e-mail de validation.",
+    VALIDATION_EMAIL_ERROR:
+      "Une erreur s'est produite lors de l'envoi de l'e-mail de validation.",
   },
   en: {
     VALIDATE_EMAIL:
@@ -21,7 +22,8 @@ const strings = new LocalizedStrings({
       "Se ha enviado un correo de validación a tu dirección de correo electrónico. Por favor, revisa tu bandeja de entrada y valida tu cuenta haciendo clic en el enlace del correo. El enlace expirará después de un día. Si no recibiste el correo de validación, haz clic en reenviar.",
     RESEND: "Reenviar",
     VALIDATION_EMAIL_SENT: "Correo de validación enviado.",
-    VALIDATION_EMAIL_ERROR: "Se produjo un error al enviar el correo de validación.",
+    VALIDATION_EMAIL_ERROR:
+      "Se produjo un error al enviar el correo de validación.",
   },
 });
 

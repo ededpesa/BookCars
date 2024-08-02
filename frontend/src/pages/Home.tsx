@@ -27,9 +27,13 @@ const Home = () => {
   _minDate.setDate(_minDate.getDate() + 1);
 
   const [pickupLocation, setPickupLocation] = useState("");
-  const [selectedPickupLocation, setSelectedPickupLocation] = useState<bookcarsTypes.Location | undefined>(undefined);
+  const [selectedPickupLocation, setSelectedPickupLocation] = useState<
+    bookcarsTypes.Location | undefined
+  >(undefined);
   const [dropOffLocation, setDropOffLocation] = useState("");
-  const [selectedDropOffLocation, setSelectedDropOffLocation] = useState<bookcarsTypes.Location | undefined>(undefined);
+  const [selectedDropOffLocation, setSelectedDropOffLocation] = useState<
+    bookcarsTypes.Location | undefined
+  >(undefined);
   const [minDate, setMinDate] = useState(_minDate);
   const [maxDate, setMaxDate] = useState<Date>();
   const [from, setFrom] = useState<Date>();
@@ -63,7 +67,9 @@ const Home = () => {
 
     const init = async () => {
       let _suppliers = await SupplierService.getAllSuppliers();
-      _suppliers = _suppliers.filter((supplier) => supplier.avatar && !/no-image/i.test(supplier.avatar));
+      _suppliers = _suppliers.filter(
+        (supplier) => supplier.avatar && !/no-image/i.test(supplier.avatar),
+      );
       bookcarsHelper.shuffle(_suppliers);
       setSuppliers(_suppliers);
     };
@@ -105,7 +111,9 @@ const Home = () => {
     }
   };
 
-  const handleDropOffLocationChange = async (values: bookcarsTypes.Option[]) => {
+  const handleDropOffLocationChange = async (
+    values: bookcarsTypes.Option[],
+  ) => {
     const _dropOffLocation = (values.length > 0 && values[0]._id) || "";
     setDropOffLocation(_dropOffLocation);
 
@@ -120,7 +128,14 @@ const Home = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!pickupLocation || !dropOffLocation || !from || !to || fromError || toError) {
+    if (
+      !pickupLocation ||
+      !dropOffLocation ||
+      !from ||
+      !to ||
+      fromError ||
+      toError
+    ) {
       return;
     }
 
@@ -233,7 +248,12 @@ const Home = () => {
                 </FormControl>
               )}
               <FormControl className="chk-same-location">
-                <input id="chk-same-location" type="checkbox" checked={sameLocation} onChange={handleSameLocationChange} />
+                <input
+                  id="chk-same-location"
+                  type="checkbox"
+                  checked={sameLocation}
+                  onChange={handleSameLocationChange}
+                />
                 <label htmlFor="chk-same-location">{strings.DROP_OFF}</label>
               </FormControl>
             </form>

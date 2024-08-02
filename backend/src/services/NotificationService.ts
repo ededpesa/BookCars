@@ -1,6 +1,6 @@
-import * as bookcarsTypes from ':bookcars-types'
-import axiosInstance from './axiosInstance'
-import env from '../config/env.config'
+import * as bookcarsTypes from ":bookcars-types";
+import axiosInstance from "./axiosInstance";
+import env from "../config/env.config";
 
 /**
  * Get NotificationCounter by UserID.
@@ -8,14 +8,14 @@ import env from '../config/env.config'
  * @param {string} userId
  * @returns {Promise<bookcarsTypes.NotificationCounter>}
  */
-export const getNotificationCounter = (userId: string): Promise<bookcarsTypes.NotificationCounter> => (
+export const getNotificationCounter = (
+  userId: string,
+): Promise<bookcarsTypes.NotificationCounter> =>
   axiosInstance
-    .get(
-      `/api/notification-counter/${encodeURIComponent(userId)}`,
-      { withCredentials: true }
-    )
-    .then((res) => res.data)
-)
+    .get(`/api/notification-counter/${encodeURIComponent(userId)}`, {
+      withCredentials: true,
+    })
+    .then((res) => res.data);
 
 /**
  * Mark Notifications as read.
@@ -24,15 +24,14 @@ export const getNotificationCounter = (userId: string): Promise<bookcarsTypes.No
  * @param {string[]} ids
  * @returns {Promise<number>}
  */
-export const markAsRead = (userId: string, ids: string[]): Promise<number> => (
+export const markAsRead = (userId: string, ids: string[]): Promise<number> =>
   axiosInstance
     .post(
       `/api/mark-notifications-as-read/${encodeURIComponent(userId)}`,
       { ids },
-      { withCredentials: true }
+      { withCredentials: true },
     )
-    .then((res) => res.status)
-)
+    .then((res) => res.status);
 
 /**
  * Mark Notifications as unread.
@@ -41,15 +40,14 @@ export const markAsRead = (userId: string, ids: string[]): Promise<number> => (
  * @param {string[]} ids
  * @returns {Promise<number>}
  */
-export const markAsUnread = (userId: string, ids: string[]): Promise<number> => (
+export const markAsUnread = (userId: string, ids: string[]): Promise<number> =>
   axiosInstance
     .post(
-`/api/mark-notifications-as-unread/${encodeURIComponent(userId)}`,
+      `/api/mark-notifications-as-unread/${encodeURIComponent(userId)}`,
       { ids },
-      { withCredentials: true }
+      { withCredentials: true },
     )
-    .then((res) => res.status)
-)
+    .then((res) => res.status);
 
 /**
  * Delete Notifications.
@@ -58,15 +56,17 @@ export const markAsUnread = (userId: string, ids: string[]): Promise<number> => 
  * @param {string[]} ids
  * @returns {Promise<number>}
  */
-export const deleteNotifications = (userId: string, ids: string[]): Promise<number> => (
+export const deleteNotifications = (
+  userId: string,
+  ids: string[],
+): Promise<number> =>
   axiosInstance
     .post(
       `/api/delete-notifications/${encodeURIComponent(userId)}`,
       { ids },
-      { withCredentials: true }
-)
-    .then((res) => res.status)
-)
+      { withCredentials: true },
+    )
+    .then((res) => res.status);
 
 /**
  * Get Notifications.
@@ -75,11 +75,13 @@ export const deleteNotifications = (userId: string, ids: string[]): Promise<numb
  * @param {number} page
  * @returns {Promise<bookcarsTypes.Result<bookcarsTypes.Notification>>}
  */
-export const getNotifications = (userId: string, page: number): Promise<bookcarsTypes.Result<bookcarsTypes.Notification>> => (
+export const getNotifications = (
+  userId: string,
+  page: number,
+): Promise<bookcarsTypes.Result<bookcarsTypes.Notification>> =>
   axiosInstance
     .get(
       `/api/notifications/${encodeURIComponent(userId)}/${page}/${env.PAGE_SIZE}`,
-      { withCredentials: true }
+      { withCredentials: true },
     )
-    .then((res) => res.data)
-)
+    .then((res) => res.data);

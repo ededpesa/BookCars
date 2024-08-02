@@ -1,11 +1,11 @@
-import React from 'react'
-import { Link } from '@mui/material'
-import { strings as commonStrings } from '../lang/common'
-import { strings } from '../lang/no-match'
-import Layout from '../components/Layout'
+import React from "react";
+import { Link } from "@mui/material";
+import { strings as commonStrings } from "../lang/common";
+import { strings } from "../lang/no-match";
+import Layout from "../components/Layout";
 
 interface NoMatchProps {
-  hideHeader?: boolean
+  hideHeader?: boolean;
 }
 
 const NoMatch = ({ hideHeader }: NoMatchProps) => {
@@ -16,9 +16,9 @@ const NoMatch = ({ hideHeader }: NoMatchProps) => {
         <Link href="/">{commonStrings.GO_TO_HOME}</Link>
       </p>
     </div>
-  )
+  );
 
-  return hideHeader ? noMatch() : <Layout strict={false}>{noMatch()}</Layout>
-}
+  return hideHeader ? noMatch() : <Layout strict={false}>{noMatch()}</Layout>;
+};
 
-export default NoMatch
+export default NoMatch;

@@ -239,9 +239,7 @@ export const getMileage = (mileage: number, language: string) => {
   if (mileage === -1) {
     return strings.UNLIMITED;
   }
-  return `${bookcarsHelper.formatNumber(mileage, language)} ${
-    strings.MILEAGE_UNIT
-  }`;
+  return `${bookcarsHelper.formatNumber(mileage, language)} ${strings.MILEAGE_UNIT}`;
 };
 
 /**
@@ -257,10 +255,7 @@ export const getMileageTooltip = (mileage: number, language: string) => {
   if (mileage === -1) {
     return `${strings.MILEAGE} ${strings.UNLIMITED.toLocaleLowerCase()}.`;
   }
-  return `${strings.MILEAGE}${fr ? " : " : ": "}${bookcarsHelper.formatNumber(
-    mileage,
-    language
-  )} ${strings.MILEAGE_UNIT}`;
+  return `${strings.MILEAGE}${fr ? " : " : ": "}${bookcarsHelper.formatNumber(mileage, language)} ${strings.MILEAGE_UNIT}`;
 };
 
 /**
@@ -272,27 +267,19 @@ export const getMileageTooltip = (mileage: number, language: string) => {
  */
 export const getAdditionalDriver = (
   additionalDriver: number,
-  language: string
+  language: string,
 ) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (additionalDriver === -1) {
-    return `${strings.ADDITIONAL_DRIVER}${fr ? " : " : ": "}${
-      strings.UNAVAILABLE
-    }`;
+    return `${strings.ADDITIONAL_DRIVER}${fr ? " : " : ": "}${strings.UNAVAILABLE}`;
   }
   if (additionalDriver === 0) {
-    return `${strings.ADDITIONAL_DRIVER}${fr ? " : " : ": "}${
-      strings.INCLUDED
-    }`;
+    return `${strings.ADDITIONAL_DRIVER}${fr ? " : " : ": "}${strings.INCLUDED}`;
   }
-  return `${strings.ADDITIONAL_DRIVER}${
-    fr ? " : " : ": "
-  }${bookcarsHelper.formatPrice(
-    additionalDriver,
-    commonStrings.CURRENCY,
-    language
-  )}${commonStrings.DAILY}`;
+  return `${strings.ADDITIONAL_DRIVER}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(additionalDriver, commonStrings.CURRENCY, language)}${
+    commonStrings.DAILY
+  }`;
 };
 
 /**
@@ -306,22 +293,12 @@ export const getFullInsurance = (fullInsurance: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (fullInsurance === -1) {
-    return `${strings.FULL_INSURANCE}${fr ? " : " : ": "}${
-      strings.UNAVAILABLE
-    }`;
+    return `${strings.FULL_INSURANCE}${fr ? " : " : ": "}${strings.UNAVAILABLE}`;
   }
   if (fullInsurance === 0) {
-    return `${strings.FULL_INSURANCE}${fr ? " : " : ": "}${strings.INCLUDED}${
-      fr ? "e" : ""
-    }`;
+    return `${strings.FULL_INSURANCE}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `${strings.FULL_INSURANCE}${
-    fr ? " : " : ": "
-  }${bookcarsHelper.formatPrice(
-    fullInsurance,
-    commonStrings.CURRENCY,
-    language
-  )}${commonStrings.DAILY}`;
+  return `${strings.FULL_INSURANCE}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(fullInsurance, commonStrings.CURRENCY, language)}${commonStrings.DAILY}`;
 };
 
 /**
@@ -333,27 +310,19 @@ export const getFullInsurance = (fullInsurance: number, language: string) => {
  */
 export const getCollisionDamageWaiver = (
   collisionDamageWaiver: number,
-  language: string
+  language: string,
 ) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (collisionDamageWaiver === -1) {
-    return `${strings.COLLISION_DAMAGE_WAVER}${fr ? " : " : ": "}${
-      strings.UNAVAILABLE
-    }`;
+    return `${strings.COLLISION_DAMAGE_WAVER}${fr ? " : " : ": "}${strings.UNAVAILABLE}`;
   }
   if (collisionDamageWaiver === 0) {
-    return `${strings.COLLISION_DAMAGE_WAVER}${fr ? " : " : ": "}${
-      strings.INCLUDED
-    }${fr ? "e" : ""}`;
+    return `${strings.COLLISION_DAMAGE_WAVER}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `${strings.COLLISION_DAMAGE_WAVER}${
-    fr ? " : " : ": "
-  }${bookcarsHelper.formatPrice(
-    collisionDamageWaiver,
-    commonStrings.CURRENCY,
-    language
-  )}${commonStrings.DAILY}`;
+  return `${strings.COLLISION_DAMAGE_WAVER}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(collisionDamageWaiver, commonStrings.CURRENCY, language)}${
+    commonStrings.DAILY
+  }`;
 };
 
 /**
@@ -365,27 +334,19 @@ export const getCollisionDamageWaiver = (
  */
 export const getTheftProtection = (
   theftProtection: number,
-  language: string
+  language: string,
 ) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (theftProtection === -1) {
-    return `${strings.THEFT_PROTECTION}${fr ? " : " : ": "}${
-      strings.UNAVAILABLE
-    }`;
+    return `${strings.THEFT_PROTECTION}${fr ? " : " : ": "}${strings.UNAVAILABLE}`;
   }
   if (theftProtection === 0) {
-    return `${strings.THEFT_PROTECTION}${fr ? " : " : ": "}${strings.INCLUDED}${
-      fr ? "e" : ""
-    }`;
+    return `${strings.THEFT_PROTECTION}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `${strings.THEFT_PROTECTION}${
-    fr ? " : " : ": "
-  }${bookcarsHelper.formatPrice(
-    theftProtection,
-    commonStrings.CURRENCY,
-    language
-  )}${commonStrings.DAILY}`;
+  return `${strings.THEFT_PROTECTION}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(theftProtection, commonStrings.CURRENCY, language)}${
+    commonStrings.DAILY
+  }`;
 };
 
 /**
@@ -399,20 +360,69 @@ export const getAmendments = (amendments: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (amendments === -1) {
-    return `${strings.AMENDMENTS}${fr ? " : " : ": "}${strings.UNAVAILABLE}${
-      fr ? "s" : ""
-    }`;
+    return `${strings.AMENDMENTS}${fr ? " : " : ": "}${strings.UNAVAILABLE}${fr ? "s" : ""}`;
   }
   if (amendments === 0) {
-    return `${strings.AMENDMENTS}${fr ? " : " : ": "}${strings.INCLUDED}${
-      fr ? "es" : ""
-    }`;
+    return `${strings.AMENDMENTS}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "es" : ""}`;
   }
-  return `${strings.AMENDMENTS}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(
-    amendments,
-    commonStrings.CURRENCY,
-    language
-  )}`;
+  return `${strings.AMENDMENTS}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(amendments, commonStrings.CURRENCY, language)}`;
+};
+
+/**
+ * Get amendments label.
+ *
+ * @param {number} gps
+ * @param {string} language
+ * @returns {string}
+ */
+export const getGps = (gps: number, language: string) => {
+  const fr = bookcarsHelper.isFrench(language);
+
+  if (gps === -1) {
+    return `${strings.GPS}${fr ? " : " : ": "}${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+  }
+  if (gps === 0) {
+    return `${strings.GPS}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "es" : ""}`;
+  }
+  return `${strings.GPS}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(gps, commonStrings.CURRENCY, language)}${commonStrings.DAILY}`;
+};
+
+/**
+ * Get home delivery label.
+ *
+ * @param {number} homeDelivery
+ * @param {string} language
+ * @returns {string}
+ */
+export const getHomeDelivery = (homeDelivery: number, language: string) => {
+  const fr = bookcarsHelper.isFrench(language);
+
+  if (homeDelivery === -1) {
+    return `${strings.HOME_DELIVERY}${fr ? " : " : ": "}${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+  }
+  if (homeDelivery === 0) {
+    return `${strings.HOME_DELIVERY}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "es" : ""}`;
+  }
+  return `${strings.HOME_DELIVERY}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(homeDelivery, commonStrings.CURRENCY, language)}${commonStrings.DAILY}`;
+};
+
+/**
+ * Get baby chair label.
+ *
+ * @param {number} babyChair
+ * @param {string} language
+ * @returns {string}
+ */
+export const getBabyChair = (babyChair: number, language: string) => {
+  const fr = bookcarsHelper.isFrench(language);
+
+  if (babyChair === -1) {
+    return `${strings.BABY_CHAIR}${fr ? " : " : ": "}${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+  }
+  if (babyChair === 0) {
+    return `${strings.BABY_CHAIR}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "es" : ""}`;
+  }
+  return `${strings.BABY_CHAIR}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(babyChair, commonStrings.CURRENCY, language)}${commonStrings.DAILY}`;
 };
 
 /**
@@ -429,17 +439,9 @@ export const getCancellation = (cancellation: number, language: string) => {
     return `${strings.CANCELLATION}${fr ? " : " : ": "}${strings.UNAVAILABLE}`;
   }
   if (cancellation === 0) {
-    return `${strings.CANCELLATION}${fr ? " : " : ": "}${strings.INCLUDED}${
-      fr ? "e" : ""
-    }`;
+    return `${strings.CANCELLATION}${fr ? " : " : ": "}${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `${strings.CANCELLATION}${
-    fr ? " : " : ": "
-  }${bookcarsHelper.formatPrice(
-    cancellation,
-    commonStrings.CURRENCY,
-    language
-  )}`;
+  return `${strings.CANCELLATION}${fr ? " : " : ": "}${bookcarsHelper.formatPrice(cancellation, commonStrings.CURRENCY, language)}`;
 };
 
 /**
@@ -518,7 +520,7 @@ export const price = (
   car: bookcarsTypes.Car,
   from: Date,
   to: Date,
-  options?: bookcarsTypes.CarOptions
+  options?: bookcarsTypes.CarOptions,
 ) => {
   const _days = bookcarsHelper.days(from, to);
 
@@ -554,9 +556,7 @@ export const price = (
  * @returns {string}
  */
 export const getDays = (days: number) =>
-  `${strings.PRICE_DAYS_PART_1} ${days} ${strings.PRICE_DAYS_PART_2}${
-    days > 1 ? "s" : ""
-  }`;
+  `${strings.PRICE_DAYS_PART_1} ${days} ${strings.PRICE_DAYS_PART_2}${days > 1 ? "s" : ""}`;
 
 /**
  * Get short days label.
@@ -576,7 +576,7 @@ export const getDaysShort = (days: number) =>
  */
 export const getCancellationOption = (
   cancellation: number,
-  language: string
+  language: string,
 ) => {
   const fr = bookcarsHelper.isFrench(language);
 
@@ -586,11 +586,7 @@ export const getCancellationOption = (
   if (cancellation === 0) {
     return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(
-    cancellation,
-    commonStrings.CURRENCY,
-    language
-  )}`;
+  return `+ ${bookcarsHelper.formatPrice(cancellation, commonStrings.CURRENCY, language)}`;
 };
 
 /**
@@ -609,11 +605,7 @@ export const getAmendmentsOption = (amendments: number, language: string) => {
   if (amendments === 0) {
     return `${strings.INCLUDED}${fr ? "es" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(
-    amendments,
-    commonStrings.CURRENCY,
-    language
-  )}`;
+  return `+ ${bookcarsHelper.formatPrice(amendments, commonStrings.CURRENCY, language)}`;
 };
 
 /**
@@ -627,7 +619,7 @@ export const getAmendmentsOption = (amendments: number, language: string) => {
 export const getTheftProtectionOption = (
   theftProtection: number,
   days: number,
-  language: string
+  language: string,
 ) => {
   const fr = bookcarsHelper.isFrench(language);
 
@@ -637,14 +629,10 @@ export const getTheftProtectionOption = (
   if (theftProtection === 0) {
     return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(
-    theftProtection * days,
-    commonStrings.CURRENCY,
-    language
-  )} (${bookcarsHelper.formatPrice(
+  return `+ ${bookcarsHelper.formatPrice(theftProtection * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     theftProtection,
     commonStrings.CURRENCY,
-    language
+    language,
   )}${commonStrings.DAILY})`;
 };
 
@@ -659,7 +647,7 @@ export const getTheftProtectionOption = (
 export const getCollisionDamageWaiverOption = (
   collisionDamageWaiver: number,
   days: number,
-  language: string
+  language: string,
 ) => {
   const fr = bookcarsHelper.isFrench(language);
 
@@ -669,14 +657,10 @@ export const getCollisionDamageWaiverOption = (
   if (collisionDamageWaiver === 0) {
     return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(
-    collisionDamageWaiver * days,
-    commonStrings.CURRENCY,
-    language
-  )} (${bookcarsHelper.formatPrice(
+  return `+ ${bookcarsHelper.formatPrice(collisionDamageWaiver * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     collisionDamageWaiver,
     commonStrings.CURRENCY,
-    language
+    language,
   )}${commonStrings.DAILY})`;
 };
 
@@ -691,7 +675,7 @@ export const getCollisionDamageWaiverOption = (
 export const getFullInsuranceOption = (
   fullInsurance: number,
   days: number,
-  language: string
+  language: string,
 ) => {
   const fr = bookcarsHelper.isFrench(language);
 
@@ -701,14 +685,10 @@ export const getFullInsuranceOption = (
   if (fullInsurance === 0) {
     return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(
-    fullInsurance * days,
-    commonStrings.CURRENCY,
-    language
-  )} (${bookcarsHelper.formatPrice(
+  return `+ ${bookcarsHelper.formatPrice(fullInsurance * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     fullInsurance,
     commonStrings.CURRENCY,
-    language
+    language,
   )}${commonStrings.DAILY})`;
 };
 
@@ -723,7 +703,7 @@ export const getFullInsuranceOption = (
 export const getAdditionalDriverOption = (
   additionalDriver: number,
   days: number,
-  language: string
+  language: string,
 ) => {
   if (additionalDriver === -1) {
     return strings.UNAVAILABLE;
@@ -731,14 +711,10 @@ export const getAdditionalDriverOption = (
   if (additionalDriver === 0) {
     return strings.INCLUDED;
   }
-  return `+ ${bookcarsHelper.formatPrice(
-    additionalDriver * days,
-    commonStrings.CURRENCY,
-    language
-  )} (${bookcarsHelper.formatPrice(
+  return `+ ${bookcarsHelper.formatPrice(additionalDriver * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
     additionalDriver,
     commonStrings.CURRENCY,
-    language
+    language,
   )}${commonStrings.DAILY})`;
 };
 
@@ -760,5 +736,5 @@ export const getBirthDateError = (minimumAge: number) =>
  */
 export const carOptionAvailable = (
   car: bookcarsTypes.Car | undefined,
-  option: string
+  option: string,
 ) => car && option in car && (car[option] as number) > -1;

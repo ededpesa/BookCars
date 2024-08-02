@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   Input,
   InputLabel,
@@ -7,207 +7,207 @@ import {
   Button,
   Paper,
   FormControlLabel,
-  Switch
-} from '@mui/material'
-import { Info as InfoIcon } from '@mui/icons-material'
-import validator from 'validator'
-import { useNavigate } from 'react-router-dom'
-import * as bookcarsTypes from ':bookcars-types'
-import Layout from '../components/Layout'
-import { strings as commonStrings } from '../lang/common'
-import { strings } from '../lang/create-supplier'
-import * as UserService from '../services/UserService'
-import * as SupplierService from '../services/SupplierService'
-import Error from '../components/Error'
-import Backdrop from '../components/SimpleBackdrop'
-import Avatar from '../components/Avatar'
-import * as helper from '../common/helper'
+  Switch,
+} from "@mui/material";
+import { Info as InfoIcon } from "@mui/icons-material";
+import validator from "validator";
+import { useNavigate } from "react-router-dom";
+import * as bookcarsTypes from ":bookcars-types";
+import Layout from "../components/Layout";
+import { strings as commonStrings } from "../lang/common";
+import { strings } from "../lang/create-supplier";
+import * as UserService from "../services/UserService";
+import * as SupplierService from "../services/SupplierService";
+import Error from "../components/Error";
+import Backdrop from "../components/SimpleBackdrop";
+import Avatar from "../components/Avatar";
+import * as helper from "../common/helper";
 
-import '../assets/css/create-supplier.css'
+import "../assets/css/create-supplier.css";
 
 const CreateSupplier = () => {
-  const navigate = useNavigate()
-  const [fullName, setFullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [location, setLocation] = useState('')
-  const [bio, setBio] = useState('')
-  const [error, setError] = useState(false)
-  const [emailError, setEmailError] = useState(false)
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [fullNameError, setFullNameError] = useState(false)
-  const [avatar, setAvatar] = useState('')
-  const [avatarError, setAvatarError] = useState(false)
-  const [emailValid, setEmailValid] = useState(true)
-  const [phoneValid, setPhoneValid] = useState(true)
-  const [payLater, setPayLater] = useState(true)
+  const navigate = useNavigate();
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [location, setLocation] = useState("");
+  const [bio, setBio] = useState("");
+  const [error, setError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fullNameError, setFullNameError] = useState(false);
+  const [avatar, setAvatar] = useState("");
+  const [avatarError, setAvatarError] = useState(false);
+  const [emailValid, setEmailValid] = useState(true);
+  const [phoneValid, setPhoneValid] = useState(true);
+  const [payLater, setPayLater] = useState(true);
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFullName(e.target.value)
+    setFullName(e.target.value);
 
     if (!e.target.value) {
-      setFullNameError(false)
+      setFullNameError(false);
     }
-  }
+  };
 
   const validateFullName = async (_fullName: string) => {
     if (_fullName) {
       try {
-        const status = await SupplierService.validate({ fullName: _fullName })
+        const status = await SupplierService.validate({ fullName: _fullName });
 
         if (status === 200) {
-          setFullNameError(false)
-          return true
+          setFullNameError(false);
+          return true;
         }
-        setFullNameError(true)
-        return false
+        setFullNameError(true);
+        return false;
       } catch (err) {
-        helper.error(err)
-        return true
+        helper.error(err);
+        return true;
       }
     } else {
-      setFullNameError(false)
-      return false
+      setFullNameError(false);
+      return false;
     }
-  }
+  };
 
   const handleFullNameBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    await validateFullName(e.target.value)
-  }
+    await validateFullName(e.target.value);
+  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
+    setEmail(e.target.value);
 
     if (!e.target.value) {
-      setEmailError(false)
-      setEmailValid(true)
+      setEmailError(false);
+      setEmailValid(true);
     }
-  }
+  };
 
   const validateEmail = async (_email?: string) => {
     if (_email) {
       if (validator.isEmail(_email)) {
         try {
-          const status = await UserService.validateEmail({ email: _email })
+          const status = await UserService.validateEmail({ email: _email });
 
           if (status === 200) {
-            setEmailError(false)
-            setEmailValid(true)
-            return true
+            setEmailError(false);
+            setEmailValid(true);
+            return true;
           }
-          setEmailError(true)
-          setEmailValid(true)
-          return false
+          setEmailError(true);
+          setEmailValid(true);
+          return false;
         } catch (err) {
-          helper.error(err)
-          return true
+          helper.error(err);
+          return true;
         }
       } else {
-        setEmailError(false)
-        setEmailValid(false)
-        return false
+        setEmailError(false);
+        setEmailValid(false);
+        return false;
       }
     } else {
-      setEmailError(false)
-      setEmailValid(true)
-      return false
+      setEmailError(false);
+      setEmailValid(true);
+      return false;
     }
-  }
+  };
 
   const handleEmailBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    await validateEmail(e.target.value)
-  }
+    await validateEmail(e.target.value);
+  };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value)
+    setPhone(e.target.value);
 
     if (!e.target.value) {
-      setPhoneValid(true)
+      setPhoneValid(true);
     }
-  }
+  };
 
   const validatePhone = (_phone?: string) => {
     if (_phone) {
-      const _phoneValid = validator.isMobilePhone(_phone)
-      setPhoneValid(_phoneValid)
+      const _phoneValid = validator.isMobilePhone(_phone);
+      setPhoneValid(_phoneValid);
 
-      return _phoneValid
+      return _phoneValid;
     }
-    setPhoneValid(true)
+    setPhoneValid(true);
 
-    return true
-  }
+    return true;
+  };
 
   const handlePhoneBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    validatePhone(e.target.value)
-  }
+    validatePhone(e.target.value);
+  };
 
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(e.target.value)
-  }
+    setLocation(e.target.value);
+  };
 
   const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBio(e.target.value)
-  }
+    setBio(e.target.value);
+  };
 
   const onBeforeUpload = () => {
-    setLoading(true)
-  }
+    setLoading(true);
+  };
 
   const onAvatarChange = (_avatar: string) => {
-    setLoading(false)
-    setAvatar(_avatar)
+    setLoading(false);
+    setAvatar(_avatar);
 
     if (_avatar !== null) {
-      setAvatarError(false)
+      setAvatarError(false);
     }
-  }
+  };
 
   const handleCancel = async () => {
     try {
       if (avatar) {
-        setLoading(true)
+        setLoading(true);
 
-        await UserService.deleteTempAvatar(avatar)
-        navigate('/suppliers')
+        await UserService.deleteTempAvatar(avatar);
+        navigate("/suppliers");
       } else {
-        navigate('/suppliers')
+        navigate("/suppliers");
       }
     } catch {
-      navigate('/suppliers')
+      navigate("/suppliers");
     }
-  }
+  };
 
   const onLoad = (user?: bookcarsTypes.User) => {
     if (user && user.verified) {
-      setVisible(true)
+      setVisible(true);
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      e.preventDefault()
+      e.preventDefault();
 
-      const _emailValid = await validateEmail(email)
+      const _emailValid = await validateEmail(email);
       if (!_emailValid) {
-        return
+        return;
       }
 
-      const fullNameValid = await validateFullName(fullName)
+      const fullNameValid = await validateFullName(fullName);
       if (!fullNameValid) {
-        return
+        return;
       }
 
-      const _phoneValid = validatePhone(phone)
+      const _phoneValid = validatePhone(phone);
       if (!_phoneValid) {
-        return
+        return;
       }
 
       if (!avatar) {
-        setAvatarError(true)
-        setError(false)
-        return
+        setAvatarError(true);
+        setError(false);
+        return;
       }
 
       const data: bookcarsTypes.CreateUserPayload = {
@@ -220,28 +220,31 @@ const CreateSupplier = () => {
         type: bookcarsTypes.RecordType.Supplier,
         avatar,
         payLater,
-      }
+      };
 
-      const status = await UserService.create(data)
+      const status = await UserService.create(data);
 
       if (status === 200) {
-        navigate('/suppliers')
+        navigate("/suppliers");
       } else {
-        setError(true)
+        setError(true);
       }
     } catch (err) {
-      helper.error(err)
+      helper.error(err);
     }
-  }
+  };
 
   return (
     <Layout onLoad={onLoad} strict admin>
       <div className="create-supplier">
-        <Paper className="supplier-form" elevation={10} style={visible ? {} : { display: 'none' }}>
+        <Paper
+          className="supplier-form"
+          elevation={10}
+          style={visible ? {} : { display: "none" }}
+        >
           <h1 className="supplier-form-title">
-            {' '}
-            {strings.CREATE_SUPPLIER_HEADING}
-            {' '}
+            {" "}
+            {strings.CREATE_SUPPLIER_HEADING}{" "}
           </h1>
           <form onSubmit={handleSubmit}>
             <Avatar
@@ -262,7 +265,9 @@ const CreateSupplier = () => {
             </div>
 
             <FormControl fullWidth margin="dense">
-              <InputLabel className="required">{commonStrings.FULL_NAME}</InputLabel>
+              <InputLabel className="required">
+                {commonStrings.FULL_NAME}
+              </InputLabel>
               <Input
                 id="full-name"
                 type="text"
@@ -272,11 +277,15 @@ const CreateSupplier = () => {
                 onChange={handleFullNameChange}
                 autoComplete="off"
               />
-              <FormHelperText error={fullNameError}>{(fullNameError && strings.INVALID_SUPPLIER_NAME) || ''}</FormHelperText>
+              <FormHelperText error={fullNameError}>
+                {(fullNameError && strings.INVALID_SUPPLIER_NAME) || ""}
+              </FormHelperText>
             </FormControl>
 
             <FormControl fullWidth margin="dense">
-              <InputLabel className="required">{commonStrings.EMAIL}</InputLabel>
+              <InputLabel className="required">
+                {commonStrings.EMAIL}
+              </InputLabel>
               <Input
                 id="email"
                 type="text"
@@ -287,22 +296,22 @@ const CreateSupplier = () => {
                 required
               />
               <FormHelperText error={!emailValid || emailError}>
-                {(!emailValid && commonStrings.EMAIL_NOT_VALID) || ''}
-                {(emailError && commonStrings.EMAIL_ALREADY_REGISTERED) || ''}
+                {(!emailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                {(emailError && commonStrings.EMAIL_ALREADY_REGISTERED) || ""}
               </FormHelperText>
             </FormControl>
 
             <FormControl component="fieldset" style={{ marginTop: 15 }}>
               <FormControlLabel
-                control={(
+                control={
                   <Switch
                     checked={payLater}
                     onChange={(e) => {
-                      setPayLater(e.target.checked)
+                      setPayLater(e.target.checked);
                     }}
                     color="primary"
                   />
-                )}
+                }
                 label={commonStrings.PAY_LATER}
               />
             </FormControl>
@@ -314,25 +323,54 @@ const CreateSupplier = () => {
 
             <FormControl fullWidth margin="dense">
               <InputLabel>{commonStrings.PHONE}</InputLabel>
-              <Input id="phone" type="text" onChange={handlePhoneChange} onBlur={handlePhoneBlur} autoComplete="off" error={!phoneValid} />
-              <FormHelperText error={!phoneValid}>{(!phoneValid && commonStrings.PHONE_NOT_VALID) || ''}</FormHelperText>
+              <Input
+                id="phone"
+                type="text"
+                onChange={handlePhoneChange}
+                onBlur={handlePhoneBlur}
+                autoComplete="off"
+                error={!phoneValid}
+              />
+              <FormHelperText error={!phoneValid}>
+                {(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}
+              </FormHelperText>
             </FormControl>
 
             <FormControl fullWidth margin="dense">
               <InputLabel>{commonStrings.LOCATION}</InputLabel>
-              <Input id="location" type="text" onChange={handleLocationChange} autoComplete="off" />
+              <Input
+                id="location"
+                type="text"
+                onChange={handleLocationChange}
+                autoComplete="off"
+              />
             </FormControl>
 
             <FormControl fullWidth margin="dense">
               <InputLabel>{commonStrings.BIO}</InputLabel>
-              <Input id="bio" type="text" onChange={handleBioChange} autoComplete="off" />
+              <Input
+                id="bio"
+                type="text"
+                onChange={handleBioChange}
+                autoComplete="off"
+              />
             </FormControl>
 
             <div className="buttons">
-              <Button type="submit" variant="contained" className="btn-primary btn-margin-bottom" size="small">
+              <Button
+                type="submit"
+                variant="contained"
+                className="btn-primary btn-margin-bottom"
+                size="small"
+              >
                 {commonStrings.CREATE}
               </Button>
-              <Button variant="contained" className="btn-secondary btn-margin-bottom" size="small" onClick={handleCancel}>
+              <Button
+                variant="contained"
+                className="btn-secondary btn-margin-bottom"
+                size="small"
+                onClick={handleCancel}
+              >
                 {commonStrings.CANCEL}
               </Button>
             </div>
@@ -346,7 +384,7 @@ const CreateSupplier = () => {
       </div>
       {loading && <Backdrop text={commonStrings.PLEASE_WAIT} />}
     </Layout>
-  )
-}
+  );
+};
 
-export default CreateSupplier
+export default CreateSupplier;

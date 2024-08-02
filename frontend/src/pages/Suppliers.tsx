@@ -1,13 +1,12 @@
-import React from 'react'
-import Layout from '../components/Layout'
-import SupplierList from '../components/SupplierList'
-import Footer from '../components/Footer'
+import React from "react";
+import Layout from "../components/Layout";
+import SupplierList from "../components/SupplierList";
+import Footer from "../components/Footer";
 
-import '../assets/css/suppliers.css'
+import "../assets/css/suppliers.css";
 
 const Suppliers = () => {
-  const onLoad = () => {
-  }
+  const onLoad = () => {};
 
   return (
     <Layout onLoad={onLoad} strict={false}>
@@ -16,7 +15,7 @@ const Suppliers = () => {
       </div>
       <Footer />
     </Layout>
-  )
-}
+  );
+};
 
-export default Suppliers
+export default Suppliers;

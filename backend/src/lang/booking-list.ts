@@ -13,7 +13,8 @@ const strings = new LocalizedStrings({
     UPDATE_STATUS: "Modification du statut",
     NEW_STATUS: "Nouveau statut",
     DELETE_BOOKING: "Êtes-vous sûr de vouloir supprimer cette réservation ?",
-    DELETE_BOOKINGS: "Êtes-vous sûr de vouloir supprimer les réservations sélectionnées ?",
+    DELETE_BOOKINGS:
+      "Êtes-vous sûr de vouloir supprimer les réservations sélectionnées ?",
     EMPTY_LIST: "Pas de réservations.",
     DAYS: "Jours",
     COST: "Total",
@@ -45,7 +46,8 @@ const strings = new LocalizedStrings({
     UPDATE_STATUS: "Modificación de estado",
     NEW_STATUS: "Nuevo estado",
     DELETE_BOOKING: "¿Está seguro de que quiere eliminar esta reserva?",
-    DELETE_BOOKINGS: "¿Está seguro de que quiere eliminar las reservas seleccionadas?",
+    DELETE_BOOKINGS:
+      "¿Está seguro de que quiere eliminar las reservas seleccionadas?",
     EMPTY_LIST: "No hay reservas.",
     DAYS: "Días",
     COST: "Costo",

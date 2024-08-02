@@ -1,4 +1,4 @@
-import cors from 'cors'
+import cors from "cors";
 
 /**
  * CORS configuration.
@@ -6,9 +6,9 @@ import cors from 'cors'
  * @type {cors.CorsOptions}
  */
 const CORS_CONFIG: cors.CorsOptions = {
-    origin: true,
-    credentials: true,
-}
+  origin: true,
+  credentials: true,
+};
 
 /**
  * CORS middleware.
@@ -19,4 +19,4 @@ const CORS_CONFIG: cors.CorsOptions = {
  * @param {NextFunction} next
  * @returns {*}
  */
-export default () => cors(CORS_CONFIG)
+export default () => cors(CORS_CONFIG);

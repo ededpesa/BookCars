@@ -1,10 +1,10 @@
-import React, { CSSProperties } from 'react'
-import { Link } from '@mui/material'
-import { strings as commonStrings } from '../lang/common'
-import { strings } from '../lang/unauthorized'
+import React, { CSSProperties } from "react";
+import { Link } from "@mui/material";
+import { strings as commonStrings } from "../lang/common";
+import { strings } from "../lang/unauthorized";
 
 interface UnauthorizedProps {
-  style?: CSSProperties
+  style?: CSSProperties;
 }
 
 const Unauthorized = ({ style }: UnauthorizedProps) => (
@@ -14,6 +14,6 @@ const Unauthorized = ({ style }: UnauthorizedProps) => (
       <Link href="/">{commonStrings.GO_TO_HOME}</Link>
     </p>
   </div>
-  )
+);
 
-export default Unauthorized
+export default Unauthorized;

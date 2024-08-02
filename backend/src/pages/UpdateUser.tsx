@@ -1,5 +1,17 @@
 import React, { useState } from "react";
-import { Input, InputLabel, FormControl, FormHelperText, Button, Paper, Select, MenuItem, FormControlLabel, Switch, SelectChangeEvent } from "@mui/material";
+import {
+  Input,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+  Button,
+  Paper,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Switch,
+  SelectChangeEvent,
+} from "@mui/material";
 import { Info as InfoIcon } from "@mui/icons-material";
 import { intervalToDuration } from "date-fns";
 import validator from "validator";
@@ -125,7 +137,11 @@ const UpdateUser = () => {
   };
 
   const validateBirthDate = (date?: Date) => {
-    if (date && bookcarsHelper.isDate(date) && type === bookcarsTypes.RecordType.User) {
+    if (
+      date &&
+      bookcarsHelper.isDate(date) &&
+      type === bookcarsTypes.RecordType.User
+    ) {
       const now = new Date();
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0;
       const _birthDateValid = sub >= env.MINIMUM_AGE;
@@ -186,7 +202,11 @@ const UpdateUser = () => {
 
   const handleResendActivationLink = async () => {
     try {
-      const status = await UserService.resend(email, false, type === bookcarsTypes.RecordType.User ? "frontend" : "backend");
+      const status = await UserService.resend(
+        email,
+        false,
+        type === bookcarsTypes.RecordType.User ? "frontend" : "backend",
+      );
 
       if (status === 200) {
         helper.info(commonStrings.ACTIVATION_EMAIL_SENT);
@@ -220,7 +240,11 @@ const UpdateUser = () => {
               setPhone(_user.phone || "");
               setLocation(_user.location || "");
               setBio(_user.bio || "");
-              setBirthDate(_user && _user.birthDate ? new Date(_user.birthDate) : undefined);
+              setBirthDate(
+                _user && _user.birthDate
+                  ? new Date(_user.birthDate)
+                  : undefined,
+              );
               setPayLater(_user.payLater || false);
               setVisible(true);
               setLoading(false);
@@ -351,18 +375,39 @@ const UpdateUser = () => {
               )}
 
               {admin && (
-                <FormControl fullWidth margin="dense" style={{ marginTop: supplier ? 0 : 39 }}>
-                  <InputLabel className="required">{commonStrings.TYPE}</InputLabel>
-                  <Select label={commonStrings.TYPE} value={type} onChange={handleUserTypeChange} variant="standard" required fullWidth>
-                    <MenuItem value={bookcarsTypes.RecordType.Admin}>{helper.getUserType(bookcarsTypes.UserType.Admin)}</MenuItem>
-                    <MenuItem value={bookcarsTypes.RecordType.Supplier}>{helper.getUserType(bookcarsTypes.UserType.Supplier)}</MenuItem>
-                    <MenuItem value={bookcarsTypes.RecordType.User}>{helper.getUserType(bookcarsTypes.UserType.User)}</MenuItem>
+                <FormControl
+                  fullWidth
+                  margin="dense"
+                  style={{ marginTop: supplier ? 0 : 39 }}
+                >
+                  <InputLabel className="required">
+                    {commonStrings.TYPE}
+                  </InputLabel>
+                  <Select
+                    label={commonStrings.TYPE}
+                    value={type}
+                    onChange={handleUserTypeChange}
+                    variant="standard"
+                    required
+                    fullWidth
+                  >
+                    <MenuItem value={bookcarsTypes.RecordType.Admin}>
+                      {helper.getUserType(bookcarsTypes.UserType.Admin)}
+                    </MenuItem>
+                    <MenuItem value={bookcarsTypes.RecordType.Supplier}>
+                      {helper.getUserType(bookcarsTypes.UserType.Supplier)}
+                    </MenuItem>
+                    <MenuItem value={bookcarsTypes.RecordType.User}>
+                      {helper.getUserType(bookcarsTypes.UserType.User)}
+                    </MenuItem>
                   </Select>
                 </FormControl>
               )}
 
               <FormControl fullWidth margin="dense">
-                <InputLabel className="required">{commonStrings.FULL_NAME}</InputLabel>
+                <InputLabel className="required">
+                  {commonStrings.FULL_NAME}
+                </InputLabel>
                 <Input
                   id="full-name"
                   type="text"
@@ -373,11 +418,15 @@ const UpdateUser = () => {
                   autoComplete="off"
                   value={fullName}
                 />
-                <FormHelperText error={fullNameError}>{(fullNameError && ccStrings.INVALID_SUPPLIER_NAME) || ""}</FormHelperText>
+                <FormHelperText error={fullNameError}>
+                  {(fullNameError && ccStrings.INVALID_SUPPLIER_NAME) || ""}
+                </FormHelperText>
               </FormControl>
 
               <FormControl fullWidth margin="dense">
-                <InputLabel className="required">{commonStrings.EMAIL}</InputLabel>
+                <InputLabel className="required">
+                  {commonStrings.EMAIL}
+                </InputLabel>
                 <Input id="email" type="text" value={email} disabled />
               </FormControl>
 
@@ -397,7 +446,10 @@ const UpdateUser = () => {
                     }}
                     language={(user && user.language) || env.DEFAULT_LANGUAGE}
                   />
-                  <FormHelperText error={!birthDateValid}>{(!birthDateValid && commonStrings.BIRTH_DATE_NOT_VALID) || ""}</FormHelperText>
+                  <FormHelperText error={!birthDateValid}>
+                    {(!birthDateValid && commonStrings.BIRTH_DATE_NOT_VALID) ||
+                      ""}
+                  </FormHelperText>
                 </FormControl>
               )}
 
@@ -425,23 +477,52 @@ const UpdateUser = () => {
 
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.PHONE}</InputLabel>
-                <Input id="phone" type="text" onChange={handlePhoneChange} onBlur={handlePhoneBlur} autoComplete="off" value={phone} error={!phoneValid} />
-                <FormHelperText error={!phoneValid}>{(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}</FormHelperText>
+                <Input
+                  id="phone"
+                  type="text"
+                  onChange={handlePhoneChange}
+                  onBlur={handlePhoneBlur}
+                  autoComplete="off"
+                  value={phone}
+                  error={!phoneValid}
+                />
+                <FormHelperText error={!phoneValid}>
+                  {(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}
+                </FormHelperText>
               </FormControl>
 
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.LOCATION}</InputLabel>
-                <Input id="location" type="text" onChange={handleLocationChange} autoComplete="off" value={location} />
+                <Input
+                  id="location"
+                  type="text"
+                  onChange={handleLocationChange}
+                  autoComplete="off"
+                  value={location}
+                />
               </FormControl>
 
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.BIO}</InputLabel>
-                <Input id="bio" type="text" onChange={handleBioChange} autoComplete="off" value={bio} />
+                <Input
+                  id="bio"
+                  type="text"
+                  onChange={handleBioChange}
+                  autoComplete="off"
+                  value={bio}
+                />
               </FormControl>
 
               {activate && (
-                <FormControl fullWidth margin="dense" className="resend-activation-link">
-                  <Button variant="outlined" onClick={handleResendActivationLink}>
+                <FormControl
+                  fullWidth
+                  margin="dense"
+                  className="resend-activation-link"
+                >
+                  <Button
+                    variant="outlined"
+                    onClick={handleResendActivationLink}
+                  >
                     {commonStrings.RESEND_ACTIVATION_LINK}
                   </Button>
                 </FormControl>
@@ -458,18 +539,30 @@ const UpdateUser = () => {
                   {commonStrings.RESET_PASSWORD}
                 </Button>
 
-                <Button type="submit" variant="contained" className="btn-primary black btn-margin-bottom" size="small">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="btn-primary black btn-margin-bottom"
+                  size="small"
+                >
                   {commonStrings.SAVE}
                 </Button>
 
-                <Button variant="contained" className="btn-secondary btn-margin-bottom" size="small" onClick={handleCancel}>
+                <Button
+                  variant="contained"
+                  className="btn-secondary btn-margin-bottom"
+                  size="small"
+                  onClick={handleCancel}
+                >
                   {commonStrings.CANCEL}
                 </Button>
               </div>
 
               <div className="form-error">
                 {error && <Error message={commonStrings.GENERIC_ERROR} />}
-                {avatarError && <Error message={commonStrings.IMAGE_REQUIRED} />}
+                {avatarError && (
+                  <Error message={commonStrings.IMAGE_REQUIRED} />
+                )}
               </div>
             </form>
           </Paper>

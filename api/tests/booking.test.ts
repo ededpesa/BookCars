@@ -47,7 +47,7 @@ beforeAll(async () => {
   const supplierName = testHelper.getSupplierName();
   SUPPLIER_ID = await testHelper.createSupplier(
     `${supplierName}@test.bookcars.ma`,
-    supplierName
+    supplierName,
   );
 
   // get user id
@@ -56,7 +56,7 @@ beforeAll(async () => {
   // create a location
   LOCATION_ID = await testHelper.createLocation(
     "Location 1 EN",
-    "Location 1 FR"
+    "Location 1 FR",
   );
 
   // create car
@@ -386,7 +386,7 @@ describe("POST /api/update-booking", () => {
     payload.booking.additionalDriver = false;
     payload.additionalDriver = undefined;
     booking!._additionalDriver = new mongoose.Types.ObjectId(
-      ADDITIONAL_DRIVER_ID
+      ADDITIONAL_DRIVER_ID,
     );
     await booking?.save();
     res = await request(app)
@@ -523,7 +523,7 @@ describe("GET /api/booking/:id/:language", () => {
       .get(
         `/api/booking/${testHelper.GetRandromObjectIdAsString()}/${
           testHelper.LANGUAGE
-        }`
+        }`,
       )
       .set(env.X_ACCESS_TOKEN, token);
     expect(res.statusCode).toBe(204);
@@ -557,7 +557,7 @@ describe("POST /api/bookings/:page/:size/:language", () => {
 
     let res = await request(app)
       .post(
-        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`
+        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`,
       )
       .set(env.X_ACCESS_TOKEN, token)
       .send(payload);
@@ -573,7 +573,7 @@ describe("POST /api/bookings/:page/:size/:language", () => {
     payload.filter!.keyword = undefined;
     res = await request(app)
       .post(
-        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`
+        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`,
       )
       .set(env.X_ACCESS_TOKEN, token)
       .send(payload);
@@ -583,7 +583,7 @@ describe("POST /api/bookings/:page/:size/:language", () => {
     payload.filter!.keyword = BOOKING_ID;
     res = await request(app)
       .post(
-        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`
+        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`,
       )
       .set(env.X_ACCESS_TOKEN, token)
       .send(payload);
@@ -592,7 +592,7 @@ describe("POST /api/bookings/:page/:size/:language", () => {
 
     res = await request(app)
       .post(
-        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`
+        `/api/bookings/${testHelper.PAGE}/${testHelper.SIZE}/${testHelper.LANGUAGE}`,
       )
       .set(env.X_ACCESS_TOKEN, token);
     expect(res.statusCode).toBe(400);
@@ -714,7 +714,7 @@ describe("DELETE /api/delete-temp-booking", () => {
     await booking.save();
 
     let res = await request(app).delete(
-      `/api/delete-temp-booking/${booking._id.toString()}/${sessionId}`
+      `/api/delete-temp-booking/${booking._id.toString()}/${sessionId}`,
     );
     expect(res.statusCode).toBe(200);
     const _booking = await Booking.findById(booking._id);
@@ -726,7 +726,7 @@ describe("DELETE /api/delete-temp-booking", () => {
     try {
       await databaseHelper.close();
       res = await request(app).delete(
-        `/api/delete-temp-booking/${booking._id.toString()}/${sessionId}`
+        `/api/delete-temp-booking/${booking._id.toString()}/${sessionId}`,
       );
       expect(res.statusCode).toBe(400);
     } catch (err) {

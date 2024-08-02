@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
-import * as bookcarsTypes from ':bookcars-types'
-import * as env from '../config/env.config'
+import { Schema, model } from "mongoose";
+import * as bookcarsTypes from ":bookcars-types";
+import * as env from "../config/env.config";
 
 const carSchema = new Schema<env.Car>(
   {
@@ -13,7 +13,7 @@ const carSchema = new Schema<env.Car>(
     supplier: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'User',
+      ref: "User",
       index: true,
     },
     minimumAge: {
@@ -24,8 +24,9 @@ const carSchema = new Schema<env.Car>(
     },
     locations: {
       type: [Schema.Types.ObjectId],
-      ref: 'Location',
-      validate: (value: any): boolean => Array.isArray(value) && value.length > 0,
+      ref: "Location",
+      validate: (value: any): boolean =>
+        Array.isArray(value) && value.length > 0,
     },
     price: {
       type: Number,
@@ -54,7 +55,10 @@ const carSchema = new Schema<env.Car>(
     },
     gearbox: {
       type: String,
-      enum: [bookcarsTypes.GearboxType.Manual, bookcarsTypes.GearboxType.Automatic],
+      enum: [
+        bookcarsTypes.GearboxType.Manual,
+        bookcarsTypes.GearboxType.Automatic,
+      ],
       required: [true, "can't be blank"],
     },
     aircon: {
@@ -69,7 +73,7 @@ const carSchema = new Schema<env.Car>(
       required: [true, "can't be blank"],
       validate: {
         validator: Number.isInteger,
-        message: '{VALUE} is not an integer',
+        message: "{VALUE} is not an integer",
       },
     },
     doors: {
@@ -77,12 +81,15 @@ const carSchema = new Schema<env.Car>(
       required: [true, "can't be blank"],
       validate: {
         validator: Number.isInteger,
-        message: '{VALUE} is not an integer',
+        message: "{VALUE} is not an integer",
       },
     },
     fuelPolicy: {
       type: String,
-      enum: [bookcarsTypes.FuelPolicy.LikeForlike, bookcarsTypes.FuelPolicy.FreeTank],
+      enum: [
+        bookcarsTypes.FuelPolicy.LikeForlike,
+        bookcarsTypes.FuelPolicy.FreeTank,
+      ],
       required: [true, "can't be blank"],
     },
     mileage: {
@@ -93,7 +100,11 @@ const carSchema = new Schema<env.Car>(
       type: Number,
       required: [true, "can't be blank"],
     },
-    amendments: {
+    // amendments: {
+    //   type: Number,
+    //   required: [true, "can't be blank"],
+    // },
+    gps: {
       type: Number,
       required: [true, "can't be blank"],
     },
@@ -113,14 +124,22 @@ const carSchema = new Schema<env.Car>(
       type: Number,
       required: [true, "can't be blank"],
     },
+    homeDelivery: {
+      type: Number,
+      required: [true, "can't be blank"],
+    },
+    babyChair: {
+      type: Number,
+      required: [true, "can't be blank"],
+    },
   },
   {
     timestamps: true,
     strict: true,
-    collection: 'Car',
+    collection: "Car",
   },
-)
+);
 
-const Car = model<env.Car>('Car', carSchema)
+const Car = model<env.Car>("Car", carSchema);
 
-export default Car
+export default Car;

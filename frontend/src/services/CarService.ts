@@ -1,6 +1,6 @@
-import * as bookcarsTypes from ':bookcars-types'
-import axiosInstance from './axiosInstance'
-import * as UserService from './UserService'
+import * as bookcarsTypes from ":bookcars-types";
+import axiosInstance from "./axiosInstance";
+import * as UserService from "./UserService";
 
 /**
  * Get cars.
@@ -10,12 +10,14 @@ import * as UserService from './UserService'
  * @param {number} size
  * @returns {Promise<bookcarsTypes.Result<bookcarsTypes.Car>>}
  */
-export const getCars = (data: bookcarsTypes.GetCarsPayload, page: number, size: number): Promise<bookcarsTypes.Result<bookcarsTypes.Car>> =>
+export const getCars = (
+  data: bookcarsTypes.GetCarsPayload,
+  page: number,
+  size: number,
+): Promise<bookcarsTypes.Result<bookcarsTypes.Car>> =>
   axiosInstance
-    .post(
-      `/api/frontend-cars/${page}/${size}`,
-      data
-    ).then((res) => res.data)
+    .post(`/api/frontend-cars/${page}/${size}`, data)
+    .then((res) => res.data);
 
 /**
  * Get a Car by ID.
@@ -25,10 +27,8 @@ export const getCars = (data: bookcarsTypes.GetCarsPayload, page: number, size: 
  */
 export const getCar = (id: string): Promise<bookcarsTypes.Car> =>
   axiosInstance
-    .get(
-      `/api/car/${encodeURIComponent(id)}/${UserService.getLanguage()}`
-    )
-    .then((res) => res.data)
+    .get(`/api/car/${encodeURIComponent(id)}/${UserService.getLanguage()}`)
+    .then((res) => res.data);
 
 /**
  * Get cars by agency and location.
@@ -39,11 +39,16 @@ export const getCar = (id: string): Promise<bookcarsTypes.Car> =>
  * @param {number} size
  * @returns {Promise<bookcarsTypes.Car[]>}
  */
-export const getBookingCars = (keyword: string, data: bookcarsTypes.GetBookingCarsPayload, page: number, size: number): Promise<bookcarsTypes.Car[]> =>
+export const getBookingCars = (
+  keyword: string,
+  data: bookcarsTypes.GetBookingCarsPayload,
+  page: number,
+  size: number,
+): Promise<bookcarsTypes.Car[]> =>
   axiosInstance
     .post(
       `/api/booking-cars/${page}/${size}/?s=${encodeURIComponent(keyword)}`,
       data,
-      { withCredentials: true }
+      { withCredentials: true },
     )
-    .then((res) => res.data)
+    .then((res) => res.data);

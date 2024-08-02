@@ -23,9 +23,12 @@ const locationValueSchema = new Schema<env.LocationValue>(
     timestamps: true,
     strict: true,
     collection: "LocationValue",
-  }
+  },
 );
 
-const LocationValue = model<env.LocationValue>("LocationValue", locationValueSchema);
+const LocationValue = model<env.LocationValue>(
+  "LocationValue",
+  locationValueSchema,
+);
 
 export default LocationValue;

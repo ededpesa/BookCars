@@ -1,15 +1,15 @@
-import { Request, Response } from 'express'
-import Stripe from 'stripe'
-import stripeAPI from '../stripe'
-import i18n from '../lang/i18n'
-import * as logger from '../common/logger'
-import * as bookcarsTypes from ':bookcars-types'
-import * as env from '../config/env.config'
-import * as helper from '../common/helper'
-import Booking from '../models/Booking'
-import User from '../models/User'
+import { Request, Response } from "express";
+import Stripe from "stripe";
+import stripeAPI from "../stripe";
+import i18n from "../lang/i18n";
+import * as logger from "../common/logger";
+import * as bookcarsTypes from ":bookcars-types";
+import * as env from "../config/env.config";
+import * as helper from "../common/helper";
+import Booking from "../models/Booking";
+import User from "../models/User";
 // import Car from '../models/Car'
-import * as bookingController from './bookingController'
+import * as bookingController from "./bookingController";
 
 /**
  * Create Checkout Session.
@@ -28,31 +28,33 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
     name,
     description,
     customerName,
-  }: bookcarsTypes.CreatePaymentPayload = req.body
+  }: bookcarsTypes.CreatePaymentPayload = req.body;
 
   try {
     //
     // 1. Create the customer if he does not already exist
     //
-    const customers = await stripeAPI.customers.list({ email: receiptEmail })
+    const customers = await stripeAPI.customers.list({ email: receiptEmail });
 
-    let customer: Stripe.Customer
+    let customer: Stripe.Customer;
     if (customers.data.length === 0) {
       customer = await stripeAPI.customers.create({
         email: receiptEmail,
         name: customerName,
-      })
+      });
     } else {
-      [customer] = customers.data
+      [customer] = customers.data;
     }
 
     //
     // 2. Create checkout session
     //
-    const expireAt = Math.floor((Date.now() / 1000) + env.STRIPE_SESSION_EXPIRE_AT)
+    const expireAt = Math.floor(
+      Date.now() / 1000 + env.STRIPE_SESSION_EXPIRE_AT,
+    );
 
     const session = await stripeAPI.checkout.sessions.create({
-      ui_mode: 'embedded',
+      ui_mode: "embedded",
       line_items: [
         {
           price_data: {
@@ -65,27 +67,27 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
           quantity: 1,
         },
       ],
-      mode: 'payment',
-      return_url: `${helper.trimEnd(env.FRONTEND_HOST, '/')}/checkout-session/{CHECKOUT_SESSION_ID}`,
+      mode: "payment",
+      return_url: `${helper.trimEnd(env.FRONTEND_HOST, "/")}/checkout-session/{CHECKOUT_SESSION_ID}`,
       customer: customer.id,
       locale: helper.getStripeLocale(locale),
       payment_intent_data: {
         description,
       },
       expires_at: expireAt,
-    })
+    });
 
     const result: bookcarsTypes.PaymentResult = {
       sessionId: session.id,
       customerId: customer.id,
       clientSecret: session.client_secret,
-    }
-    return res.json(result)
+    };
+    return res.json(result);
   } catch (err) {
-    logger.error(`[stripe.createCheckoutSession] ${i18n.t('ERROR')}`, err)
-    return res.status(400).send(i18n.t('ERROR') + err)
+    logger.error(`[stripe.createCheckoutSession] ${i18n.t("ERROR")}`, err);
+    return res.status(400).send(i18n.t("ERROR") + err);
   }
-}
+};
 
 /**
  * Check Checkout Session and update booking if the payment succeeded.
@@ -97,85 +99,96 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
  */
 export const checkCheckoutSession = async (req: Request, res: Response) => {
   try {
-    const { sessionId } = req.params
+    const { sessionId } = req.params;
 
     //
     // 1. Retrieve Checkout Sesssion and Booking
     //
-    let session: Stripe.Checkout.Session | undefined
+    let session: Stripe.Checkout.Session | undefined;
     try {
-      session = await stripeAPI.checkout.sessions.retrieve(sessionId)
+      session = await stripeAPI.checkout.sessions.retrieve(sessionId);
     } catch (err) {
-      logger.error(`[stripe.checkCheckoutSession] retrieve session error: ${sessionId}`, err)
+      logger.error(
+        `[stripe.checkCheckoutSession] retrieve session error: ${sessionId}`,
+        err,
+      );
     }
 
     if (!session) {
-      const msg = `Session ${sessionId} not found`
-      logger.info(`[stripe.checkCheckoutSession] ${msg}`)
-      return res.status(204).send(msg)
+      const msg = `Session ${sessionId} not found`;
+      logger.info(`[stripe.checkCheckoutSession] ${msg}`);
+      return res.status(204).send(msg);
     }
 
-    const booking = await Booking.findOne({ sessionId, expireAt: { $ne: null } })
+    const booking = await Booking.findOne({
+      sessionId,
+      expireAt: { $ne: null },
+    });
     if (!booking) {
-      const msg = `Booking with sessionId ${sessionId} not found`
-      logger.info(`[stripe.checkCheckoutSession] ${msg}`)
-      return res.status(204).send(msg)
+      const msg = `Booking with sessionId ${sessionId} not found`;
+      logger.info(`[stripe.checkCheckoutSession] ${msg}`);
+      return res.status(204).send(msg);
     }
 
     //
     // 2. Update Booking if the payment succeeded
     // (Set BookingStatus to Paid and remove expireAt TTL index)
     //
-    if (session.payment_status === 'paid') {
-      booking.expireAt = undefined
-      booking.status = bookcarsTypes.BookingStatus.Paid
-      await booking.save()
+    if (session.payment_status === "paid") {
+      booking.expireAt = undefined;
+      booking.status = bookcarsTypes.BookingStatus.Paid;
+      await booking.save();
 
       // Mark car as unavailable
       // await Car.updateOne({ _id: booking.car }, { available: false })
 
       // Send confirmation email
-      const user = await User.findById(booking.driver)
+      const user = await User.findById(booking.driver);
       if (!user) {
-        logger.info(`Driver ${booking.driver} not found`)
-        return res.sendStatus(204)
+        logger.info(`Driver ${booking.driver} not found`);
+        return res.sendStatus(204);
       }
 
-      if (!await bookingController.confirm(user, booking, false)) {
-        return res.sendStatus(400)
+      if (!(await bookingController.confirm(user, booking, false))) {
+        return res.sendStatus(400);
       }
 
       // Notify supplier
-      const supplier = await User.findById(booking.supplier)
+      const supplier = await User.findById(booking.supplier);
       if (!supplier) {
-        logger.info(`Supplier ${booking.supplier} not found`)
-        return res.sendStatus(204)
+        logger.info(`Supplier ${booking.supplier} not found`);
+        return res.sendStatus(204);
       }
-      i18n.locale = supplier.language
-      let message = i18n.t('BOOKING_PAID_NOTIFICATION')
-      await bookingController.notify(user, booking.id, supplier, message)
+      i18n.locale = supplier.language;
+      let message = i18n.t("BOOKING_PAID_NOTIFICATION");
+      await bookingController.notify(user, booking.id, supplier, message);
 
       // Notify admin
-      const admin = !!env.ADMIN_EMAIL && await User.findOne({ email: env.ADMIN_EMAIL, type: bookcarsTypes.UserType.Admin })
+      const admin =
+        !!env.ADMIN_EMAIL &&
+        (await User.findOne({
+          email: env.ADMIN_EMAIL,
+          type: bookcarsTypes.UserType.Admin,
+        }));
       if (admin) {
-        i18n.locale = admin.language
-        message = i18n.t('BOOKING_PAID_NOTIFICATION')
-        await bookingController.notify(user, booking.id, admin, message)
+        i18n.locale = admin.language;
+        message = i18n.t("BOOKING_PAID_NOTIFICATION");
+        await bookingController.notify(user, booking.id, admin, message);
       }
 
-      return res.sendStatus(200)
+      return res.sendStatus(200);
     }
 
     //
     // 3. Delete Booking if the payment didn't succeed
     //
-    await booking.deleteOne()
-    return res.status(400).send(session.payment_status)
+    await booking.deleteOne();
+    return res.status(400).send(session.payment_status);
   } catch (err) {
-    logger.error(`[stripe.checkCheckoutSession] ${i18n.t('ERROR')}`, err)
-    return res.status(400).send(i18n.t('ERROR') + err)
+    logger.error(`[stripe.checkCheckoutSession] ${i18n.t("ERROR")}`, err);
+    return res.status(400).send(i18n.t("ERROR") + err);
   }
-}
+};
 
 /**
  * Create Payment Intent.
@@ -192,22 +205,22 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
     receiptEmail,
     description,
     customerName,
-  }: bookcarsTypes.CreatePaymentPayload = req.body
+  }: bookcarsTypes.CreatePaymentPayload = req.body;
 
   try {
     //
     // 1. Create the customer if he does not already exist
     //
-    const customers = await stripeAPI.customers.list({ email: receiptEmail })
+    const customers = await stripeAPI.customers.list({ email: receiptEmail });
 
-    let customer: Stripe.Customer
+    let customer: Stripe.Customer;
     if (customers.data.length === 0) {
       customer = await stripeAPI.customers.create({
         email: receiptEmail,
         name: customerName,
-      })
+      });
     } else {
-      [customer] = customers.data
+      [customer] = customers.data;
     }
 
     //
@@ -225,9 +238,9 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
       customer: customer.id,
       automatic_payment_methods: {
         enabled: true,
-        allow_redirects: 'never',
+        allow_redirects: "never",
       },
-    })
+    });
 
     //
     // 3. Send result
@@ -236,10 +249,10 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
       paymentIntentId: paymentIntent.id,
       customerId: customer.id,
       clientSecret: paymentIntent.client_secret,
-    }
-    return res.status(200).json(result)
+    };
+    return res.status(200).json(result);
   } catch (err) {
-    logger.error(`[stripe.createPaymentIntent] ${i18n.t('ERROR')}`, err)
-    return res.status(400).send(i18n.t('ERROR') + err)
+    logger.error(`[stripe.createPaymentIntent] ${i18n.t("ERROR")}`, err);
+    return res.status(400).send(i18n.t("ERROR") + err);
   }
-}
+};

@@ -9,7 +9,7 @@ import * as UserService from "./UserService";
  * @returns {Promise<number>}
  */
 export const checkout = (
-  data: bookcarsTypes.CheckoutPayload
+  data: bookcarsTypes.CheckoutPayload,
 ): Promise<{ status: number; bookingId: string }> =>
   axiosInstance
     .post("/api/checkout", data)
@@ -22,7 +22,7 @@ export const checkout = (
  * @returns {Promise<number>}
  */
 export const update = (
-  data: bookcarsTypes.UpsertBookingPayload
+  data: bookcarsTypes.UpsertBookingPayload,
 ): Promise<number> =>
   axiosInstance
     .put("/api/update-booking", data, { withCredentials: true })
@@ -39,13 +39,13 @@ export const update = (
 export const getBookings = (
   payload: bookcarsTypes.GetBookingsPayload,
   page: number,
-  size: number
+  size: number,
 ): Promise<bookcarsTypes.Result<bookcarsTypes.Booking>> =>
   axiosInstance
     .post(
       `/api/bookings/${page}/${size}/${UserService.getLanguage()}`,
       payload,
-      { withCredentials: true }
+      { withCredentials: true },
     )
     .then((res) => res.data);
 
@@ -59,7 +59,7 @@ export const getBooking = (id: string): Promise<bookcarsTypes.Booking> =>
   axiosInstance
     .get(
       `/api/booking/${encodeURIComponent(id)}/${UserService.getLanguage()}`,
-      { withCredentials: true }
+      { withCredentials: true },
     )
     .then((res) => res.data);
 
@@ -85,7 +85,7 @@ export const cancel = (id: string): Promise<number> =>
  */
 export const deleteTempBooking = (
   bookingId: string,
-  sessionId: string
+  sessionId: string,
 ): Promise<number> =>
   axiosInstance
     .delete(`/api/delete-temp-booking/${bookingId}/${sessionId}`)

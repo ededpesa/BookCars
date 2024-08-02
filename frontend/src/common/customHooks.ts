@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
 /**
  * Custom initialization hook.
@@ -8,16 +8,16 @@ import { useState, useEffect } from 'react'
  * @returns {{}}
  */
 export const useInit = (callback: any, ...args: any) => {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
 
-  const resetInit = () => setMounted(false)
+  const resetInit = () => setMounted(false);
 
   useEffect(() => {
     if (!mounted) {
-      setMounted(true)
-      callback(...args)
+      setMounted(true);
+      callback(...args);
     }
-  }, [mounted, callback, args])
+  }, [mounted, callback, args]);
 
-  return [resetInit]
-}
+  return [resetInit];
+};

@@ -26,7 +26,9 @@ export const create = async (req: Request, res: Response) => {
 
   try {
     if (!body.image) {
-      logger.error(`[car.create] ${i18n.t("CAR_IMAGE_REQUIRED")} ${JSON.stringify(body)}`);
+      logger.error(
+        `[car.create] ${i18n.t("CAR_IMAGE_REQUIRED")} ${JSON.stringify(body)}`,
+      );
       return res.status(400).send(i18n.t("CAR_IMAGE_REQUIRED"));
     }
 
@@ -50,7 +52,10 @@ export const create = async (req: Request, res: Response) => {
 
     return res.json(car);
   } catch (err) {
-    logger.error(`[car.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`, err);
+    logger.error(
+      `[car.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`,
+      err,
+    );
     return res.status(400).send(i18n.t("ERROR") + err);
   }
 };
@@ -91,11 +96,14 @@ export const update = async (req: Request, res: Response) => {
         fuelPolicy,
         mileage,
         cancellation,
-        amendments,
+        // amendments,
+        gps,
         theftProtection,
         collisionDamageWaiver,
         fullInsurance,
         additionalDriver,
+        homeDelivery,
+        babyChair,
       } = body;
 
       car.supplier = new mongoose.Types.ObjectId(supplier);
@@ -113,11 +121,14 @@ export const update = async (req: Request, res: Response) => {
       car.fuelPolicy = fuelPolicy as bookcarsTypes.FuelPolicy;
       car.mileage = mileage;
       car.cancellation = cancellation;
-      car.amendments = amendments;
+      // car.amendments = amendments;
+      car.gps = gps;
       car.theftProtection = theftProtection;
       car.collisionDamageWaiver = collisionDamageWaiver;
       car.fullInsurance = fullInsurance;
       car.additionalDriver = additionalDriver;
+      car.homeDelivery = homeDelivery;
+      car.babyChair = babyChair;
 
       await car.save();
       return res.json(car);
@@ -316,7 +327,9 @@ export const deleteTempImage = async (req: Request, res: Response) => {
   try {
     const imageFile = path.join(env.CDN_TEMP_CARS, image);
     if (!(await helper.exists(imageFile))) {
-      throw new Error(`[car.deleteTempImage] temp image ${imageFile} not found`);
+      throw new Error(
+        `[car.deleteTempImage] temp image ${imageFile} not found`,
+      );
     }
 
     await fs.unlink(imageFile);
@@ -362,7 +375,9 @@ export const getCar = async (req: Request, res: Response) => {
       };
 
       for (const location of car.locations) {
-        location.name = location.values.filter((value) => value.language === language)[0].value;
+        location.name = location.values.filter(
+          (value) => value.language === language,
+        )[0].value;
       }
 
       return res.json(car);
@@ -389,13 +404,26 @@ export const getCars = async (req: Request, res: Response) => {
     const { body }: { body: bookcarsTypes.GetCarsPayload } = req;
     const page = Number.parseInt(req.params.page, 10);
     const size = Number.parseInt(req.params.size, 10);
-    const suppliers = body.suppliers!.map((id) => new mongoose.Types.ObjectId(id));
-    const { carType, gearbox, mileage, deposit, availability, fuelPolicy, carSpecs } = body;
+    const suppliers = body.suppliers!.map(
+      (id) => new mongoose.Types.ObjectId(id),
+    );
+    const {
+      carType,
+      gearbox,
+      mileage,
+      deposit,
+      availability,
+      fuelPolicy,
+      carSpecs,
+    } = body;
     const keyword = escapeStringRegexp(String(req.query.s || ""));
     const options = "i";
 
     const $match: mongoose.FilterQuery<any> = {
-      $and: [{ name: { $regex: keyword, $options: options } }, { supplier: { $in: suppliers } }],
+      $and: [
+        { name: { $regex: keyword, $options: options } },
+        { supplier: { $in: suppliers } },
+      ],
     };
 
     if (fuelPolicy) {
@@ -423,9 +451,15 @@ export const getCars = async (req: Request, res: Response) => {
     }
 
     if (mileage) {
-      if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Limited) {
+      if (
+        mileage.length === 1 &&
+        mileage[0] === bookcarsTypes.Mileage.Limited
+      ) {
         $match.$and!.push({ mileage: { $gt: -1 } });
-      } else if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Unlimited) {
+      } else if (
+        mileage.length === 1 &&
+        mileage[0] === bookcarsTypes.Mileage.Unlimited
+      ) {
         $match.$and!.push({ mileage: -1 });
       } else if (mileage.length === 0) {
         return res.json([{ resultData: [], pageInfo: [] }]);
@@ -437,9 +471,15 @@ export const getCars = async (req: Request, res: Response) => {
     }
 
     if (Array.isArray(availability)) {
-      if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Available) {
+      if (
+        availability.length === 1 &&
+        availability[0] === bookcarsTypes.Availablity.Available
+      ) {
         $match.$and!.push({ available: true });
-      } else if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Unavailable) {
+      } else if (
+        availability.length === 1 &&
+        availability[0] === bookcarsTypes.Availablity.Unavailable
+      ) {
         $match.$and!.push({ available: false });
       } else if (availability.length === 0) {
         return res.json([{ resultData: [], pageInfo: [] }]);
@@ -480,7 +520,11 @@ export const getCars = async (req: Request, res: Response) => {
         // },
         {
           $facet: {
-            resultData: [{ $sort: { updatedAt: -1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
+            resultData: [
+              { $sort: { updatedAt: -1, _id: 1 } },
+              { $skip: (page - 1) * size },
+              { $limit: size },
+            ],
             // resultData: [{ $sort: { price: 1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
             pageInfo: [
               {
@@ -490,7 +534,7 @@ export const getCars = async (req: Request, res: Response) => {
           },
         },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
     );
 
     for (const car of data[0].resultData) {
@@ -528,19 +572,27 @@ export const getBookingCars = async (req: Request, res: Response) => {
       [
         {
           $match: {
-            $and: [{ supplier: { $eq: supplier } }, { locations: pickupLocation }, { available: true }, { name: { $regex: keyword, $options: options } }],
+            $and: [
+              { supplier: { $eq: supplier } },
+              { locations: pickupLocation },
+              { available: true },
+              { name: { $regex: keyword, $options: options } },
+            ],
           },
         },
         { $sort: { name: 1, _id: 1 } },
         { $skip: (page - 1) * size },
         { $limit: size },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
     );
 
     return res.json(cars);
   } catch (err) {
-    logger.error(`[car.getBookingCars] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);
+    logger.error(
+      `[car.getBookingCars] ${i18n.t("DB_ERROR")} ${req.query.s}`,
+      err,
+    );
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -559,12 +611,20 @@ export const getFrontendCars = async (req: Request, res: Response) => {
     const { body }: { body: bookcarsTypes.GetCarsPayload } = req;
     const page = Number.parseInt(req.params.page, 10);
     const size = Number.parseInt(req.params.size, 10);
-    const suppliers = body.suppliers!.map((id) => new mongoose.Types.ObjectId(id));
+    const suppliers = body.suppliers!.map(
+      (id) => new mongoose.Types.ObjectId(id),
+    );
     const pickupLocation = new mongoose.Types.ObjectId(body.pickupLocation);
     const { carType, gearbox, mileage, fuelPolicy, deposit, carSpecs } = body;
 
     const $match: mongoose.FilterQuery<any> = {
-      $and: [{ supplier: { $in: suppliers } }, { locations: pickupLocation }, { available: true }, { type: { $in: carType } }, { gearbox: { $in: gearbox } }],
+      $and: [
+        { supplier: { $in: suppliers } },
+        { locations: pickupLocation },
+        { available: true },
+        { type: { $in: carType } },
+        { gearbox: { $in: gearbox } },
+      ],
     };
 
     if (fuelPolicy) {
@@ -584,9 +644,15 @@ export const getFrontendCars = async (req: Request, res: Response) => {
     }
 
     if (mileage) {
-      if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Limited) {
+      if (
+        mileage.length === 1 &&
+        mileage[0] === bookcarsTypes.Mileage.Limited
+      ) {
         $match.$and!.push({ mileage: { $gt: -1 } });
-      } else if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Unlimited) {
+      } else if (
+        mileage.length === 1 &&
+        mileage[0] === bookcarsTypes.Mileage.Unlimited
+      ) {
         $match.$and!.push({ mileage: -1 });
       } else if (mileage.length === 0) {
         return res.json([{ resultData: [], pageInfo: [] }]);
@@ -631,7 +697,11 @@ export const getFrontendCars = async (req: Request, res: Response) => {
         // },
         {
           $facet: {
-            resultData: [{ $sort: { price: 1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
+            resultData: [
+              { $sort: { price: 1, _id: 1 } },
+              { $skip: (page - 1) * size },
+              { $limit: size },
+            ],
             pageInfo: [
               {
                 $count: "totalRecords",
@@ -640,7 +710,7 @@ export const getFrontendCars = async (req: Request, res: Response) => {
           },
         },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
     );
 
     for (const car of data[0].resultData) {
@@ -650,7 +720,10 @@ export const getFrontendCars = async (req: Request, res: Response) => {
 
     return res.json(data);
   } catch (err) {
-    logger.error(`[car.getFrontendCars] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);
+    logger.error(
+      `[car.getFrontendCars] ${i18n.t("DB_ERROR")} ${req.query.s}`,
+      err,
+    );
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };

@@ -20,9 +20,12 @@ const strings = new LocalizedStrings({
     CVV_NOT_VALID: "Code de sécurité non valide",
     BOOK: "Réserver",
     SIGN_IN: "Se connecter ?",
-    SECURE_PAYMENT_INFO: "Vos données sont protégées par le paiement sécurisé SSL.",
-    SUCCESS: "Votre paiement a été effectué avec succès. Nous vous avons envoyé un e-mail de confirmation.",
-    PAY_LATER_SUCCESS: "Votre réservation a été effectuée avec succès. Nous vous avons envoyé un e-mail de confirmation.",
+    SECURE_PAYMENT_INFO:
+      "Vos données sont protégées par le paiement sécurisé SSL.",
+    SUCCESS:
+      "Votre paiement a été effectué avec succès. Nous vous avons envoyé un e-mail de confirmation.",
+    PAY_LATER_SUCCESS:
+      "Votre réservation a été effectuée avec succès. Nous vous avons envoyé un e-mail de confirmation.",
     PAYMENT_OPTIONS: "Options de paiement",
     PAY_LATER: "Payer plus tard",
     PAY_LATER_INFO: "Modification et annulation gratuites",
@@ -50,8 +53,10 @@ const strings = new LocalizedStrings({
     BOOK: "Book now",
     SIGN_IN: "Sign in?",
     SECURE_PAYMENT_INFO: "Your data is protected by SSL secure payment.",
-    SUCCESS: "Your payment was successfully done. We sent you a confirmation email.",
-    PAY_LATER_SUCCESS: "Your booking was successfully done. We sent you a confirmation email.",
+    SUCCESS:
+      "Your payment was successfully done. We sent you a confirmation email.",
+    PAY_LATER_SUCCESS:
+      "Your booking was successfully done. We sent you a confirmation email.",
     PAYMENT_OPTIONS: "Payment options",
     PAY_LATER: "Paye later",
     PAY_LATER_INFO: "Free amendments and cancellation",
@@ -69,7 +74,8 @@ const strings = new LocalizedStrings({
     SUPPLIER: "Proveedor",
     COST: "COSTO",
     DRIVER_DETAILS: "Detalles del conductor",
-    EMAIL_INFO: "Recibirás un correo electrónico de confirmación en esta dirección.",
+    EMAIL_INFO:
+      "Recibirás un correo electrónico de confirmación en esta dirección.",
     PHONE_INFO: "Si necesitamos comunicarnos con usted urgentemente.",
     PAYMENT: "Pago seguro",
     CARD_NUMBER: "Número de tarjeta",
@@ -79,8 +85,10 @@ const strings = new LocalizedStrings({
     BOOK: "Reservar ahora",
     SIGN_IN: "¿Iniciar sesión?",
     SECURE_PAYMENT_INFO: "Tus datos están protegidos mediante pago seguro SSL.",
-    SUCCESS: "Su pago se realizó exitosamente. Te hemos enviado un e-mail de confirmación.",
-    PAY_LATER_SUCCESS: "Su reserva se realizó con éxito. Te hemos enviado un e-mail de confirmación.",
+    SUCCESS:
+      "Su pago se realizó exitosamente. Te hemos enviado un e-mail de confirmación.",
+    PAY_LATER_SUCCESS:
+      "Su reserva se realizó con éxito. Te hemos enviado un e-mail de confirmación.",
     PAYMENT_OPTIONS: "Opciones de pago",
     PAY_LATER: "Paga después",
     PAY_LATER_INFO: "Modificaciones y cancelaciones gratuitas",

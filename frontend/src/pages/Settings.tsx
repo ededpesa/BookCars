@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, InputLabel, FormHelperText, FormControl, FormControlLabel, Switch, Button, Paper } from "@mui/material";
+import {
+  Input,
+  InputLabel,
+  FormHelperText,
+  FormControl,
+  FormControlLabel,
+  Switch,
+  Button,
+  Paper,
+} from "@mui/material";
 import validator from "validator";
 import { intervalToDuration } from "date-fns";
 import * as bookcarsTypes from ":bookcars-types";
@@ -30,7 +39,8 @@ const Settings = () => {
   const [birthDate, setBirthDate] = useState<Date>();
   const [birthDateValid, setBirthDateValid] = useState(true);
   const [phoneValid, setPhoneValid] = useState(true);
-  const [enableEmailNotifications, setEnableEmailNotifications] = useState(false);
+  const [enableEmailNotifications, setEnableEmailNotifications] =
+    useState(false);
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value);
@@ -77,7 +87,9 @@ const Settings = () => {
     setBio(e.target.value);
   };
 
-  const handleEmailNotificationsChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailNotificationsChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     try {
       if (user && user._id) {
         setEnableEmailNotifications(e.target.checked);
@@ -156,7 +168,9 @@ const Settings = () => {
       setUser(_user);
       setFullName(_user.fullName);
       setPhone(_user.phone || "");
-      setBirthDate(_user && _user.birthDate ? new Date(_user.birthDate) : undefined);
+      setBirthDate(
+        _user && _user.birthDate ? new Date(_user.birthDate) : undefined,
+      );
       setLocation(_user.location || "");
       setBio(_user.bio || "");
       setEnableEmailNotifications(_user.enableEmailNotifications ?? true);
@@ -182,17 +196,38 @@ const Settings = () => {
                 className="avatar-ctn"
               />
               <FormControl fullWidth margin="dense">
-                <InputLabel className="required">{commonStrings.FULL_NAME}</InputLabel>
-                <Input type="text" required onChange={handleFullNameChange} autoComplete="off" value={fullName} />
+                <InputLabel className="required">
+                  {commonStrings.FULL_NAME}
+                </InputLabel>
+                <Input
+                  type="text"
+                  required
+                  onChange={handleFullNameChange}
+                  autoComplete="off"
+                  value={fullName}
+                />
               </FormControl>
               <FormControl fullWidth margin="dense">
-                <InputLabel className="required">{commonStrings.EMAIL}</InputLabel>
+                <InputLabel className="required">
+                  {commonStrings.EMAIL}
+                </InputLabel>
                 <Input type="text" value={user.email} disabled />
               </FormControl>
               <FormControl fullWidth margin="dense">
-                <InputLabel className="required">{commonStrings.PHONE}</InputLabel>
-                <Input type="text" required error={!phoneValid} onChange={handlePhoneChange} autoComplete="off" value={phone} />
-                <FormHelperText error={!phoneValid}>{(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}</FormHelperText>
+                <InputLabel className="required">
+                  {commonStrings.PHONE}
+                </InputLabel>
+                <Input
+                  type="text"
+                  required
+                  error={!phoneValid}
+                  onChange={handlePhoneChange}
+                  autoComplete="off"
+                  value={phone}
+                />
+                <FormHelperText error={!phoneValid}>
+                  {(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}
+                </FormHelperText>
               </FormControl>
               <FormControl fullWidth margin="dense">
                 <DatePicker
@@ -210,15 +245,30 @@ const Settings = () => {
                   }}
                   language={user.language}
                 />
-                <FormHelperText error={!birthDateValid}>{(!birthDateValid && commonStrings.BIRTH_DATE_NOT_VALID) || ""}</FormHelperText>
+                <FormHelperText error={!birthDateValid}>
+                  {(!birthDateValid && commonStrings.BIRTH_DATE_NOT_VALID) ||
+                    ""}
+                </FormHelperText>
               </FormControl>
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.LOCATION}</InputLabel>
-                <Input id="location" type="text" onChange={handleLocationChange} autoComplete="off" value={location} />
+                <Input
+                  id="location"
+                  type="text"
+                  onChange={handleLocationChange}
+                  autoComplete="off"
+                  value={location}
+                />
               </FormControl>
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.BIO}</InputLabel>
-                <Input id="bio" type="text" onChange={handleBioChange} autoComplete="off" value={bio} />
+                <Input
+                  id="bio"
+                  type="text"
+                  onChange={handleBioChange}
+                  autoComplete="off"
+                  value={bio}
+                />
               </FormControl>
               <div className="buttons">
                 <Button
@@ -233,7 +283,12 @@ const Settings = () => {
                 >
                   {commonStrings.RESET_PASSWORD}
                 </Button>
-                <Button type="submit" variant="contained" className="btn-primary black btn-margin-bottom" size="small">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="btn-primary black btn-margin-bottom"
+                  size="small"
+                >
                   {commonStrings.SAVE}
                 </Button>
                 <Button
@@ -251,10 +306,18 @@ const Settings = () => {
             </form>
           </Paper>
           <Paper className="settings-net settings-net-wrapper" elevation={10}>
-            <h1 className="settings-form-title"> {strings.NOTIFICATIONS_SETTINGS} </h1>
+            <h1 className="settings-form-title">
+              {" "}
+              {strings.NOTIFICATIONS_SETTINGS}{" "}
+            </h1>
             <FormControl component="fieldset">
               <FormControlLabel
-                control={<Switch checked={enableEmailNotifications} onChange={handleEmailNotificationsChange} />}
+                control={
+                  <Switch
+                    checked={enableEmailNotifications}
+                    onChange={handleEmailNotificationsChange}
+                  />
+                }
                 label={strings.SETTINGS_EMAIL_NOTIFICATIONS}
               />
             </FormControl>

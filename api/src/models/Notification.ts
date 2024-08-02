@@ -1,12 +1,12 @@
-import { Schema, model } from 'mongoose'
-import * as env from '../config/env.config'
+import { Schema, model } from "mongoose";
+import * as env from "../config/env.config";
 
 const notificationSchema = new Schema<env.Notification>(
   {
     user: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'User',
+      ref: "User",
       index: true,
     },
     message: {
@@ -15,7 +15,7 @@ const notificationSchema = new Schema<env.Notification>(
     },
     booking: {
       type: Schema.Types.ObjectId,
-      ref: 'Booking',
+      ref: "Booking",
     },
     isRead: {
       type: Boolean,
@@ -25,10 +25,13 @@ const notificationSchema = new Schema<env.Notification>(
   {
     timestamps: true,
     strict: true,
-    collection: 'Notification',
+    collection: "Notification",
   },
-)
+);
 
-const Notification = model<env.Notification>('Notification', notificationSchema)
+const Notification = model<env.Notification>(
+  "Notification",
+  notificationSchema,
+);
 
-export default Notification
+export default Notification;

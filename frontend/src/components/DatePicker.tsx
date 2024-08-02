@@ -19,7 +19,18 @@ interface DatePickerProps {
   onError?: (error: DateValidationError, value: Date | null) => void;
 }
 
-const DatePicker = ({ value: dateValue, label, minDate: minDateValue, maxDate, required, language, variant, readOnly, onChange, onError }: DatePickerProps) => {
+const DatePicker = ({
+  value: dateValue,
+  label,
+  minDate: minDateValue,
+  maxDate,
+  required,
+  language,
+  variant,
+  readOnly,
+  onChange,
+  onError,
+}: DatePickerProps) => {
   const [value, setValue] = useState<Date | null>(null);
   const [minDate, setMinDate] = useState<Date>();
 
@@ -38,7 +49,10 @@ const DatePicker = ({ value: dateValue, label, minDate: minDateValue, maxDate, r
   }, [minDateValue]);
 
   return (
-    <LocalizationProvider adapterLocale={language === "fr" ? fr : language === "es" ? es : enUS} dateAdapter={AdapterDateFns}>
+    <LocalizationProvider
+      adapterLocale={language === "fr" ? fr : language === "es" ? es : enUS}
+      dateAdapter={AdapterDateFns}
+    >
       <MuiDatePicker
         label={label}
         views={["year", "month", "day"]}

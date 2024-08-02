@@ -1,36 +1,36 @@
 const babel = (api) => {
-  const isTest = api.env('test')
+  const isTest = api.env("test");
 
   const plugins = [
     [
-      'module-resolver',
+      "module-resolver",
       {
         alias: {
-          ':bookcars-types': '../packages/bookcars-types',
+          ":bookcars-types": "../packages/bookcars-types",
         },
       },
     ],
-  ]
+  ];
 
   if (!isTest) {
-    plugins.push('add-import-extension')
+    plugins.push("add-import-extension");
   }
 
   return {
     presets: [
       [
-        '@babel/preset-env',
+        "@babel/preset-env",
         {
           modules: false,
           targets: {
-            node: 'current',
+            node: "current",
           },
         },
       ],
-      '@babel/preset-typescript',
+      "@babel/preset-typescript",
     ],
     plugins,
-  }
-}
+  };
+};
 
-export default babel
+export default babel;

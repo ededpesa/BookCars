@@ -1,37 +1,37 @@
-import { Schema, model } from 'mongoose'
-import * as bookcarsTypes from ':bookcars-types'
-import * as env from '../config/env.config'
+import { Schema, model } from "mongoose";
+import * as bookcarsTypes from ":bookcars-types";
+import * as env from "../config/env.config";
 
-export const BOOKING_EXPIRE_AT_INDEX_NAME = 'expireAt'
+export const BOOKING_EXPIRE_AT_INDEX_NAME = "expireAt";
 
 const bookingSchema = new Schema<env.Booking>(
   {
     supplier: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'User',
+      ref: "User",
       index: true,
     },
     car: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'Car',
+      ref: "Car",
     },
     driver: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'User',
+      ref: "User",
       index: true,
     },
     pickupLocation: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'Location',
+      ref: "Location",
     },
     dropOffLocation: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'Location',
+      ref: "Location",
     },
     from: {
       type: Date,
@@ -79,7 +79,7 @@ const bookingSchema = new Schema<env.Booking>(
     },
     _additionalDriver: {
       type: Schema.Types.ObjectId,
-      ref: 'AdditionalDriver',
+      ref: "AdditionalDriver",
     },
     price: {
       type: Number,
@@ -105,16 +105,20 @@ const bookingSchema = new Schema<env.Booking>(
       // are automatically deleted if the payment checkout session expires.
       //
       type: Date,
-      index: { name: BOOKING_EXPIRE_AT_INDEX_NAME, expireAfterSeconds: env.BOOKING_EXPIRE_AT, background: true },
+      index: {
+        name: BOOKING_EXPIRE_AT_INDEX_NAME,
+        expireAfterSeconds: env.BOOKING_EXPIRE_AT,
+        background: true,
+      },
     },
   },
   {
     timestamps: true,
     strict: true,
-    collection: 'Booking',
+    collection: "Booking",
   },
-)
+);
 
-const Booking = model<env.Booking>('Booking', bookingSchema)
+const Booking = model<env.Booking>("Booking", bookingSchema);
 
-export default Booking
+export default Booking;

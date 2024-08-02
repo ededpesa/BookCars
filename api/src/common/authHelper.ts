@@ -9,7 +9,10 @@ import * as env from "../config/env.config";
  * @param {Request} req
  * @returns {boolean}
  */
-export const isBackend = (req: Request): boolean => !!req.headers.host && helper.trimEnd(req.headers.host, "/") === helper.trimEnd(env.BACKEND_DOMAIN, "/");
+export const isBackend = (req: Request): boolean =>
+  !!req.headers.host &&
+  helper.trimEnd(req.headers.host, "/") ===
+    helper.trimEnd(env.BACKEND_DOMAIN, "/");
 
 /**
  * Check whether the request is from the frontend or not.
@@ -18,7 +21,10 @@ export const isBackend = (req: Request): boolean => !!req.headers.host && helper
  * @param {Request} req
  * @returns {boolean}
  */
-export const isFrontend = (req: Request): boolean => !!req.headers.host && helper.trimEnd(req.headers.host, "/") === helper.trimEnd(env.FRONTEND_DOMAIN, "/");
+export const isFrontend = (req: Request): boolean =>
+  !!req.headers.host &&
+  helper.trimEnd(req.headers.host, "/") ===
+    helper.trimEnd(env.FRONTEND_DOMAIN, "/");
 
 /**
  * Get authentification cookie name.

@@ -10,8 +10,10 @@ const strings = new LocalizedStrings({
     MARK_ALL_AS_READ: "Tout marquer comme lu",
     MARK_ALL_AS_UNREAD: "Tout marquer comme non lu",
     DELETE_ALL: "Tout supprimer",
-    DELETE_NOTIFICATION: "Êtes-vous sûr de vouloir supprimer cette notification ?",
-    DELETE_NOTIFICATIONS: "Êtes-vous sûr de vouloir supprimer ces notifications ?",
+    DELETE_NOTIFICATION:
+      "Êtes-vous sûr de vouloir supprimer cette notification ?",
+    DELETE_NOTIFICATIONS:
+      "Êtes-vous sûr de vouloir supprimer ces notifications ?",
   },
   en: {
     EMPTY_LIST: "No notifications",
@@ -22,7 +24,8 @@ const strings = new LocalizedStrings({
     MARK_ALL_AS_UNREAD: "Mark all as unread",
     DELETE_ALL: "Delete all",
     DELETE_NOTIFICATION: "Are you sure you want to delete this notification?",
-    DELETE_NOTIFICATIONS: "Are you sure you want to delete these notifications?",
+    DELETE_NOTIFICATIONS:
+      "Are you sure you want to delete these notifications?",
   },
   es: {
     EMPTY_LIST: "No hay notificaciones",
@@ -32,8 +35,10 @@ const strings = new LocalizedStrings({
     MARK_ALL_AS_READ: "Marcar todo como leído",
     MARK_ALL_AS_UNREAD: "Marcar todo como no leído",
     DELETE_ALL: "Eliminar todo",
-    DELETE_NOTIFICATION: "¿Está seguro de que quiere eliminar esta notificación?",
-    DELETE_NOTIFICATIONS: "¿Está seguro de que quiere eliminar estas notificaciones?",
+    DELETE_NOTIFICATION:
+      "¿Está seguro de que quiere eliminar esta notificación?",
+    DELETE_NOTIFICATIONS:
+      "¿Está seguro de que quiere eliminar estas notificaciones?",
   },
 });
 

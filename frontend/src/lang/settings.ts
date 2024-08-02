@@ -18,7 +18,8 @@ const strings = new LocalizedStrings({
     SETTINGS_UPDATED: "Configuraciones actualizadas con éxito.",
     NETWORK_SETTINGS: "Configuraciones de red",
     NOTIFICATIONS_SETTINGS: "Configuraciones de notificación",
-    SETTINGS_EMAIL_NOTIFICATIONS: "Habilitar notificaciones por correo electrónico",
+    SETTINGS_EMAIL_NOTIFICATIONS:
+      "Habilitar notificaciones por correo electrónico",
   },
 });
 

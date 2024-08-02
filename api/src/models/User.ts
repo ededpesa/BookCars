@@ -83,7 +83,11 @@ const userSchema = new Schema<env.User>(
     },
     type: {
       type: String,
-      enum: [bookcarsTypes.UserType.Admin, bookcarsTypes.UserType.Supplier, bookcarsTypes.UserType.User],
+      enum: [
+        bookcarsTypes.UserType.Admin,
+        bookcarsTypes.UserType.Supplier,
+        bookcarsTypes.UserType.User,
+      ],
       default: bookcarsTypes.UserType.User,
     },
     blacklisted: {
@@ -105,7 +109,7 @@ const userSchema = new Schema<env.User>(
     timestamps: true,
     strict: true,
     collection: "User",
-  }
+  },
 );
 
 const User = model<env.User>("User", userSchema);

@@ -1,6 +1,6 @@
-import validator from 'validator'
-import { Schema, model } from 'mongoose'
-import * as env from '../config/env.config'
+import validator from "validator";
+import { Schema, model } from "mongoose";
+import * as env from "../config/env.config";
 
 const additionalDriverSchema = new Schema<env.AdditionalDriver>(
   {
@@ -14,7 +14,7 @@ const additionalDriverSchema = new Schema<env.AdditionalDriver>(
       type: String,
       lowercase: true,
       required: [true, "can't be blank"],
-      validate: [validator.isEmail, 'is not valid'],
+      validate: [validator.isEmail, "is not valid"],
       index: true,
       trim: true,
     },
@@ -24,13 +24,13 @@ const additionalDriverSchema = new Schema<env.AdditionalDriver>(
         validator: (value: string) => {
           // Check if value is empty then return false.
           if (!value) {
-            return false
+            return false;
           }
 
           // If value is empty will not validate for mobile phone.
-          return validator.isMobilePhone(value)
+          return validator.isMobilePhone(value);
         },
-        message: '{VALUE} is not valid',
+        message: "{VALUE} is not valid",
       },
       trim: true,
     },
@@ -42,10 +42,13 @@ const additionalDriverSchema = new Schema<env.AdditionalDriver>(
   {
     timestamps: true,
     strict: true,
-    collection: 'AdditionalDriver',
+    collection: "AdditionalDriver",
   },
-)
+);
 
-const AdditionalDriver = model<env.AdditionalDriver>('AdditionalDriver', additionalDriverSchema)
+const AdditionalDriver = model<env.AdditionalDriver>(
+  "AdditionalDriver",
+  additionalDriverSchema,
+);
 
-export default AdditionalDriver
+export default AdditionalDriver;

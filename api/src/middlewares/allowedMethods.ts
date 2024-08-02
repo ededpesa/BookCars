@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, Response } from "express";
 
 /**
  * Allowed methods.
  *
  * @type {string[]}
  */
-const ALLOWED_METHODS = ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE']
+const ALLOWED_METHODS = ["OPTIONS", "GET", "POST", "PUT", "DELETE"];
 
 /**
  * Allowed methods middleware.
@@ -18,10 +18,8 @@ const ALLOWED_METHODS = ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE']
  * @returns {*}
  */
 export default (req: Request, res: Response, next: NextFunction) => {
-    if (!ALLOWED_METHODS.includes(req.method)) {
-        return res
-            .status(405)
-            .send('Method Not Allowed')
-    }
-    return next()
-}
+  if (!ALLOWED_METHODS.includes(req.method)) {
+    return res.status(405).send("Method Not Allowed");
+  }
+  return next();
+};

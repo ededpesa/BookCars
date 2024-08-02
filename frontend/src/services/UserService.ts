@@ -23,13 +23,13 @@ export const signup = (data: bookcarsTypes.SignUpPayload): Promise<number> =>
 export const checkToken = (
   userId: string,
   email: string,
-  token: string
+  token: string,
 ): Promise<number> =>
   axiosInstance
     .get(
       `/api/check-token/${env.APP_TYPE}/${encodeURIComponent(
-        userId
-      )}/${encodeURIComponent(email)}/${encodeURIComponent(token)}`
+        userId,
+      )}/${encodeURIComponent(email)}/${encodeURIComponent(token)}`,
     )
     .then((res) => res.status);
 
@@ -54,7 +54,7 @@ export const deleteTokens = (userId: string): Promise<number> =>
 export const resend = (email?: string, reset = false): Promise<number> =>
   axiosInstance
     .post(
-      `/api/resend/${env.APP_TYPE}/${encodeURIComponent(email || "")}/${reset}`
+      `/api/resend/${env.APP_TYPE}/${encodeURIComponent(email || "")}/${reset}`,
     )
     .then((res) => res.status);
 
@@ -65,7 +65,7 @@ export const resend = (email?: string, reset = false): Promise<number> =>
  * @returns {Promise<number>}
  */
 export const activate = (
-  data: bookcarsTypes.ActivatePayload
+  data: bookcarsTypes.ActivatePayload,
 ): Promise<number> =>
   axiosInstance
     .post("/api/activate", data, { withCredentials: true })
@@ -78,7 +78,7 @@ export const activate = (
  * @returns {Promise<number>}
  */
 export const validateEmail = (
-  data: bookcarsTypes.ValidateEmailPayload
+  data: bookcarsTypes.ValidateEmailPayload,
 ): Promise<number> =>
   axiosInstance.post("/api/validate-email", data).then((exist) => exist.status);
 
@@ -89,7 +89,7 @@ export const validateEmail = (
  * @returns {Promise<{ status: number, data: bookcarsTypes.User }>}
  */
 export const signin = (
-  data: bookcarsTypes.SignInPayload
+  data: bookcarsTypes.SignInPayload,
 ): Promise<{ status: number; data: bookcarsTypes.User }> =>
   axiosInstance
     .post("/api/sign-in/frontend", data, { withCredentials: true })
@@ -150,8 +150,8 @@ export const confirmEmail = (email: string, token: string): Promise<number> =>
   axiosInstance
     .post(
       `/api/confirm-email/${encodeURIComponent(email)}/${encodeURIComponent(
-        token
-      )}`
+        token,
+      )}`,
     )
     .then((res) => res.status);
 
@@ -162,7 +162,7 @@ export const confirmEmail = (email: string, token: string): Promise<number> =>
  * @returns {Promise<number>}
  */
 export const resendLink = (
-  data: bookcarsTypes.ResendLinkPayload
+  data: bookcarsTypes.ResendLinkPayload,
 ): Promise<number> =>
   axiosInstance
     .post("/api/resend-link", data, { withCredentials: true })
@@ -233,7 +233,7 @@ export const setLanguage = (lang: string) => {
  */
 export const getCurrentUser = (): bookcarsTypes.User | null => {
   const user = JSON.parse(
-    localStorage.getItem("bc-user") ?? "null"
+    localStorage.getItem("bc-user") ?? "null",
   ) as bookcarsTypes.User | null;
   return user;
 };
@@ -261,7 +261,7 @@ export const getUser = (id?: string): Promise<bookcarsTypes.User | null> => {
  * @returns {Promise<number>}
  */
 export const updateUser = (
-  data: bookcarsTypes.UpdateUserPayload
+  data: bookcarsTypes.UpdateUserPayload,
 ): Promise<number> =>
   axiosInstance
     .post("/api/update-user", data, { withCredentials: true })
@@ -274,7 +274,7 @@ export const updateUser = (
  * @returns {Promise<number>}
  */
 export const updateEmailNotifications = (
-  data: bookcarsTypes.UpdateEmailNotificationsPayload
+  data: bookcarsTypes.UpdateEmailNotificationsPayload,
 ): Promise<number> =>
   axiosInstance
     .post("/api/update-email-notifications", data, { withCredentials: true })
@@ -332,9 +332,9 @@ export const checkPassword = (id: string, pass: string): Promise<number> =>
   axiosInstance
     .get(
       `/api/check-password/${encodeURIComponent(id)}/${encodeURIComponent(
-        pass
+        pass,
       )}`,
-      { withCredentials: true }
+      { withCredentials: true },
     )
     .then((res) => res.status);
 
@@ -345,7 +345,7 @@ export const checkPassword = (id: string, pass: string): Promise<number> =>
  * @returns {Promise<number>}
  */
 export const changePassword = (
-  data: bookcarsTypes.ChangePasswordPayload
+  data: bookcarsTypes.ChangePasswordPayload,
 ): Promise<number> =>
   axiosInstance
     .post("/api/change-password", data, { withCredentials: true })
@@ -3246,10 +3246,10 @@ export const verifyRecaptcha = (token: string, ip: string): Promise<number> =>
   axiosInstance
     .post(
       `/api/verify-recaptcha/${encodeURIComponent(token)}/${encodeURIComponent(
-        ip
+        ip,
       )}`,
       null,
-      { withCredentials: true }
+      { withCredentials: true },
     )
     .then((res) => res.status);
 
@@ -3260,6 +3260,6 @@ export const verifyRecaptcha = (token: string, ip: string): Promise<number> =>
  * @returns {Promise<number>}
  */
 export const sendEmail = (
-  payload: bookcarsTypes.SendEmailPayload
+  payload: bookcarsTypes.SendEmailPayload,
 ): Promise<number> =>
   axiosInstance.post("/api/send-email", payload).then((res) => res.status);

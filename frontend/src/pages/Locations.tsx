@@ -1,13 +1,12 @@
-import React from 'react'
-import Layout from '../components/Layout'
-import Map from '../components/Map'
-import Footer from '../components/Footer'
+import React from "react";
+import Layout from "../components/Layout";
+import Map from "../components/Map";
+import Footer from "../components/Footer";
 
-import '../assets/css/locations.css'
+import "../assets/css/locations.css";
 
 const Locations = () => {
-  const onLoad = () => {
-  }
+  const onLoad = () => {};
 
   return (
     <Layout onLoad={onLoad} strict={false}>
@@ -16,7 +15,7 @@ const Locations = () => {
       </div>
       <Footer />
     </Layout>
-  )
-}
+  );
+};
 
-export default Locations
+export default Locations;

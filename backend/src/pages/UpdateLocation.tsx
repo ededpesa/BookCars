@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Input, InputLabel, FormControl, FormHelperText, Button, Paper, TextField } from "@mui/material";
+import {
+  Input,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+  Button,
+  Paper,
+  TextField,
+} from "@mui/material";
 import * as bookcarsTypes from ":bookcars-types";
 import * as bookcarsHelper from ":bookcars-helper";
 import Layout from "../components/Layout";
@@ -117,15 +125,22 @@ const UpdateLocation = () => {
 
             if (_location && _location.values) {
               env._LANGUAGES.forEach((lang) => {
-                if (_location.values && !_location.values.some((value) => value.language === lang.code)) {
+                if (
+                  _location.values &&
+                  !_location.values.some(
+                    (value) => value.language === lang.code,
+                  )
+                ) {
                   _location.values.push({ language: lang.code, name: "" });
                 }
               });
 
-              const _names: bookcarsTypes.LocationName[] = _location.values.map((value) => ({
-                language: value.language || "",
-                name: value.value || "",
-              }));
+              const _names: bookcarsTypes.LocationName[] = _location.values.map(
+                (value) => ({
+                  language: value.language || "",
+                  name: value.value || "",
+                }),
+              );
 
               setLocation(_location);
               setNames(_names);
@@ -156,7 +171,11 @@ const UpdateLocation = () => {
     <Layout onLoad={onLoad} strict>
       {!error && !noMatch && location && location.values && (
         <div className="update-location">
-          <Paper className="location-form location-form-wrapper" elevation={10} style={visible ? {} : { display: "none" }}>
+          <Paper
+            className="location-form location-form-wrapper"
+            elevation={10}
+            style={visible ? {} : { display: "none" }}
+          >
             <h1 className="location-form-title"> {strings.UPDATE_LOCATION} </h1>
             <form onSubmit={handleSubmit}>
               {location.values.map((value, index) => (
@@ -185,21 +204,41 @@ const UpdateLocation = () => {
                       nameErrors[index] = false;
                       names[index].name = e.target.value;
                       checkName();
-                      setNames(bookcarsHelper.cloneArray(names) as bookcarsTypes.LocationName[]);
+                      setNames(
+                        bookcarsHelper.cloneArray(
+                          names,
+                        ) as bookcarsTypes.LocationName[],
+                      );
                     }}
                     autoComplete="off"
                     variant="standard"
-                    label={env._LANGUAGES.filter((l) => l.code === value.language)[0].label}
+                    label={
+                      env._LANGUAGES.filter((l) => l.code === value.language)[0]
+                        .label
+                    }
                   />
-                  <FormHelperText error={nameErrors[index]}>{(nameErrors[index] && clStrings.INVALID_LOCATION) || ""}</FormHelperText>
+                  <FormHelperText error={nameErrors[index]}>
+                    {(nameErrors[index] && clStrings.INVALID_LOCATION) || ""}
+                  </FormHelperText>
                 </FormControl>
               ))}
 
               <div className="buttons">
-                <Button type="submit" variant="contained" className="btn-primary btn-margin-bottom" size="small" disabled={!nameChanged}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="btn-primary btn-margin-bottom"
+                  size="small"
+                  disabled={!nameChanged}
+                >
                   {commonStrings.SAVE}
                 </Button>
-                <Button variant="contained" className="btn-secondary btn-margin-bottom" size="small" href="/locations">
+                <Button
+                  variant="contained"
+                  className="btn-secondary btn-margin-bottom"
+                  size="small"
+                  href="/locations"
+                >
                   {commonStrings.CANCEL}
                 </Button>
               </div>

@@ -1,154 +1,170 @@
-import React, { useState, useEffect, useRef } from 'react'
-import * as bookcarsTypes from ':bookcars-types'
-import * as bookcarsHelper from ':bookcars-helper'
-import { strings as commonStrings } from '../lang/common'
-import { strings } from '../lang/cars'
-import Accordion from './Accordion'
+import React, { useState, useEffect, useRef } from "react";
+import * as bookcarsTypes from ":bookcars-types";
+import * as bookcarsHelper from ":bookcars-helper";
+import { strings as commonStrings } from "../lang/common";
+import { strings } from "../lang/cars";
+import Accordion from "./Accordion";
 
-import '../assets/css/fuel-policy-filter.css'
+import "../assets/css/fuel-policy-filter.css";
 
 interface FuelPolicyFilterProps {
-  className?: string
-  collapse?: boolean
-  onChange?: (value: bookcarsTypes.FuelPolicy[]) => void
+  className?: string;
+  collapse?: boolean;
+  onChange?: (value: bookcarsTypes.FuelPolicy[]) => void;
 }
 
 const FuelPolicyFilter = ({
   className,
   collapse,
-  onChange
+  onChange,
 }: FuelPolicyFilterProps) => {
-  const [allChecked, setAllChecked] = useState(true)
-  const [values, setValues] = useState([bookcarsTypes.FuelPolicy.FreeTank, bookcarsTypes.FuelPolicy.LikeForlike])
+  const [allChecked, setAllChecked] = useState(true);
+  const [values, setValues] = useState([
+    bookcarsTypes.FuelPolicy.FreeTank,
+    bookcarsTypes.FuelPolicy.LikeForlike,
+  ]);
 
-  const automaticRef = useRef<HTMLInputElement>(null)
-  const manualRef = useRef<HTMLInputElement>(null)
+  const automaticRef = useRef<HTMLInputElement>(null);
+  const manualRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (allChecked && automaticRef.current && manualRef.current) {
-      automaticRef.current.checked = true
-      manualRef.current.checked = true
+      automaticRef.current.checked = true;
+      manualRef.current.checked = true;
     }
-  }, [allChecked])
+  }, [allChecked]);
 
-  const handleCheckFreeTankChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
-    if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(bookcarsTypes.FuelPolicy.FreeTank)
+  const handleCheckFreeTankChange = (
+    e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>,
+  ) => {
+    if ("checked" in e.currentTarget && e.currentTarget.checked) {
+      values.push(bookcarsTypes.FuelPolicy.FreeTank);
 
       if (values.length === 2) {
-        setAllChecked(true)
+        setAllChecked(true);
       }
     } else {
       values.splice(
         values.findIndex((v) => v === bookcarsTypes.FuelPolicy.FreeTank),
         1,
-      )
+      );
 
       if (values.length === 0) {
-        setAllChecked(false)
+        setAllChecked(false);
       }
     }
 
-    setValues(values)
+    setValues(values);
 
     if (onChange) {
-      onChange(bookcarsHelper.clone(values))
+      onChange(bookcarsHelper.clone(values));
     }
-  }
+  };
 
   const handleFreeTankClick = (e: React.MouseEvent<HTMLElement>) => {
-    const checkbox = e.currentTarget.previousSibling as HTMLInputElement
-    checkbox.checked = !checkbox.checked
-    const event = e
-    event.currentTarget = checkbox
-    handleCheckFreeTankChange(event)
-  }
+    const checkbox = e.currentTarget.previousSibling as HTMLInputElement;
+    checkbox.checked = !checkbox.checked;
+    const event = e;
+    event.currentTarget = checkbox;
+    handleCheckFreeTankChange(event);
+  };
 
-  const handleCheckLikeForlikeChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
-    if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(bookcarsTypes.FuelPolicy.LikeForlike)
+  const handleCheckLikeForlikeChange = (
+    e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>,
+  ) => {
+    if ("checked" in e.currentTarget && e.currentTarget.checked) {
+      values.push(bookcarsTypes.FuelPolicy.LikeForlike);
 
       if (values.length === 2) {
-        setAllChecked(true)
+        setAllChecked(true);
       }
     } else {
       values.splice(
         values.findIndex((v) => v === bookcarsTypes.FuelPolicy.LikeForlike),
         1,
-      )
+      );
 
       if (values.length === 0) {
-        setAllChecked(false)
+        setAllChecked(false);
       }
     }
 
-    setValues(values)
+    setValues(values);
 
     if (onChange) {
-      onChange(bookcarsHelper.clone(values))
+      onChange(bookcarsHelper.clone(values));
     }
-  }
+  };
 
   const handleLikeForlikeClick = (e: React.MouseEvent<HTMLElement>) => {
-    const checkbox = e.currentTarget.previousSibling as HTMLInputElement
-    checkbox.checked = !checkbox.checked
-    const event = e
-    event.currentTarget = checkbox
-    handleCheckLikeForlikeChange(event)
-  }
+    const checkbox = e.currentTarget.previousSibling as HTMLInputElement;
+    checkbox.checked = !checkbox.checked;
+    const event = e;
+    event.currentTarget = checkbox;
+    handleCheckLikeForlikeChange(event);
+  };
 
   const handleUncheckAllChange = () => {
     if (allChecked) {
       // uncheck all
       if (automaticRef.current) {
-        automaticRef.current.checked = false
+        automaticRef.current.checked = false;
       }
       if (manualRef.current) {
-        manualRef.current.checked = false
+        manualRef.current.checked = false;
       }
 
-      setAllChecked(false)
-      setValues([])
+      setAllChecked(false);
+      setValues([]);
     } else {
       // check all
       if (automaticRef.current) {
-        automaticRef.current.checked = true
+        automaticRef.current.checked = true;
       }
       if (manualRef.current) {
-        manualRef.current.checked = true
+        manualRef.current.checked = true;
       }
 
-      const _values = [bookcarsTypes.FuelPolicy.FreeTank, bookcarsTypes.FuelPolicy.LikeForlike]
+      const _values = [
+        bookcarsTypes.FuelPolicy.FreeTank,
+        bookcarsTypes.FuelPolicy.LikeForlike,
+      ];
 
-      setAllChecked(true)
-      setValues(_values)
+      setAllChecked(true);
+      setValues(_values);
 
       if (onChange) {
-        onChange(bookcarsHelper.clone(_values))
+        onChange(bookcarsHelper.clone(_values));
       }
     }
-  }
+  };
 
   return (
-    <Accordion title={strings.FUEL_POLICY} collapse={collapse} className={`${className ? `${className} ` : ''}fuel-policy-filter`}>
+    <Accordion
+      title={strings.FUEL_POLICY}
+      collapse={collapse}
+      className={`${className ? `${className} ` : ""}fuel-policy-filter`}
+    >
       <div className="filter-elements">
         <div className="filter-element">
-          <input ref={automaticRef} type="checkbox" className="fuel-policy-checkbox" onChange={handleCheckFreeTankChange} />
-          <span
-            onClick={handleFreeTankClick}
-            role="button"
-            tabIndex={0}
-          >
+          <input
+            ref={automaticRef}
+            type="checkbox"
+            className="fuel-policy-checkbox"
+            onChange={handleCheckFreeTankChange}
+          />
+          <span onClick={handleFreeTankClick} role="button" tabIndex={0}>
             {strings.FUEL_POLICY_FREE_TANK}
           </span>
         </div>
         <div className="filter-element">
-          <input ref={manualRef} type="checkbox" className="fuel-policy-checkbox" onChange={handleCheckLikeForlikeChange} />
-          <span
-            onClick={handleLikeForlikeClick}
-            role="button"
-            tabIndex={0}
-          >
+          <input
+            ref={manualRef}
+            type="checkbox"
+            className="fuel-policy-checkbox"
+            onChange={handleCheckLikeForlikeChange}
+          />
+          <span onClick={handleLikeForlikeClick} role="button" tabIndex={0}>
             {strings.FUEL_POLICY_LIKE_FOR_LIKE}
           </span>
         </div>
@@ -164,7 +180,7 @@ const FuelPolicyFilter = ({
         </span>
       </div>
     </Accordion>
-  )
-}
+  );
+};
 
-export default FuelPolicyFilter
+export default FuelPolicyFilter;

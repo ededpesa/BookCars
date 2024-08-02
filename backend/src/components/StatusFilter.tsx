@@ -1,107 +1,113 @@
-import React, { useEffect, useRef, useState } from 'react'
-import * as bookcarsTypes from ':bookcars-types'
-import * as bookcarsHelper from ':bookcars-helper'
-import { strings as commonStrings } from '../lang/common'
-import * as helper from '../common/helper'
-import Accordion from '../components/Accordion'
+import React, { useEffect, useRef, useState } from "react";
+import * as bookcarsTypes from ":bookcars-types";
+import * as bookcarsHelper from ":bookcars-helper";
+import { strings as commonStrings } from "../lang/common";
+import * as helper from "../common/helper";
+import Accordion from "../components/Accordion";
 
-import '../assets/css/status-filter.css'
+import "../assets/css/status-filter.css";
 
 interface StatusFilterProps {
-  className?: string
-  collapse?: boolean
-  onChange?: (value: bookcarsTypes.BookingStatus[]) => void
+  className?: string;
+  collapse?: boolean;
+  onChange?: (value: bookcarsTypes.BookingStatus[]) => void;
 }
 
-const StatusFilter = ({
-  className,
-  collapse,
-  onChange
-}: StatusFilterProps) => {
-  const statuses = helper.getBookingStatuses()
-  const [checkedStatuses, setCheckedStatuses] = useState(statuses.map((status) => status.value))
-  const [allChecked, setAllChecked] = useState(true)
+const StatusFilter = ({ className, collapse, onChange }: StatusFilterProps) => {
+  const statuses = helper.getBookingStatuses();
+  const [checkedStatuses, setCheckedStatuses] = useState(
+    statuses.map((status) => status.value),
+  );
+  const [allChecked, setAllChecked] = useState(true);
 
-  const refs = useRef<(HTMLInputElement | null)[]>([])
+  const refs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
     refs.current.forEach((checkbox) => {
       if (checkbox) {
-        checkbox.checked = true
+        checkbox.checked = true;
       }
-    })
-  }, [])
+    });
+  }, []);
 
-  const handleCheckStatusChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
-    const status = e.currentTarget.getAttribute('data-value') as bookcarsTypes.BookingStatus
+  const handleCheckStatusChange = (
+    e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>,
+  ) => {
+    const status = e.currentTarget.getAttribute(
+      "data-value",
+    ) as bookcarsTypes.BookingStatus;
 
-    if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      checkedStatuses.push(status)
+    if ("checked" in e.currentTarget && e.currentTarget.checked) {
+      checkedStatuses.push(status);
 
       if (checkedStatuses.length === statuses.length) {
-        setAllChecked(true)
+        setAllChecked(true);
       }
     } else {
-      const index = checkedStatuses.findIndex((s) => s === status)
-      checkedStatuses.splice(index, 1)
+      const index = checkedStatuses.findIndex((s) => s === status);
+      checkedStatuses.splice(index, 1);
 
       if (checkedStatuses.length === 0) {
-        setAllChecked(false)
+        setAllChecked(false);
       }
     }
 
-    setCheckedStatuses(checkedStatuses)
+    setCheckedStatuses(checkedStatuses);
     if (onChange) {
-      onChange(bookcarsHelper.clone(checkedStatuses))
+      onChange(bookcarsHelper.clone(checkedStatuses));
     }
-  }
+  };
 
   const handleStatusClick = (e: React.MouseEvent<HTMLElement>) => {
-    const checkbox = e.currentTarget.previousSibling as HTMLInputElement
-    checkbox.checked = !checkbox.checked
-    const event = e
-    event.currentTarget = checkbox
-    handleCheckStatusChange(event)
-  }
+    const checkbox = e.currentTarget.previousSibling as HTMLInputElement;
+    checkbox.checked = !checkbox.checked;
+    const event = e;
+    event.currentTarget = checkbox;
+    handleCheckStatusChange(event);
+  };
 
   const handleUncheckAllChange = () => {
     if (allChecked) {
       // uncheck all
       refs.current.forEach((checkbox) => {
         if (checkbox) {
-          checkbox.checked = false
+          checkbox.checked = false;
         }
-      })
+      });
 
-      setAllChecked(false)
-      setCheckedStatuses([])
+      setAllChecked(false);
+      setCheckedStatuses([]);
     } else {
       // check all
       refs.current.forEach((checkbox) => {
         if (checkbox) {
-          checkbox.checked = true
+          checkbox.checked = true;
         }
-      })
+      });
 
-      const allStatuses = statuses.map((status) => status.value)
-      setAllChecked(true)
-      setCheckedStatuses(allStatuses)
+      const allStatuses = statuses.map((status) => status.value);
+      setAllChecked(true);
+      setCheckedStatuses(allStatuses);
 
       if (onChange) {
-        onChange(bookcarsHelper.clone(allStatuses))
+        onChange(bookcarsHelper.clone(allStatuses));
       }
     }
-  }
+  };
 
   return (
     (statuses.length > 0 && (
-      <Accordion title={commonStrings.STATUS} collapse={collapse} className={`${className ? `${className} ` : ''}status-filter`}>
+      <Accordion
+        title={commonStrings.STATUS}
+        collapse={collapse}
+        className={`${className ? `${className} ` : ""}status-filter`}
+      >
         <ul className="status-list">
           {statuses.map((status, index) => (
             <li key={status.value}>
               <input
                 ref={(ref) => {
-                  refs.current[index] = ref
+                  refs.current[index] = ref;
                 }}
                 type="checkbox"
                 data-value={status.value}
@@ -131,7 +137,7 @@ const StatusFilter = ({
         </div>
       </Accordion>
     )) || <></>
-  )
-}
+  );
+};
 
-export default StatusFilter
+export default StatusFilter;

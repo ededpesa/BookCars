@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Avatar as MaterialAvatar,
@@ -8,8 +8,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Tooltip
-} from '@mui/material'
+  Tooltip,
+} from "@mui/material";
 import {
   AccountCircle,
   PhotoCamera as PhotoCameraIcon,
@@ -17,30 +17,39 @@ import {
   CorporateFare as SupplierIcon,
   DirectionsCar as CarIcon,
   Check as VerifiedIcon,
-} from '@mui/icons-material'
-import * as bookcarsTypes from ':bookcars-types'
-import * as bookcarsHelper from ':bookcars-helper'
-import env from '../config/env.config'
-import { strings as commonStrings } from '../lang/common'
-import * as helper from '../common/helper'
-import * as UserService from '../services/UserService'
-import * as CarService from '../services/CarService'
+} from "@mui/icons-material";
+import * as bookcarsTypes from ":bookcars-types";
+import * as bookcarsHelper from ":bookcars-helper";
+import env from "../config/env.config";
+import { strings as commonStrings } from "../lang/common";
+import * as helper from "../common/helper";
+import * as UserService from "../services/UserService";
+import * as CarService from "../services/CarService";
 
 interface AvatarProps {
-  width?: number
-  height?: number
-  mode?: 'create' | 'update'
-  type?: string
-  record?: bookcarsTypes.User | bookcarsTypes.Car | null
-  size: 'small' | 'medium' | 'large'
-  readonly?: boolean
-  color?: 'disabled' | 'action' | 'inherit' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
-  className?: string
-  verified?: boolean
-  hideDelete?: boolean
-  onValidate?: (valid: boolean) => void
-  onBeforeUpload?: () => void
-  onChange?: (param: string) => void
+  width?: number;
+  height?: number;
+  mode?: "create" | "update";
+  type?: string;
+  record?: bookcarsTypes.User | bookcarsTypes.Car | null;
+  size: "small" | "medium" | "large";
+  readonly?: boolean;
+  color?:
+    | "disabled"
+    | "action"
+    | "inherit"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
+  className?: string;
+  verified?: boolean;
+  hideDelete?: boolean;
+  onValidate?: (valid: boolean) => void;
+  onBeforeUpload?: () => void;
+  onChange?: (param: string) => void;
 }
 
 const Avatar = ({
@@ -59,353 +68,393 @@ const Avatar = ({
   onBeforeUpload,
   onChange,
 }: AvatarProps) => {
-  const [error, setError] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [openTypeDialog, setOpenTypeDialog] = useState(false)
-  const [avatarRecord, setAvatarRecord] = useState<bookcarsTypes.User | bookcarsTypes.Car>()
-  const [avatar, setAvatar] = useState<string | undefined | null>(null)
-  const [loading, setIsLoading] = useState(true)
+  const [error, setError] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [openTypeDialog, setOpenTypeDialog] = useState(false);
+  const [avatarRecord, setAvatarRecord] = useState<
+    bookcarsTypes.User | bookcarsTypes.Car
+  >();
+  const [avatar, setAvatar] = useState<string | undefined | null>(null);
+  const [loading, setIsLoading] = useState(true);
 
   const validate = async (file: Blob, onValid: () => void) => {
     if (width && height) {
-      const _URL = window.URL || window.webkitURL
-      const img = new Image()
-      const objectUrl = _URL.createObjectURL(file)
+      const _URL = window.URL || window.webkitURL;
+      const img = new Image();
+      const objectUrl = _URL.createObjectURL(file);
       img.onload = async () => {
         if (width !== img.width || height !== img.height) {
           if (onValidate) {
-            onValidate(false)
+            onValidate(false);
           }
         } else {
           if (onValidate) {
-            onValidate(true)
+            onValidate(true);
           }
           if (onValid) {
-            await onValid()
+            await onValid();
           }
         }
-        _URL.revokeObjectURL(objectUrl)
-      }
-      img.src = objectUrl
+        _URL.revokeObjectURL(objectUrl);
+      };
+      img.src = objectUrl;
     } else if (onValid) {
-      onValid()
+      onValid();
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
-      helper.error()
-      return
+      helper.error();
+      return;
     }
 
     if (onBeforeUpload) {
-      onBeforeUpload()
+      onBeforeUpload();
     }
 
-    const reader = new FileReader()
-    const file = e.target.files[0]
+    const reader = new FileReader();
+    const file = e.target.files[0];
 
     reader.onloadend = async () => {
-      if (type === bookcarsTypes.RecordType.Admin
-        || type === bookcarsTypes.RecordType.Supplier
-        || type === bookcarsTypes.RecordType.User) {
-        if (mode === 'create') {
+      if (
+        type === bookcarsTypes.RecordType.Admin ||
+        type === bookcarsTypes.RecordType.Supplier ||
+        type === bookcarsTypes.RecordType.User
+      ) {
+        if (mode === "create") {
           const createAvatar = async () => {
             try {
-              const data = await UserService.createAvatar(file)
+              const data = await UserService.createAvatar(file);
 
-              setAvatar(data)
+              setAvatar(data);
 
               if (onChange) {
-                onChange(data)
+                onChange(data);
               }
             } catch (err) {
-              helper.error(err)
+              helper.error(err);
             }
-          }
+          };
 
-          await validate(file, createAvatar)
-        } else if (avatarRecord && mode === 'update') {
+          await validate(file, createAvatar);
+        } else if (avatarRecord && mode === "update") {
           const updateAvatar = async () => {
             try {
-              const { _id } = avatarRecord
+              const { _id } = avatarRecord;
 
               if (!_id) {
-                helper.error()
-                return
+                helper.error();
+                return;
               }
 
-              const status = await UserService.updateAvatar(_id, file)
+              const status = await UserService.updateAvatar(_id, file);
 
               if (status === 200) {
-                const user = await UserService.getUser(_id)
+                const user = await UserService.getUser(_id);
 
                 if (user) {
-                  setAvatarRecord(user)
-                  setAvatar(user.avatar || '')
+                  setAvatarRecord(user);
+                  setAvatar(user.avatar || "");
 
                   if (onChange) {
-                    onChange(user.avatar || '')
+                    onChange(user.avatar || "");
                   }
                 } else {
-                  helper.error()
+                  helper.error();
                 }
               } else {
-                helper.error()
+                helper.error();
               }
             } catch (err) {
-              helper.error(err)
+              helper.error(err);
             }
-          }
+          };
 
-          await validate(file, updateAvatar)
+          await validate(file, updateAvatar);
         }
       } else if (type === bookcarsTypes.RecordType.Car) {
-        if (mode === 'create') {
+        if (mode === "create") {
           const createAvatar = async () => {
             try {
-              const data = await CarService.createImage(file)
-              setAvatar(data)
+              const data = await CarService.createImage(file);
+              setAvatar(data);
 
               if (onChange) {
-                onChange(data)
+                onChange(data);
               }
             } catch (err) {
-              helper.error(err)
+              helper.error(err);
             }
-          }
+          };
 
-          await validate(file, createAvatar)
-        } else if (mode === 'update') {
+          await validate(file, createAvatar);
+        } else if (mode === "update") {
           const updateAvatar = async () => {
             try {
               if (!avatarRecord) {
-                helper.error()
-                return
+                helper.error();
+                return;
               }
 
-              const { _id } = avatarRecord
+              const { _id } = avatarRecord;
 
               if (!_id) {
-                helper.error()
-                return
+                helper.error();
+                return;
               }
 
-              const status = await CarService.updateImage(_id, file)
+              const status = await CarService.updateImage(_id, file);
 
               if (status === 200) {
-                const car = await CarService.getCar(_id)
+                const car = await CarService.getCar(_id);
 
                 if (car) {
-                  setAvatarRecord(car)
-                  setAvatar(car.image || '')
+                  setAvatarRecord(car);
+                  setAvatar(car.image || "");
 
                   if (onChange) {
-                    onChange(car.image || '')
+                    onChange(car.image || "");
                   }
                 } else {
-                  helper.error()
+                  helper.error();
                 }
               } else {
-                helper.error()
+                helper.error();
               }
             } catch (err) {
-              helper.error(err)
+              helper.error(err);
             }
-          }
+          };
 
-          await validate(file, updateAvatar)
+          await validate(file, updateAvatar);
         }
       }
-    }
+    };
 
-    reader.readAsDataURL(file)
-  }
+    reader.readAsDataURL(file);
+  };
 
   const handleUpload = () => {
     if (!type) {
-      setOpenTypeDialog(true)
-      return
+      setOpenTypeDialog(true);
+      return;
     }
-    const upload = document.getElementById('upload') as HTMLInputElement
-    upload.value = ''
+    const upload = document.getElementById("upload") as HTMLInputElement;
+    upload.value = "";
     setTimeout(() => {
-      upload.click()
-    }, 0)
-  }
+      upload.click();
+    }, 0);
+  };
 
   const handleCloseDialog = () => {
-    setOpenTypeDialog(false)
-  }
+    setOpenTypeDialog(false);
+  };
 
   const openDialog = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleDeleteAvatar = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault()
-    openDialog()
-  }
+    e.preventDefault();
+    openDialog();
+  };
 
   const closeDialog = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   const handleCancelDelete = () => {
-    closeDialog()
-  }
+    closeDialog();
+  };
 
   const handleDelete = async () => {
     try {
-      if (type === bookcarsTypes.RecordType.Admin || type === bookcarsTypes.RecordType.Supplier || type === bookcarsTypes.RecordType.User) {
-        if (avatarRecord && mode === 'update') {
-          const { _id } = avatarRecord
+      if (
+        type === bookcarsTypes.RecordType.Admin ||
+        type === bookcarsTypes.RecordType.Supplier ||
+        type === bookcarsTypes.RecordType.User
+      ) {
+        if (avatarRecord && mode === "update") {
+          const { _id } = avatarRecord;
 
           if (!_id) {
-            helper.error()
-            return
+            helper.error();
+            return;
           }
 
-          const status = await UserService.deleteAvatar(_id)
+          const status = await UserService.deleteAvatar(_id);
 
           if (status === 200) {
-            const user = await UserService.getUser(_id)
+            const user = await UserService.getUser(_id);
 
             if (user) {
-              setAvatarRecord(user)
-              setAvatar(null)
+              setAvatarRecord(user);
+              setAvatar(null);
 
               if (onChange) {
-                onChange('')
+                onChange("");
               }
-              closeDialog()
+              closeDialog();
             } else {
-              helper.error()
+              helper.error();
             }
           } else {
-            helper.error()
+            helper.error();
           }
-        } else if (!avatarRecord && mode === 'create') {
-          const status = await UserService.deleteTempAvatar(avatar as string)
+        } else if (!avatarRecord && mode === "create") {
+          const status = await UserService.deleteTempAvatar(avatar as string);
 
           if (status === 200) {
-            setAvatar(null)
+            setAvatar(null);
             if (onChange) {
-              onChange('')
+              onChange("");
             }
-            closeDialog()
+            closeDialog();
           } else {
-            helper.error()
+            helper.error();
           }
         }
       } else if (type === bookcarsTypes.RecordType.Car) {
-        if (!avatarRecord && mode === 'create') {
-          const status = await CarService.deleteTempImage(avatar as string)
+        if (!avatarRecord && mode === "create") {
+          const status = await CarService.deleteTempImage(avatar as string);
 
           if (status === 200) {
-            setAvatar(null)
+            setAvatar(null);
             if (onChange) {
-              onChange('')
+              onChange("");
             }
-            closeDialog()
+            closeDialog();
           } else {
-            helper.error()
+            helper.error();
           }
-        } else if (avatarRecord && mode === 'update') {
-          const { _id } = avatarRecord
+        } else if (avatarRecord && mode === "update") {
+          const { _id } = avatarRecord;
 
           if (!_id) {
-            helper.error()
-            return
+            helper.error();
+            return;
           }
 
-          const status = await CarService.deleteImage(_id)
+          const status = await CarService.deleteImage(_id);
 
           if (status === 200) {
-            const car = await UserService.getUser(_id)
+            const car = await UserService.getUser(_id);
 
             if (car) {
-              setAvatarRecord(car)
-              setAvatar(null)
+              setAvatarRecord(car);
+              setAvatar(null);
               if (onChange) {
-                onChange('')
+                onChange("");
               }
-              closeDialog()
+              closeDialog();
             } else {
-              helper.error()
+              helper.error();
             }
           } else {
-            helper.error()
+            helper.error();
           }
         }
       }
     } catch (err) {
-      helper.error(err)
+      helper.error(err);
     }
-  }
+  };
 
   const cdn = () => {
     if (type === bookcarsTypes.RecordType.Car) {
-      return mode === 'create' ? env.CDN_TEMP_CARS : env.CDN_CARS
+      return mode === "create" ? env.CDN_TEMP_CARS : env.CDN_CARS;
     }
-    return mode === 'create' ? env.CDN_TEMP_USERS : env.CDN_USERS
-  }
+    return mode === "create" ? env.CDN_TEMP_USERS : env.CDN_USERS;
+  };
 
   useEffect(() => {
-    const language = UserService.getLanguage()
-    commonStrings.setLanguage(language)
+    const language = UserService.getLanguage();
+    commonStrings.setLanguage(language);
 
-    const currentUser = UserService.getCurrentUser()
+    const currentUser = UserService.getCurrentUser();
     if (currentUser) {
       if (record) {
-        setAvatarRecord(record)
+        setAvatarRecord(record);
         if (type === bookcarsTypes.RecordType.Car) {
-          setAvatar((record as bookcarsTypes.Car).image)
+          setAvatar((record as bookcarsTypes.Car).image);
         } else {
-          setAvatar(record.avatar)
+          setAvatar(record.avatar);
         }
-        setIsLoading(false)
-      } else if (mode === 'create') {
-        setIsLoading(false)
+        setIsLoading(false);
+      } else if (mode === "create") {
+        setIsLoading(false);
       }
     } else {
-      setError(true)
-      helper.error()
+      setError(true);
+      helper.error();
     }
-  }, [record, type, mode])
+  }, [record, type, mode]);
 
-  const supplierImageStyle = { width: env.SUPPLIER_IMAGE_WIDTH }
+  const supplierImageStyle = { width: env.SUPPLIER_IMAGE_WIDTH };
 
-  const carImageStyle = { width: env.CAR_IMAGE_WIDTH }
+  const carImageStyle = { width: env.CAR_IMAGE_WIDTH };
 
-  const userAvatar = avatar ? <MaterialAvatar src={bookcarsHelper.joinURL(cdn(), avatar)} className={size ? `avatar-${size}` : 'avatar'} /> : <></>
+  const userAvatar = avatar ? (
+    <MaterialAvatar
+      src={bookcarsHelper.joinURL(cdn(), avatar)}
+      className={size ? `avatar-${size}` : "avatar"}
+    />
+  ) : (
+    <></>
+  );
 
-  const emptyAvatar = <AccountCircle className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
+  const emptyAvatar = (
+    <AccountCircle
+      className={size ? `avatar-${size}` : "avatar"}
+      color={color || "inherit"}
+    />
+  );
 
   return !error && !loading ? (
     <div className={className}>
       {avatar ? (
         readonly ? (
           type === bookcarsTypes.RecordType.Car ? (
-            <img style={carImageStyle} src={bookcarsHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as bookcarsTypes.Car).name} />
+            <img
+              style={carImageStyle}
+              src={bookcarsHelper.joinURL(cdn(), avatar)}
+              alt={avatarRecord && (avatarRecord as bookcarsTypes.Car).name}
+            />
           ) : type === bookcarsTypes.RecordType.Supplier ? (
             <div className="supplier-avatar-readonly">
-              <img src={bookcarsHelper.joinURL(cdn(), avatar)} alt={avatarRecord && avatarRecord.fullName} />
+              <img
+                src={bookcarsHelper.joinURL(cdn(), avatar)}
+                alt={avatarRecord && avatarRecord.fullName}
+              />
             </div>
           ) : verified && avatarRecord && avatarRecord.verified ? (
             <Badge
               overlap="circular"
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
+                vertical: "bottom",
+                horizontal: "right",
               }}
-              badgeContent={(
+              badgeContent={
                 <Tooltip title={commonStrings.VERIFIED}>
-                  <Box borderRadius="50%" className={size ? `user-avatar-verified-${size}` : 'user-avatar-verified-medium'}>
-                    <VerifiedIcon className={size ? `user-avatar-verified-icon-${size}` : 'user-avatar-verified-icon-medium'} />
+                  <Box
+                    borderRadius="50%"
+                    className={
+                      size
+                        ? `user-avatar-verified-${size}`
+                        : "user-avatar-verified-medium"
+                    }
+                  >
+                    <VerifiedIcon
+                      className={
+                        size
+                          ? `user-avatar-verified-icon-${size}`
+                          : "user-avatar-verified-icon-medium"
+                      }
+                    />
                   </Box>
                 </Tooltip>
-              )}
+              }
             >
               {userAvatar}
             </Badge>
@@ -417,15 +466,19 @@ const Avatar = ({
           <Badge
             overlap="circular"
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             badgeContent={
               hideDelete ? (
                 <></>
               ) : (
                 <Tooltip title={commonStrings.DELETE_IMAGE}>
-                  <Box borderRadius="50%" className="avatar-action-box" onClick={handleDeleteAvatar}>
+                  <Box
+                    borderRadius="50%"
+                    className="avatar-action-box"
+                    onClick={handleDeleteAvatar}
+                  >
                     <DeleteIcon className="avatar-action-icon" />
                   </Box>
                 </Tooltip>
@@ -435,100 +488,154 @@ const Avatar = ({
             <Badge
               overlap="circular"
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
+                vertical: "bottom",
+                horizontal: "right",
               }}
-              className={type === bookcarsTypes.RecordType.Supplier ? 'supplier-avatar' : ''}
-              badgeContent={(
+              className={
+                type === bookcarsTypes.RecordType.Supplier
+                  ? "supplier-avatar"
+                  : ""
+              }
+              badgeContent={
                 <Tooltip title={commonStrings.UPLOAD_IMAGE}>
-                  <Box borderRadius="50%" className="avatar-action-box" onClick={handleUpload}>
+                  <Box
+                    borderRadius="50%"
+                    className="avatar-action-box"
+                    onClick={handleUpload}
+                  >
                     <PhotoCameraIcon className="avatar-action-icon" />
                   </Box>
                 </Tooltip>
-              )}
+              }
             >
               {type === bookcarsTypes.RecordType.Car ? (
                 <div className="car-avatar">
-                  <img src={bookcarsHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as bookcarsTypes.Car).name} />
+                  <img
+                    src={bookcarsHelper.joinURL(cdn(), avatar)}
+                    alt={
+                      avatarRecord && (avatarRecord as bookcarsTypes.Car).name
+                    }
+                  />
                 </div>
               ) : type === bookcarsTypes.RecordType.Supplier ? (
-                <img style={supplierImageStyle} src={bookcarsHelper.joinURL(cdn(), avatar)} alt={avatarRecord && avatarRecord.fullName} />
+                <img
+                  style={supplierImageStyle}
+                  src={bookcarsHelper.joinURL(cdn(), avatar)}
+                  alt={avatarRecord && avatarRecord.fullName}
+                />
               ) : (
-                <MaterialAvatar src={bookcarsHelper.joinURL(cdn(), avatar)} className={size ? `avatar-${size}` : 'avatar'} />
+                <MaterialAvatar
+                  src={bookcarsHelper.joinURL(cdn(), avatar)}
+                  className={size ? `avatar-${size}` : "avatar"}
+                />
               )}
             </Badge>
           </Badge>
         )
-      ) // !avatar
-        : readonly ? (
-          type === bookcarsTypes.RecordType.Car ? (
-            <CarIcon style={carImageStyle} color={color || 'inherit'} />
-          ) : type === bookcarsTypes.RecordType.Supplier ? (
-            <SupplierIcon style={supplierImageStyle} color={color || 'inherit'} />
-          ) : verified && avatarRecord && avatarRecord.verified ? (
-            <Badge
-              overlap="circular"
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              badgeContent={(
-                <Tooltip title={commonStrings.VERIFIED}>
-                  <Box borderRadius="50%" className={size ? `user-avatar-verified-${size}` : 'user-avatar-verified-medium'}>
-                    <VerifiedIcon className={size ? `user-avatar-verified-icon-${size}` : 'user-avatar-verified-icon-medium'} />
-                  </Box>
-                </Tooltip>
-              )}
-            >
-              {emptyAvatar}
-            </Badge>
-          ) : (
-            emptyAvatar
-          )
-        ) : (
-          //! readonly
+      ) : // !avatar
+      readonly ? (
+        type === bookcarsTypes.RecordType.Car ? (
+          <CarIcon style={carImageStyle} color={color || "inherit"} />
+        ) : type === bookcarsTypes.RecordType.Supplier ? (
+          <SupplierIcon style={supplierImageStyle} color={color || "inherit"} />
+        ) : verified && avatarRecord && avatarRecord.verified ? (
           <Badge
             overlap="circular"
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "bottom",
+              horizontal: "right",
             }}
+            badgeContent={
+              <Tooltip title={commonStrings.VERIFIED}>
+                <Box
+                  borderRadius="50%"
+                  className={
+                    size
+                      ? `user-avatar-verified-${size}`
+                      : "user-avatar-verified-medium"
+                  }
+                >
+                  <VerifiedIcon
+                    className={
+                      size
+                        ? `user-avatar-verified-icon-${size}`
+                        : "user-avatar-verified-icon-medium"
+                    }
+                  />
+                </Box>
+              </Tooltip>
+            }
           >
-            <Badge
-              overlap="circular"
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              badgeContent={(
-                <Tooltip title={commonStrings.UPLOAD_IMAGE}>
-                  <Box borderRadius="50%" className="avatar-action-box" onClick={handleUpload}>
-                    <PhotoCameraIcon className="avatar-action-icon" />
-                  </Box>
-                </Tooltip>
-              )}
-            >
-              {type === bookcarsTypes.RecordType.Car ? (
-                <CarIcon className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
-              ) : type === bookcarsTypes.RecordType.Supplier ? (
-                <SupplierIcon className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
-              ) : (
-                <AccountCircle className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
-              )}
-            </Badge>
+            {emptyAvatar}
           </Badge>
-        )}
+        ) : (
+          emptyAvatar
+        )
+      ) : (
+        //! readonly
+        <Badge
+          overlap="circular"
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <Badge
+            overlap="circular"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            badgeContent={
+              <Tooltip title={commonStrings.UPLOAD_IMAGE}>
+                <Box
+                  borderRadius="50%"
+                  className="avatar-action-box"
+                  onClick={handleUpload}
+                >
+                  <PhotoCameraIcon className="avatar-action-icon" />
+                </Box>
+              </Tooltip>
+            }
+          >
+            {type === bookcarsTypes.RecordType.Car ? (
+              <CarIcon
+                className={size ? `avatar-${size}` : "avatar"}
+                color={color || "inherit"}
+              />
+            ) : type === bookcarsTypes.RecordType.Supplier ? (
+              <SupplierIcon
+                className={size ? `avatar-${size}` : "avatar"}
+                color={color || "inherit"}
+              />
+            ) : (
+              <AccountCircle
+                className={size ? `avatar-${size}` : "avatar"}
+                color={color || "inherit"}
+              />
+            )}
+          </Badge>
+        </Badge>
+      )}
       <Dialog disableEscapeKeyDown maxWidth="xs" open={openTypeDialog}>
-        <DialogTitle className="dialog-header">{commonStrings.INFO}</DialogTitle>
+        <DialogTitle className="dialog-header">
+          {commonStrings.INFO}
+        </DialogTitle>
         <DialogContent>{commonStrings.USER_TYPE_REQUIRED}</DialogContent>
         <DialogActions className="dialog-actions">
-          <Button onClick={handleCloseDialog} variant="contained" className="btn-secondary">
+          <Button
+            onClick={handleCloseDialog}
+            variant="contained"
+            className="btn-secondary"
+          >
             {commonStrings.CLOSE}
           </Button>
         </DialogActions>
       </Dialog>
       <Dialog disableEscapeKeyDown maxWidth="xs" open={open}>
-        <DialogTitle className="dialog-header">{commonStrings.CONFIRM_TITLE}</DialogTitle>
+        <DialogTitle className="dialog-header">
+          {commonStrings.CONFIRM_TITLE}
+        </DialogTitle>
         <DialogContent>{commonStrings.DELETE_AVATAR_CONFIRM}</DialogContent>
         <DialogActions className="dialog-actions">
           <Button onClick={handleCancelDelete} className="btn-secondary">
@@ -539,9 +646,11 @@ const Avatar = ({
           </Button>
         </DialogActions>
       </Dialog>
-      {!readonly && <input id="upload" type="file" hidden onChange={handleChange} />}
+      {!readonly && (
+        <input id="upload" type="file" hidden onChange={handleChange} />
+      )}
     </div>
-  ) : null
-}
+  ) : null;
+};
 
-export default Avatar
+export default Avatar;

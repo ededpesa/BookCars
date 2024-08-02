@@ -1,13 +1,13 @@
-import React from 'react'
-import { Link } from '@mui/material'
-import { strings as commonStrings } from '../lang/common'
+import React from "react";
+import { Link } from "@mui/material";
+import { strings as commonStrings } from "../lang/common";
 
-import '../assets/css/error.css'
+import "../assets/css/error.css";
 
 interface ErrorProps {
-  message: string
-  style?: React.CSSProperties
-  homeLink?: boolean
+  message: string;
+  style?: React.CSSProperties;
+  homeLink?: boolean;
 }
 
 const Error = ({ message, style, homeLink }: ErrorProps) => (
@@ -16,11 +16,11 @@ const Error = ({ message, style, homeLink }: ErrorProps) => (
       <span className="message">{message}</span>
     </div>
     {homeLink && (
-    <p>
-      <Link href="/">{commonStrings.GO_TO_HOME}</Link>
-    </p>
-      )}
+      <p>
+        <Link href="/">{commonStrings.GO_TO_HOME}</Link>
+      </p>
+    )}
   </div>
-  )
+);
 
-export default Error
+export default Error;

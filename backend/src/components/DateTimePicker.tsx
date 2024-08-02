@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DateTimePicker as MuiDateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
-import { fr, enUS } from 'date-fns/locale'
-import { TextFieldVariants } from '@mui/material'
-import { DateTimeValidationError, PickersActionBarAction } from '@mui/x-date-pickers'
+import React, { useEffect, useState } from "react";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker as MuiDateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { fr, enUS } from "date-fns/locale";
+import { TextFieldVariants } from "@mui/material";
+import {
+  DateTimeValidationError,
+  PickersActionBarAction,
+} from "@mui/x-date-pickers";
 
 interface DateTimePickerProps {
-  value?: Date
-  label?: string
-  minDate?: Date
-  maxDate?: Date
-  required?: boolean
-  language?: string
-  variant?: TextFieldVariants
-  readOnly?: boolean
-  showClear?: boolean
-  onChange?: (value: Date | null) => void
-  onError?: (error: DateTimeValidationError, value: Date | null) => void
+  value?: Date;
+  label?: string;
+  minDate?: Date;
+  maxDate?: Date;
+  required?: boolean;
+  language?: string;
+  variant?: TextFieldVariants;
+  readOnly?: boolean;
+  showClear?: boolean;
+  onChange?: (value: Date | null) => void;
+  onError?: (error: DateTimeValidationError, value: Date | null) => void;
 }
 
 const DateTimePicker = ({
@@ -31,42 +34,45 @@ const DateTimePicker = ({
   readOnly,
   showClear,
   onChange,
-  onError
+  onError,
 }: DateTimePickerProps) => {
-  const [value, setValue] = useState<Date | null>(null)
+  const [value, setValue] = useState<Date | null>(null);
 
   useEffect(() => {
-    setValue(dateTimeValue || null)
-  }, [dateTimeValue])
+    setValue(dateTimeValue || null);
+  }, [dateTimeValue]);
 
-  const actions: PickersActionBarAction[] = ['accept', 'cancel']
+  const actions: PickersActionBarAction[] = ["accept", "cancel"];
 
   if (showClear) {
-    actions.push('clear')
+    actions.push("clear");
   }
 
   return (
-    <LocalizationProvider adapterLocale={language === 'fr' ? fr : enUS} dateAdapter={AdapterDateFns}>
+    <LocalizationProvider
+      adapterLocale={language === "fr" ? fr : enUS}
+      dateAdapter={AdapterDateFns}
+    >
       <MuiDateTimePicker
         label={label}
         value={value}
         readOnly={readOnly}
-        views={['year', 'month', 'day', 'hours', 'minutes']}
+        views={["year", "month", "day", "hours", "minutes"]}
         onChange={(_value) => {
-          setValue(_value)
+          setValue(_value);
 
           if (onChange) {
-            onChange(_value)
+            onChange(_value);
           }
 
           if (_value && minDate) {
-            const val = new Date(_value)
-            val.setHours(0, 0, 0, 0)
-            const min = new Date(minDate)
-            min.setHours(0, 0, 0, 0)
+            const val = new Date(_value);
+            val.setHours(0, 0, 0, 0);
+            const min = new Date(minDate);
+            min.setHours(0, 0, 0, 0);
 
             if (val < min && onError) {
-              onError('minDate', _value)
+              onError("minDate", _value);
             }
           }
         }}
@@ -76,7 +82,7 @@ const DateTimePicker = ({
         timeSteps={{ hours: 1, minutes: 5 }}
         slotProps={{
           textField: {
-            variant: variant || 'standard',
+            variant: variant || "standard",
             required,
           },
           actionBar: {
@@ -85,7 +91,7 @@ const DateTimePicker = ({
         }}
       />
     </LocalizationProvider>
-  )
-}
+  );
+};
 
-export default DateTimePicker
+export default DateTimePicker;

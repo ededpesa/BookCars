@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Input, InputLabel, FormControl, FormHelperText, Button, Paper, FormControlLabel, Switch } from "@mui/material";
+import {
+  Input,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+  Button,
+  Paper,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 import { Info as InfoIcon } from "@mui/icons-material";
 import validator from "validator";
 import * as bookcarsTypes from ":bookcars-types";
@@ -48,7 +57,9 @@ const UpdateSupplier = () => {
     if (supplier && _fullName) {
       if (supplier.fullName !== _fullName) {
         try {
-          const status = await SupplierService.validate({ fullName: _fullName });
+          const status = await SupplierService.validate({
+            fullName: _fullName,
+          });
 
           if (status === 200) {
             setFullNameError(false);
@@ -141,7 +152,11 @@ const UpdateSupplier = () => {
   const handleResendActivationLink = async () => {
     if (supplier) {
       try {
-        const status = await UserService.resend(supplier.email, false, env.APP_TYPE);
+        const status = await UserService.resend(
+          supplier.email,
+          false,
+          env.APP_TYPE,
+        );
 
         if (status === 200) {
           helper.info(commonStrings.ACTIVATION_EMAIL_SENT);
@@ -273,7 +288,9 @@ const UpdateSupplier = () => {
               </div>
 
               <FormControl fullWidth margin="dense">
-                <InputLabel className="required">{commonStrings.FULL_NAME}</InputLabel>
+                <InputLabel className="required">
+                  {commonStrings.FULL_NAME}
+                </InputLabel>
                 <Input
                   id="full-name"
                   type="text"
@@ -284,11 +301,15 @@ const UpdateSupplier = () => {
                   autoComplete="off"
                   value={fullName}
                 />
-                <FormHelperText error={fullNameError}>{(fullNameError && ccStrings.INVALID_SUPPLIER_NAME) || ""}</FormHelperText>
+                <FormHelperText error={fullNameError}>
+                  {(fullNameError && ccStrings.INVALID_SUPPLIER_NAME) || ""}
+                </FormHelperText>
               </FormControl>
 
               <FormControl fullWidth margin="dense">
-                <InputLabel className="required">{commonStrings.EMAIL}</InputLabel>
+                <InputLabel className="required">
+                  {commonStrings.EMAIL}
+                </InputLabel>
                 <Input id="email" type="text" value={email} disabled />
               </FormControl>
 
@@ -314,20 +335,49 @@ const UpdateSupplier = () => {
 
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.PHONE}</InputLabel>
-                <Input id="phone" type="text" onChange={handlePhoneChange} onBlur={handlePhoneBlur} autoComplete="off" value={phone} error={!phoneValid} />
-                <FormHelperText error={!phoneValid}>{(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}</FormHelperText>
+                <Input
+                  id="phone"
+                  type="text"
+                  onChange={handlePhoneChange}
+                  onBlur={handlePhoneBlur}
+                  autoComplete="off"
+                  value={phone}
+                  error={!phoneValid}
+                />
+                <FormHelperText error={!phoneValid}>
+                  {(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}
+                </FormHelperText>
               </FormControl>
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.LOCATION}</InputLabel>
-                <Input id="location" type="text" onChange={handleLocationChange} autoComplete="off" value={location} />
+                <Input
+                  id="location"
+                  type="text"
+                  onChange={handleLocationChange}
+                  autoComplete="off"
+                  value={location}
+                />
               </FormControl>
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.BIO}</InputLabel>
-                <Input id="bio" type="text" onChange={handleBioChange} autoComplete="off" value={bio} />
+                <Input
+                  id="bio"
+                  type="text"
+                  onChange={handleBioChange}
+                  autoComplete="off"
+                  value={bio}
+                />
               </FormControl>
               {admin && (
-                <FormControl fullWidth margin="dense" className="resend-activation-link">
-                  <Button variant="outlined" onClick={handleResendActivationLink}>
+                <FormControl
+                  fullWidth
+                  margin="dense"
+                  className="resend-activation-link"
+                >
+                  <Button
+                    variant="outlined"
+                    onClick={handleResendActivationLink}
+                  >
                     {commonStrings.RESEND_ACTIVATION_LINK}
                   </Button>
                 </FormControl>
@@ -342,17 +392,29 @@ const UpdateSupplier = () => {
                 >
                   {commonStrings.RESET_PASSWORD}
                 </Button>
-                <Button type="submit" variant="contained" className="btn-primary black btn-margin-bottom" size="small">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="btn-primary black btn-margin-bottom"
+                  size="small"
+                >
                   {commonStrings.SAVE}
                 </Button>
-                <Button variant="contained" className="btn-secondary btn-margin-bottom" size="small" href="/suppliers">
+                <Button
+                  variant="contained"
+                  className="btn-secondary btn-margin-bottom"
+                  size="small"
+                  href="/suppliers"
+                >
                   {commonStrings.CANCEL}
                 </Button>
               </div>
 
               <div className="form-error">
                 {error && <Error message={commonStrings.GENERIC_ERROR} />}
-                {avatarError && <Error message={commonStrings.IMAGE_REQUIRED} />}
+                {avatarError && (
+                  <Error message={commonStrings.IMAGE_REQUIRED} />
+                )}
               </div>
             </form>
           </Paper>

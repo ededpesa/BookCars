@@ -66,7 +66,10 @@ export const create = async (req: Request, res: Response) => {
     await location.save();
     return res.send(location);
   } catch (err) {
-    logger.error(`[location.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
+    logger.error(
+      `[location.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
+      err,
+    );
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -84,13 +87,17 @@ export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const location = await Location.findById(id).populate<{ values: env.LocationValue[] }>("values");
+    const location = await Location.findById(id).populate<{
+      values: env.LocationValue[];
+    }>("values");
 
     if (location) {
       const names: bookcarsTypes.LocationName[] = req.body;
 
       for (const name of names) {
-        const locationValue = location.values.filter((value) => value.language === name.language)[0];
+        const locationValue = location.values.filter(
+          (value) => value.language === name.language,
+        )[0];
         if (locationValue) {
           locationValue.value = name.name;
           await locationValue.save();
@@ -110,7 +117,10 @@ export const update = async (req: Request, res: Response) => {
     logger.error("[location.update] Location not found:", id);
     return res.sendStatus(204);
   } catch (err) {
-    logger.error(`[location.update] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
+    logger.error(
+      `[location.update] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
+      err,
+    );
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -156,10 +166,14 @@ export const getLocation = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const location = await Location.findById(id).populate<{ values: env.LocationValue[] }>("values").lean();
+    const location = await Location.findById(id)
+      .populate<{ values: env.LocationValue[] }>("values")
+      .lean();
 
     if (location) {
-      const name = (location.values as env.LocationValue[]).filter((value) => value.language === req.params.language)[0].value;
+      const name = (location.values as env.LocationValue[]).filter(
+        (value) => value.language === req.params.language,
+      )[0].value;
       const l = { ...location, name };
       return res.json(l);
     }
@@ -200,7 +214,15 @@ export const getLocations = async (req: Request, res: Response) => {
                   $and: [
                     { $expr: { $in: ["$_id", "$$values"] } },
                     { $expr: { $eq: ["$language", language] } },
-                    { $expr: { $regexMatch: { input: "$value", regex: keyword, options } } },
+                    {
+                      $expr: {
+                        $regexMatch: {
+                          input: "$value",
+                          regex: keyword,
+                          options,
+                        },
+                      },
+                    },
                   ],
                 },
               },
@@ -212,7 +234,11 @@ export const getLocations = async (req: Request, res: Response) => {
         { $addFields: { name: "$value.value" } },
         {
           $facet: {
-            resultData: [{ $sort: { name: 1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
+            resultData: [
+              { $sort: { name: 1, _id: 1 } },
+              { $skip: (page - 1) * size },
+              { $limit: size },
+            ],
             pageInfo: [
               {
                 $count: "totalRecords",
@@ -221,12 +247,15 @@ export const getLocations = async (req: Request, res: Response) => {
           },
         },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
     );
 
     return res.json(locations);
   } catch (err) {
-    logger.error(`[location.getLocations] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);
+    logger.error(
+      `[location.getLocations] ${i18n.t("DB_ERROR")} ${req.query.s}`,
+      err,
+    );
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -271,7 +300,15 @@ export const getLocationId = async (req: Request, res: Response) => {
   const { name, language } = req.params;
 
   try {
-    const lv = await LocationValue.findOne({ language, value: { $regex: new RegExp(`^${escapeStringRegexp(helper.trim(name, " "))}$`, "i") } });
+    const lv = await LocationValue.findOne({
+      language,
+      value: {
+        $regex: new RegExp(
+          `^${escapeStringRegexp(helper.trim(name, " "))}$`,
+          "i",
+        ),
+      },
+    });
     if (lv) {
       const location = await Location.findOne({ values: lv.id });
       return res.status(200).json(location?.id);

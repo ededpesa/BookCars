@@ -1,5 +1,12 @@
 import React, { Dispatch, ReactNode, SetStateAction, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import L, { LatLngExpression } from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -27,8 +34,14 @@ interface Marker {
 //const position: LatLngExpression = new L.LatLng(36.966428, -95.844032);
 //const markers: Marker[] = [{ name: "Athens (ATH)", position: new L.LatLng(37.98381, 23.727539) }];
 const zoomMarkers: Marker[] = [
-  { name: "Athens Airport (ATH)", position: new L.LatLng(37.937225, 23.945238) },
-  { name: "Athens Port Piraeus (ATH)", position: new L.LatLng(37.9495811, 23.6121006) },
+  {
+    name: "Athens Airport (ATH)",
+    position: new L.LatLng(37.937225, 23.945238),
+  },
+  {
+    name: "Athens Port Piraeus (ATH)",
+    position: new L.LatLng(37.9495811, 23.6121006),
+  },
   { name: "Athens (ATH)", position: new L.LatLng(37.98381, 23.727539) },
 ];
 
@@ -52,7 +65,11 @@ interface ZoomControlledLayerProps {
   children: ReactNode;
 }
 
-const ZoomControlledLayer = ({ zoom, minZoom, children }: ZoomControlledLayerProps) => {
+const ZoomControlledLayer = ({
+  zoom,
+  minZoom,
+  children,
+}: ZoomControlledLayerProps) => {
   if (zoom >= minZoom) {
     return <>{children}</>;
   }
@@ -67,7 +84,13 @@ interface MapProps {
   onSelelectDropOffLocation?: (locationId: string) => void;
 }
 
-const Map = ({ title, initialZoom, className, onSelelectPickUpLocation, onSelelectDropOffLocation }: MapProps) => {
+const Map = ({
+  title,
+  initialZoom,
+  className,
+  onSelelectPickUpLocation,
+  onSelelectDropOffLocation,
+}: MapProps) => {
   const _initialZoom = initialZoom || 5.5;
   const [zoom, setZoom] = useState(_initialZoom);
   const [center, setCenter] = useState(new L.LatLng(36.966428, -95.844032));
@@ -85,7 +108,8 @@ const Map = ({ title, initialZoom, className, onSelelectPickUpLocation, onSelele
   //
   const language = UserService.getLanguage();
 
-  let tileURL = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+  let tileURL =
+    "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
   // if (language === 'fr') {
   //   tileURL = 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
   // }
@@ -106,7 +130,8 @@ const Map = ({ title, initialZoom, className, onSelelectPickUpLocation, onSelele
                 onClick={async () => {
                   try {
                     if (onSelelectPickUpLocation) {
-                      const { status, data } = await LocationService.getLocationId(marker.name, "en");
+                      const { status, data } =
+                        await LocationService.getLocationId(marker.name, "en");
 
                       if (status === 200) {
                         onSelelectPickUpLocation(data);
@@ -129,7 +154,8 @@ const Map = ({ title, initialZoom, className, onSelelectPickUpLocation, onSelele
                 onClick={async () => {
                   try {
                     if (onSelelectDropOffLocation) {
-                      const { status, data } = await LocationService.getLocationId(marker.name, "en");
+                      const { status, data } =
+                        await LocationService.getLocationId(marker.name, "en");
 
                       if (status === 200) {
                         onSelelectDropOffLocation(data);
@@ -161,8 +187,16 @@ const Map = ({ title, initialZoom, className, onSelelectPickUpLocation, onSelele
   return (
     <>
       {title && <h1 className="title">{title}</h1>}
-      <MapContainer bounds={bounds()} zoom={zoom} className={`${className ? `${className} ` : ""}map`} ref={setMap}>
-        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url={tileURL} />
+      <MapContainer
+        bounds={bounds()}
+        zoom={zoom}
+        className={`${className ? `${className} ` : ""}map`}
+        ref={setMap}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url={tileURL}
+        />
         <ZoomTracker setZoom={setZoom} />
         {/* <ZoomControlledLayer zoom={zoom} minZoom={7.5}>
           {getMarkers(zoomMarkers)}

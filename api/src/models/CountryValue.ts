@@ -22,9 +22,12 @@ const countryValueSchema = new Schema<env.CountryValue>(
   {
     strict: true,
     collection: "CountryValue",
-  }
+  },
 );
 
-const CountryValue = model<env.CountryValue>("CountryValue", countryValueSchema);
+const CountryValue = model<env.CountryValue>(
+  "CountryValue",
+  countryValueSchema,
+);
 
 export default CountryValue;

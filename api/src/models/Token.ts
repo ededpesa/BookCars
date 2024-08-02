@@ -1,14 +1,14 @@
-import { Schema, model } from 'mongoose'
-import * as env from '../config/env.config'
+import { Schema, model } from "mongoose";
+import * as env from "../config/env.config";
 
-export const TOKEN_EXPIRE_AT_INDEX_NAME = 'expireAt'
+export const TOKEN_EXPIRE_AT_INDEX_NAME = "expireAt";
 
 const tokenSchema = new Schema<env.Token>(
   {
     user: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: 'User',
+      ref: "User",
       index: true,
     },
     token: {
@@ -22,16 +22,20 @@ const tokenSchema = new Schema<env.Token>(
       //
       type: Date,
       default: Date.now,
-      index: { name: TOKEN_EXPIRE_AT_INDEX_NAME, expireAfterSeconds: env.TOKEN_EXPIRE_AT, background: true },
+      index: {
+        name: TOKEN_EXPIRE_AT_INDEX_NAME,
+        expireAfterSeconds: env.TOKEN_EXPIRE_AT,
+        background: true,
+      },
     },
   },
   {
     timestamps: true,
     strict: true,
-    collection: 'Token',
+    collection: "Token",
   },
-)
+);
 
-const Token = model<env.Token>('Token', tokenSchema)
+const Token = model<env.Token>("Token", tokenSchema);
 
-export default Token
+export default Token;
