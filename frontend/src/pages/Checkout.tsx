@@ -747,7 +747,7 @@ const Checkout = () => {
                           label={
                             <span>
                               <span className="booking-option-label">{csStrings.GPS}</span>
-                              <span className="booking-option-value">{helper.getGpsOption(car.gps, language)}</span>
+                              <span className="booking-option-value">{helper.getGpsOption(car.gps, days, language)}</span>
                             </span>
                           }
                         />
@@ -811,7 +811,7 @@ const Checkout = () => {
                           label={
                             <span>
                               <span className="booking-option-label">{csStrings.HOME_DELIVERY}</span>
-                              <span className="booking-option-value">{helper.getHomeDeliveryOption(car.homeDelivery, language)}</span>
+                              <span className="booking-option-value">{helper.getHomeDeliveryOption(car.homeDelivery, days, language)}</span>
                             </span>
                           }
                         />
@@ -823,7 +823,7 @@ const Checkout = () => {
                           label={
                             <span>
                               <span className="booking-option-label">{csStrings.BABY_CHAIR}</span>
-                              <span className="booking-option-value">{helper.getBabyChairOption(car.babyChair, language)}</span>
+                              <span className="booking-option-value">{helper.getBabyChairOption(car.babyChair, days, language)}</span>
                             </span>
                           }
                         />
@@ -921,8 +921,6 @@ const Checkout = () => {
                           <Select
                             native
                             required
-                            // value={state.age}
-                            // onChange={handleChange}
                             onChange={handleDocumentTypeChange}
                             label={commonStrings.DOCUMENT_TYPE}
                             inputProps={{

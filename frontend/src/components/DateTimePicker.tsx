@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker as MuiDateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { fr, enUS } from "date-fns/locale";
+import { fr, enUS, es } from "date-fns/locale";
 import { TextFieldVariants } from "@mui/material";
-import {
-  DateTimeValidationError,
-  PickersActionBarAction,
-} from "@mui/x-date-pickers";
+import { DateTimeValidationError, PickersActionBarAction } from "@mui/x-date-pickers";
 
 interface DateTimePickerProps {
   value?: Date;
@@ -49,14 +46,13 @@ const DateTimePicker = ({
   }
 
   return (
-    <LocalizationProvider
-      adapterLocale={language === "fr" ? fr : enUS}
-      dateAdapter={AdapterDateFns}
-    >
+    <LocalizationProvider adapterLocale={language === "fr" ? fr : language === "es" ? es : enUS} dateAdapter={AdapterDateFns}>
       <MuiDateTimePicker
         label={label}
         value={value}
         readOnly={readOnly}
+        // format={language === "es" ? "dd/MM/yyyy hh:mm aa" : undefined}
+        ampm={language === "es" ? true : undefined}
         views={["year", "month", "day", "hours", "minutes"]}
         onChange={(_value) => {
           setValue(_value);

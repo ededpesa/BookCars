@@ -83,11 +83,7 @@ const userSchema = new Schema<env.User>(
     },
     type: {
       type: String,
-      enum: [
-        bookcarsTypes.UserType.Admin,
-        bookcarsTypes.UserType.Supplier,
-        bookcarsTypes.UserType.User,
-      ],
+      enum: [bookcarsTypes.UserType.Admin, bookcarsTypes.UserType.Supplier, bookcarsTypes.UserType.Enterprise, bookcarsTypes.UserType.User],
       default: bookcarsTypes.UserType.User,
     },
     blacklisted: {
@@ -104,12 +100,46 @@ const userSchema = new Schema<env.User>(
     documentType: {
       type: Number,
     },
+    documentNumber: {
+      type: String,
+    },
+    enterprise: {
+      name: {
+        type: String,
+        required: [true, "can't be blank"],
+        trim: true,
+      },
+      commercialActivity: {
+        type: String,
+        required: [true, "can't be blank"],
+        trim: true,
+      },
+      web: String,
+      email: {
+        type: String,
+        lowercase: true,
+        unique: true,
+        required: [true, "can't be blank"],
+        validate: [validator.isEmail, "is not valid"],
+        trim: true,
+      },
+      rif: {
+        type: String,
+        required: [true, "can't be blank"],
+        trim: true,
+      },
+      address: {
+        type: String,
+        required: [true, "can't be blank"],
+        trim: true,
+      },
+    },
   },
   {
     timestamps: true,
     strict: true,
     collection: "User",
-  },
+  }
 );
 
 const User = model<env.User>("User", userSchema);

@@ -37,13 +37,15 @@ const Booking = () => {
   const [price, setPrice] = useState<number>();
   const [driver, setDriver] = useState<bookcarsTypes.Option>();
   const [pickupLocation, setPickupLocation] = useState<bookcarsTypes.Option>();
-  const [dropOffLocation, setDropOffLocation] =
-    useState<bookcarsTypes.Option>();
+  const [dropOffLocation, setDropOffLocation] = useState<bookcarsTypes.Option>();
   const [from, setFrom] = useState<Date>();
   const [to, setTo] = useState<Date>();
   const [status, setStatus] = useState<bookcarsTypes.BookingStatus>();
   const [cancellation, setCancellation] = useState(false);
-  const [amendments, setAmendments] = useState(false);
+  // const [amendments, setAmendments] = useState(false);
+  const [gps, setGps] = useState(false);
+  const [homeDelivery, setHomeDelivery] = useState(false);
+  const [babyChair, setBabyChair] = useState(false);
   const [theftProtection, setTheftProtection] = useState(false);
   const [collisionDamageWaiver, setCollisionDamageWaiver] = useState(false);
   const [fullInsurance, setFullInsurance] = useState(false);
@@ -101,100 +103,95 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.cancellation = e.target.checked;
 
-      const _price = helper.price(
-        booking.car as bookcarsTypes.Car,
-        new Date(booking.from),
-        new Date(booking.to),
-        booking as bookcarsTypes.CarOptions,
-      );
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setCancellation(booking.cancellation);
     }
   };
 
-  const handleAmendmentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (booking && booking.car) {
-      booking.amendments = e.target.checked;
+  // const handleAmendmentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (booking && booking.car) {
+  //     booking.amendments = e.target.checked;
 
-      const _price = helper.price(
-        booking.car as bookcarsTypes.Car,
-        new Date(booking.from),
-        new Date(booking.to),
-        booking as bookcarsTypes.CarOptions,
-      );
+  //     const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+  //     setBooking(booking);
+  //     setPrice(_price);
+  //     setAmendments(booking.amendments);
+  //   }
+  // };
+
+  const handleGpsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (booking && booking.car) {
+      booking.gps = e.target.checked;
+
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
-      setAmendments(booking.amendments);
+      setGps(booking.gps);
     }
   };
 
-  const handleCollisionDamageWaiverChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleHomeDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (booking && booking.car) {
+      booking.homeDelivery = e.target.checked;
+
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      setBooking(booking);
+      setPrice(_price);
+      setHomeDelivery(booking.homeDelivery);
+    }
+  };
+
+  const handleBabyChairChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (booking && booking.car) {
+      booking.babyChair = e.target.checked;
+
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      setBooking(booking);
+      setPrice(_price);
+      setBabyChair(booking.babyChair);
+    }
+  };
+
+  const handleCollisionDamageWaiverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (booking && booking.car) {
       booking.collisionDamageWaiver = e.target.checked;
 
-      const _price = helper.price(
-        booking.car as bookcarsTypes.Car,
-        new Date(booking.from),
-        new Date(booking.to),
-        booking as bookcarsTypes.CarOptions,
-      );
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setCollisionDamageWaiver(booking.collisionDamageWaiver);
     }
   };
 
-  const handleTheftProtectionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleTheftProtectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (booking && booking.car) {
       booking.theftProtection = e.target.checked;
 
-      const _price = helper.price(
-        booking.car as bookcarsTypes.Car,
-        new Date(booking.from),
-        new Date(booking.to),
-        booking as bookcarsTypes.CarOptions,
-      );
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setTheftProtection(booking.theftProtection);
     }
   };
 
-  const handleFullInsuranceChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFullInsuranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (booking && booking.car) {
       booking.fullInsurance = e.target.checked;
 
-      const _price = helper.price(
-        booking.car as bookcarsTypes.Car,
-        new Date(booking.from),
-        new Date(booking.to),
-        booking as bookcarsTypes.CarOptions,
-      );
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setFullInsurance(booking.fullInsurance);
     }
   };
 
-  const handleAdditionalDriverChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleAdditionalDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (booking && booking.car) {
       booking.additionalDriver = e.target.checked;
 
-      const _price = helper.price(
-        booking.car as bookcarsTypes.Car,
-        new Date(booking.from),
-        new Date(booking.to),
-        booking as bookcarsTypes.CarOptions,
-      );
+      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setAdditionalDriver(booking.additionalDriver);
@@ -205,17 +202,7 @@ const Booking = () => {
     try {
       e.preventDefault();
 
-      if (
-        !booking ||
-        !supplier ||
-        !car ||
-        !driver ||
-        !pickupLocation ||
-        !dropOffLocation ||
-        !from ||
-        !to ||
-        !status
-      ) {
+      if (!booking || !supplier || !car || !driver || !pickupLocation || !dropOffLocation || !from || !to || !status) {
         helper.error();
         return;
       }
@@ -231,7 +218,10 @@ const Booking = () => {
         to,
         status,
         cancellation,
-        amendments,
+        // amendments,
+        gps,
+        homeDelivery,
+        babyChair,
         theftProtection,
         collisionDamageWaiver,
         fullInsurance,
@@ -294,14 +284,14 @@ const Booking = () => {
             setTo(new Date(_booking.to));
             setStatus(_booking.status);
             setCancellation(_booking.cancellation || false);
-            setAmendments(_booking.amendments || false);
+            // setAmendments(_booking.amendments || false);
+            setGps(_booking.gps || false);
+            setHomeDelivery(_booking.homeDelivery || false);
+            setBabyChair(_booking.babyChair || false);
             setTheftProtection(_booking.theftProtection || false);
             setCollisionDamageWaiver(_booking.collisionDamageWaiver || false);
             setFullInsurance(_booking.fullInsurance || false);
-            setAdditionalDriver(
-              (_booking.additionalDriver && !!_booking._additionalDriver) ||
-                false,
-            );
+            setAdditionalDriver((_booking.additionalDriver && !!_booking._additionalDriver) || false);
           } else {
             setLoading(false);
             setNoMatch(true);
@@ -330,14 +320,7 @@ const Booking = () => {
           <div className="col-1">
             <form onSubmit={handleSubmit}>
               <FormControl fullWidth margin="dense">
-                <SupplierSelectList
-                  label={blStrings.SUPPLIER}
-                  required
-                  variant="standard"
-                  onChange={handleSupplierChange}
-                  value={supplier}
-                  readOnly={!edit}
-                />
+                <SupplierSelectList label={blStrings.SUPPLIER} required variant="standard" onChange={handleSupplierChange} value={supplier} readOnly={!edit} />
               </FormControl>
 
               <FormControl fullWidth margin="dense">
@@ -388,7 +371,7 @@ const Booking = () => {
                         booking.car as bookcarsTypes.Car,
                         new Date(booking.from),
                         new Date(booking.to),
-                        booking as bookcarsTypes.CarOptions,
+                        booking as bookcarsTypes.CarOptions
                       );
                       booking.price = _price;
                       setBooking(booking);
@@ -415,7 +398,7 @@ const Booking = () => {
                         booking.car as bookcarsTypes.Car,
                         new Date(booking.from),
                         new Date(booking.to),
-                        booking as bookcarsTypes.CarOptions,
+                        booking as bookcarsTypes.CarOptions
                       );
                       booking.price = _price;
                       setBooking(booking);
@@ -428,13 +411,7 @@ const Booking = () => {
               </FormControl>
 
               <FormControl fullWidth margin="dense">
-                <StatusList
-                  label={blStrings.STATUS}
-                  onChange={handleStatusChange}
-                  required
-                  disabled
-                  value={status}
-                />
+                <StatusList label={blStrings.STATUS} onChange={handleStatusChange} required disabled value={status} />
               </FormControl>
 
               <div className="info">
@@ -444,38 +421,26 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={
-                    !edit ||
-                    (booking.car as bookcarsTypes.Car).cancellation === -1 ||
-                    (booking.car as bookcarsTypes.Car).cancellation === 0
-                  }
-                  control={
-                    <Switch
-                      checked={cancellation}
-                      onChange={handleCancellationChange}
-                      color="primary"
-                    />
-                  }
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).cancellation === -1 || (booking.car as bookcarsTypes.Car).cancellation === 0}
+                  control={<Switch checked={cancellation} onChange={handleCancellationChange} color="primary" />}
                   label={csStrings.CANCELLATION}
                   className="checkbox-fcl"
                 />
               </FormControl>
 
+              {/* <FormControl fullWidth margin="dense" className="checkbox-fc">
+                <FormControlLabel
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).amendments === -1 || (booking.car as bookcarsTypes.Car).amendments === 0}
+                  control={<Switch checked={amendments} onChange={handleAmendmentsChange} color="primary" />}
+                  label={csStrings.AMENDMENTS}
+                  className="checkbox-fcl"
+                />
+              </FormControl> */}
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={
-                    !edit ||
-                    (booking.car as bookcarsTypes.Car).amendments === -1 ||
-                    (booking.car as bookcarsTypes.Car).amendments === 0
-                  }
-                  control={
-                    <Switch
-                      checked={amendments}
-                      onChange={handleAmendmentsChange}
-                      color="primary"
-                    />
-                  }
-                  label={csStrings.AMENDMENTS}
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).gps === -1 || (booking.car as bookcarsTypes.Car).gps === 0}
+                  control={<Switch checked={gps} onChange={handleGpsChange} color="primary" />}
+                  label={csStrings.GPS}
                   className="checkbox-fcl"
                 />
               </FormControl>
@@ -483,19 +448,9 @@ const Booking = () => {
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
                   disabled={
-                    !edit ||
-                    (booking.car as bookcarsTypes.Car).collisionDamageWaiver ===
-                      -1 ||
-                    (booking.car as bookcarsTypes.Car).collisionDamageWaiver ===
-                      0
+                    !edit || (booking.car as bookcarsTypes.Car).collisionDamageWaiver === -1 || (booking.car as bookcarsTypes.Car).collisionDamageWaiver === 0
                   }
-                  control={
-                    <Switch
-                      checked={collisionDamageWaiver}
-                      onChange={handleCollisionDamageWaiverChange}
-                      color="primary"
-                    />
-                  }
+                  control={<Switch checked={collisionDamageWaiver} onChange={handleCollisionDamageWaiverChange} color="primary" />}
                   label={csStrings.COLLISION_DAMAGE_WAVER}
                   className="checkbox-fcl"
                 />
@@ -503,18 +458,8 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={
-                    !edit ||
-                    (booking.car as bookcarsTypes.Car).theftProtection === -1 ||
-                    (booking.car as bookcarsTypes.Car).theftProtection === 0
-                  }
-                  control={
-                    <Switch
-                      checked={theftProtection}
-                      onChange={handleTheftProtectionChange}
-                      color="primary"
-                    />
-                  }
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).theftProtection === -1 || (booking.car as bookcarsTypes.Car).theftProtection === 0}
+                  control={<Switch checked={theftProtection} onChange={handleTheftProtectionChange} color="primary" />}
                   label={csStrings.THEFT_PROTECTION}
                   className="checkbox-fcl"
                 />
@@ -522,18 +467,8 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={
-                    !edit ||
-                    (booking.car as bookcarsTypes.Car).fullInsurance === -1 ||
-                    (booking.car as bookcarsTypes.Car).fullInsurance === 0
-                  }
-                  control={
-                    <Switch
-                      checked={fullInsurance}
-                      onChange={handleFullInsuranceChange}
-                      color="primary"
-                    />
-                  }
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).fullInsurance === -1 || (booking.car as bookcarsTypes.Car).fullInsurance === 0}
+                  control={<Switch checked={fullInsurance} onChange={handleFullInsuranceChange} color="primary" />}
                   label={csStrings.FULL_INSURANCE}
                   className="checkbox-fcl"
                 />
@@ -541,20 +476,27 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={
-                    !edit ||
-                    (booking.car as bookcarsTypes.Car).additionalDriver ===
-                      -1 ||
-                    (booking.car as bookcarsTypes.Car).additionalDriver === 0
-                  }
-                  control={
-                    <Switch
-                      checked={additionalDriver}
-                      onChange={handleAdditionalDriverChange}
-                      color="primary"
-                    />
-                  }
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).additionalDriver === -1 || (booking.car as bookcarsTypes.Car).additionalDriver === 0}
+                  control={<Switch checked={additionalDriver} onChange={handleAdditionalDriverChange} color="primary" />}
                   label={csStrings.ADDITIONAL_DRIVER}
+                  className="checkbox-fcl"
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="dense" className="checkbox-fc">
+                <FormControlLabel
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).homeDelivery === -1 || (booking.car as bookcarsTypes.Car).homeDelivery === 0}
+                  control={<Switch checked={homeDelivery} onChange={handleGpsChange} color="primary" />}
+                  label={csStrings.HOME_DELIVERY}
+                  className="checkbox-fcl"
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="dense" className="checkbox-fc">
+                <FormControlLabel
+                  disabled={!edit || (booking.car as bookcarsTypes.Car).babyChair === -1 || (booking.car as bookcarsTypes.Car).babyChair === 0}
+                  control={<Switch checked={babyChair} onChange={handleGpsChange} color="primary" />}
+                  label={csStrings.BABY_CHAIR}
                   className="checkbox-fcl"
                 />
               </FormControl>
@@ -562,12 +504,7 @@ const Booking = () => {
               <div>
                 {edit && (
                   <div className="booking-buttons">
-                    <Button
-                      variant="contained"
-                      className="btn-primary btn-margin-bottom"
-                      size="small"
-                      type="submit"
-                    >
+                    <Button variant="contained" className="btn-primary btn-margin-bottom" size="small" type="submit">
                       {commonStrings.SAVE}
                     </Button>
                   </div>
@@ -579,28 +516,15 @@ const Booking = () => {
             <div className="col-2-header">
               <div className="price">
                 <span className="price-days">{helper.getDays(days)}</span>
-                <span className="price-main">
-                  {bookcarsHelper.formatPrice(
-                    price as number,
-                    commonStrings.CURRENCY,
-                    language,
-                  )}
-                </span>
-                <span className="price-day">{`${
-                  csStrings.PRICE_PER_DAY
-                } ${bookcarsHelper.formatPrice(
+                <span className="price-main">{bookcarsHelper.formatPrice(price as number, commonStrings.CURRENCY, language)}</span>
+                <span className="price-day">{`${csStrings.PRICE_PER_DAY} ${bookcarsHelper.formatPrice(
                   Math.floor((price as number) / days),
                   commonStrings.CURRENCY,
-                  language,
+                  language
                 )}`}</span>
               </div>
             </div>
-            <CarList
-              className="car"
-              booking={booking}
-              cars={[booking.car as bookcarsTypes.Car]}
-              hidePrice
-            />
+            <CarList className="car" booking={booking} cars={[booking.car as bookcarsTypes.Car]} hidePrice />
           </div>
         </div>
       )}

@@ -599,29 +599,35 @@ export const getAmendmentsOption = (amendments: number, language: string) => {
  * Get gps option label.
  *
  * @param {number} gps
+ * @param {number} days
  * @param {string} language
  * @returns {string}
  */
-export const getGpsOption = (gps: number, language: string) => {
+export const getGpsOption = (gps: number, days: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (gps === -1) {
-    return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+    return strings.UNAVAILABLE;
   }
   if (gps === 0) {
-    return `${strings.INCLUDED}${fr ? "es" : ""}`;
+    return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(gps, commonStrings.CURRENCY, language)}`;
+  return `+ ${bookcarsHelper.formatPrice(gps * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
+    gps,
+    commonStrings.CURRENCY,
+    language
+  )}${commonStrings.DAILY})`;
 };
 
 /**
  * Get homeDelivery option label.
  *
  * @param {number} homeDelivery
+ * @param {number} days
  * @param {string} language
  * @returns {string}
  */
-export const getHomeDeliveryOption = (homeDelivery: number, language: string) => {
+export const getHomeDeliveryOption = (homeDelivery: number, days: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (homeDelivery === -1) {
@@ -630,17 +636,22 @@ export const getHomeDeliveryOption = (homeDelivery: number, language: string) =>
   if (homeDelivery === 0) {
     return `${strings.INCLUDED}${fr ? "es" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(homeDelivery, commonStrings.CURRENCY, language)}`;
+  return `+ ${bookcarsHelper.formatPrice(homeDelivery * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
+    homeDelivery,
+    commonStrings.CURRENCY,
+    language
+  )}${commonStrings.DAILY})`;
 };
 
 /**
  * Get babyChair option label.
  *
  * @param {number} babyChair
+ * @param {number} days
  * @param {string} language
  * @returns {string}
  */
-export const getBabyChairOption = (babyChair: number, language: string) => {
+export const getBabyChairOption = (babyChair: number, days: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (babyChair === -1) {
@@ -649,7 +660,11 @@ export const getBabyChairOption = (babyChair: number, language: string) => {
   if (babyChair === 0) {
     return `${strings.INCLUDED}${fr ? "es" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(babyChair, commonStrings.CURRENCY, language)}`;
+  return `+ ${bookcarsHelper.formatPrice(babyChair * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
+    babyChair,
+    commonStrings.CURRENCY,
+    language
+  )}${commonStrings.DAILY})`;
 };
 
 /**

@@ -609,6 +609,9 @@ export const getUserType = (status?: bookcarsTypes.UserType) => {
     case bookcarsTypes.UserType.Supplier:
       return commonStrings.RECORD_TYPE_SUPPLIER;
 
+    case bookcarsTypes.UserType.Enterprise:
+      return commonStrings.RECORD_TYPE_ENTERPRISE;
+
     case bookcarsTypes.UserType.User:
       return commonStrings.RECORD_TYPE_USER;
 
@@ -680,16 +683,20 @@ export const getAmendmentsOption = (amendments: number, language: string, hidePl
  * @param {string} language
  * @returns {string}
  */
-export const getGpsOption = (gps: number, language: string) => {
+export const getGpsOption = (gps: number, days: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (gps === -1) {
-    return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+    return strings.UNAVAILABLE;
   }
   if (gps === 0) {
-    return `${strings.INCLUDED}${fr ? "es" : ""}`;
+    return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(gps, commonStrings.CURRENCY, language)}`;
+  return `${hidePlus ? "" : "+ "}${bookcarsHelper.formatPrice(gps * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
+    gps,
+    commonStrings.CURRENCY,
+    language
+  )}${commonStrings.DAILY})`;
 };
 
 /**
@@ -699,16 +706,20 @@ export const getGpsOption = (gps: number, language: string) => {
  * @param {string} language
  * @returns {string}
  */
-export const getHomeDeliveryOption = (homeDelivery: number, language: string) => {
+export const getHomeDeliveryOption = (homeDelivery: number, days: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (homeDelivery === -1) {
-    return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+    return strings.UNAVAILABLE;
   }
   if (homeDelivery === 0) {
-    return `${strings.INCLUDED}${fr ? "es" : ""}`;
+    return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(homeDelivery, commonStrings.CURRENCY, language)}`;
+  return `${hidePlus ? "" : "+ "}${bookcarsHelper.formatPrice(homeDelivery * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
+    homeDelivery,
+    commonStrings.CURRENCY,
+    language
+  )}${commonStrings.DAILY})`;
 };
 
 /**
@@ -718,16 +729,20 @@ export const getHomeDeliveryOption = (homeDelivery: number, language: string) =>
  * @param {string} language
  * @returns {string}
  */
-export const getBabyChairOption = (babyChair: number, language: string) => {
+export const getBabyChairOption = (babyChair: number, days: number, language: string, hidePlus: boolean) => {
   const fr = bookcarsHelper.isFrench(language);
 
   if (babyChair === -1) {
-    return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
+    return strings.UNAVAILABLE;
   }
   if (babyChair === 0) {
-    return `${strings.INCLUDED}${fr ? "es" : ""}`;
+    return `${strings.INCLUDED}${fr ? "e" : ""}`;
   }
-  return `+ ${bookcarsHelper.formatPrice(babyChair, commonStrings.CURRENCY, language)}`;
+  return `${hidePlus ? "" : "+ "}${bookcarsHelper.formatPrice(babyChair * days, commonStrings.CURRENCY, language)} (${bookcarsHelper.formatPrice(
+    babyChair,
+    commonStrings.CURRENCY,
+    language
+  )}${commonStrings.DAILY})`;
 };
 
 /**

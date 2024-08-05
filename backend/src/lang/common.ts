@@ -5,8 +5,7 @@ import * as langHelper from "../common/langHelper";
 const strings = new LocalizedStrings({
   fr: {
     GENERIC_ERROR: "Une erreur non gérée s'est produite.",
-    CHANGE_LANGUAGE_ERROR:
-      "Une erreur s'est produite lors du changement de langue.",
+    CHANGE_LANGUAGE_ERROR: "Une erreur s'est produite lors du changement de langue.",
     UPDATED: "Modifications effectuées avec succès.",
     GO_TO_HOME: "Aller à la page d'accueil",
     FULL_NAME: "Nom complet",
@@ -127,6 +126,7 @@ const strings = new LocalizedStrings({
     AND: "and",
     RECORD_TYPE_ADMIN: "Admin",
     RECORD_TYPE_SUPPLIER: "Supplier",
+    RECORD_TYPE_ENTERPRISE: "Enterprise",
     RECORD_TYPE_USER: "Driver",
     TYPE: "Type",
     CONFIRM: "Confirm",
@@ -164,8 +164,7 @@ const strings = new LocalizedStrings({
     FULL_NAME: "Nombre completo",
     EMAIL: "Correo electrónico",
     PASSWORD: "Contraseña",
-    EMAIL_ALREADY_REGISTERED:
-      "Esta dirección de correo electrónico ya está registrada.",
+    EMAIL_ALREADY_REGISTERED: "Esta dirección de correo electrónico ya está registrada.",
     CONFIRM_PASSWORD: "Confirmar contraseña",
     PHONE: "Teléfono",
     LOCATION: "Ubicación",
@@ -204,6 +203,7 @@ const strings = new LocalizedStrings({
     AND: "y",
     RECORD_TYPE_ADMIN: "Administrador",
     RECORD_TYPE_SUPPLIER: "Proveedor",
+    RECORD_TYPE_ENTERPRISE: "Empresa",
     RECORD_TYPE_USER: "Conductor",
     TYPE: "Tipo",
     CONFIRM: "Confirmar",

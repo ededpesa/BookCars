@@ -1,4 +1,4 @@
-import * as bookcarsTypes from ':bookcars-types'
+import * as bookcarsTypes from ":bookcars-types";
 
 /**
  * Format a number.
@@ -9,14 +9,14 @@ import * as bookcarsTypes from ':bookcars-types'
  * @returns {string}
  */
 export const formatNumber = (x: number, language: string): string => {
-  if (typeof x === 'number') {
-    const parts: string[] = String(x % 1 !== 0 ? x.toFixed(2) : x).split('.')
-    const separator = language === 'en' ? ',' : ' '
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator)
-    return parts.join('.')
+  if (typeof x === "number") {
+    const parts: string[] = String(x % 1 !== 0 ? x.toFixed(2) : x).split(".");
+    const separator = language === "en" ? "," : " ";
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+    return parts.join(".");
   }
-  return ''
-}
+  return "";
+};
 
 /**
  * Format a Date number to two digits.
@@ -26,8 +26,8 @@ export const formatNumber = (x: number, language: string): string => {
  * @returns {string}
  */
 export const formatDatePart = (n: number): string => {
-  return n > 9 ? String(n) : '0' + n
-}
+  return n > 9 ? String(n) : "0" + n;
+};
 
 /**
  * Capitalize a string.
@@ -37,8 +37,8 @@ export const formatDatePart = (n: number): string => {
  * @returns {string}
  */
 export const capitalize = (str: string): string => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
 /**
  * Check if a value is a Date.
@@ -48,8 +48,8 @@ export const capitalize = (str: string): string => {
  * @returns {boolean}
  */
 export const isDate = (value?: any): boolean => {
-  return value instanceof Date && !Number.isNaN(value.valueOf())
-}
+  return value instanceof Date && !Number.isNaN(value.valueOf());
+};
 
 /**
  * Join two url parts.
@@ -60,19 +60,19 @@ export const isDate = (value?: any): boolean => {
  */
 export const joinURL = (part1?: string, part2?: string) => {
   if (!part1 || !part2) {
-    const msg = '[joinURL] part undefined'
-    console.log(msg)
-    throw new Error(msg)
+    const msg = "[joinURL] part undefined";
+    console.log(msg);
+    throw new Error(msg);
   }
 
-  if (part1.charAt(part1.length - 1) === '/') {
-    part1 = part1.substring(0, part1.length - 1)
+  if (part1.charAt(part1.length - 1) === "/") {
+    part1 = part1.substring(0, part1.length - 1);
   }
-  if (part2.charAt(0) === '/') {
-    part2 = part2.substring(1)
+  if (part2.charAt(0) === "/") {
+    part2 = part2.substring(1);
   }
-  return part1 + '/' + part2
-}
+  return part1 + "/" + part2;
+};
 
 /**
  * Check if a string is an integer.
@@ -81,8 +81,8 @@ export const joinURL = (part1?: string, part2?: string) => {
  * @returns {boolean}
  */
 export const isInteger = (val: string) => {
-  return /^\d+$/.test(val)
-}
+  return /^\d+$/.test(val);
+};
 
 /**
  * Check if a string is a year.
@@ -91,8 +91,8 @@ export const isInteger = (val: string) => {
  * @returns {boolean}
  */
 export const isYear = (val: string) => {
-  return /^\d{2}$/.test(val)
-}
+  return /^\d{2}$/.test(val);
+};
 
 /**
  * Check if a string is a CVV.
@@ -101,8 +101,8 @@ export const isYear = (val: string) => {
  * @returns {boolean}
  */
 export const isCvv = (val: string) => {
-  return /^\d{3,4}$/.test(val)
-}
+  return /^\d{3,4}$/.test(val);
+};
 
 /**
  * Check if two arrays are equal.
@@ -113,13 +113,13 @@ export const isCvv = (val: string) => {
  */
 export const arrayEqual = (a: any, b: any) => {
   if (a === b) {
-    return true
+    return true;
   }
   if (a == null || b == null) {
-    return false
+    return false;
   }
   if (a.length !== b.length) {
-    return false
+    return false;
   }
 
   // If you don't care about the order of the elements inside
@@ -129,11 +129,11 @@ export const arrayEqual = (a: any, b: any) => {
 
   for (let i = 0; i < a.length; i += 1) {
     if (a[i] !== b[i]) {
-      return false
+      return false;
     }
   }
-  return true
-}
+  return true;
+};
 
 /**
  * Clone an object or array.
@@ -142,8 +142,8 @@ export const arrayEqual = (a: any, b: any) => {
  * @returns {*}
  */
 export const clone = (obj: any) => {
-  return Array.isArray(obj) ? Array.from(obj) : Object.assign({}, obj)
-}
+  return Array.isArray(obj) ? Array.from(obj) : Object.assign({}, obj);
+};
 
 /**
  * Clone an array.
@@ -154,14 +154,14 @@ export const clone = (obj: any) => {
  * @returns {(T[] | undefined | null)}
  */
 export const cloneArray = <T>(arr: T[]): T[] | undefined | null => {
-  if (typeof arr === 'undefined') {
-    return undefined
+  if (typeof arr === "undefined") {
+    return undefined;
   }
   if (arr == null) {
-    return null
+    return null;
   }
-  return [...arr]
-}
+  return [...arr];
+};
 
 /**
  * Check if two filters are equal.
@@ -172,30 +172,30 @@ export const cloneArray = <T>(arr: T[]): T[] | undefined | null => {
  */
 export const filterEqual = (a?: bookcarsTypes.Filter | null, b?: bookcarsTypes.Filter | null) => {
   if (a === b) {
-    return true
+    return true;
   }
   if (a == null || b == null) {
-    return false
+    return false;
   }
 
   if (a.from !== b.from) {
-    return false
+    return false;
   }
   if (a.to !== b.to) {
-    return false
+    return false;
   }
   if (a.pickupLocation !== b.pickupLocation) {
-    return false
+    return false;
   }
   if (a.dropOffLocation !== b.dropOffLocation) {
-    return false
+    return false;
   }
   if (a.keyword !== b.keyword) {
-    return false
+    return false;
   }
 
-  return true
-}
+  return true;
+};
 
 /**
  * Flatten Supplier array.
@@ -203,8 +203,7 @@ export const filterEqual = (a?: bookcarsTypes.Filter | null, b?: bookcarsTypes.F
  * @param {bookcarsTypes.User[]} suppliers
  * @returns {string[]}
  */
-export const flattenSuppliers = (suppliers: bookcarsTypes.User[]): string[] =>
-  suppliers.map((supplier) => supplier._id ?? '')
+export const flattenSuppliers = (suppliers: bookcarsTypes.User[]): string[] => suppliers.map((supplier) => supplier._id ?? "");
 
 /**
  * Get number of days between two dates.
@@ -213,8 +212,7 @@ export const flattenSuppliers = (suppliers: bookcarsTypes.User[]): string[] =>
  * @param {?Date} [to]
  * @returns {number}
  */
-export const days = (from?: Date, to?: Date) =>
-  (from && to && Math.ceil((to.getTime() - from.getTime()) / (1000 * 3600 * 24))) || 0
+export const days = (from?: Date, to?: Date) => (from && to && Math.ceil((to.getTime() - from.getTime()) / (1000 * 3600 * 24))) || 0;
 
 /**
  * Format price
@@ -225,14 +223,14 @@ export const days = (from?: Date, to?: Date) =>
  * @returns {boolean}
  */
 export const formatPrice = (price: number, currency: string, language: string) => {
-  const formatedPrice = formatNumber(price, language)
+  const formatedPrice = formatNumber(price, language);
 
-  if (currency === '$') {
-    return `$${formatedPrice}`
+  if (currency === "$") {
+    return `$${formatedPrice}`;
   }
 
-  return `${formatedPrice} ${currency}`
-}
+  return `${formatedPrice} ${currency}`;
+};
 
 /**
  * Check whether language is french
@@ -240,7 +238,7 @@ export const formatPrice = (price: number, currency: string, language: string) =
  * @param {string} language
  * @returns {boolean}
  */
-export const isFrench = (language?: string) => language === 'fr'
+export const isFrench = (language?: string) => language === "fr";
 
 /**
  * Return all car types.
@@ -253,8 +251,8 @@ export const getAllCarTypes = () => [
   bookcarsTypes.CarType.Electric,
   bookcarsTypes.CarType.Hybrid,
   bookcarsTypes.CarType.PlugInHybrid,
-  bookcarsTypes.CarType.Unknown
-]
+  bookcarsTypes.CarType.Unknown,
+];
 
 /**
  * Randomize (shuffle) an array.
@@ -263,9 +261,9 @@ export const getAllCarTypes = () => [
  */
 export const shuffle = (array: any[]) => {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
   }
-}
+};

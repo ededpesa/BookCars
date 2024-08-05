@@ -11,24 +11,19 @@ export default ({ mode }: { mode: string }) => {
 
     resolve: {
       alias: {
-        ":bookcars-types": path.resolve(
-          __dirname,
-          "../packages/bookcars-types",
-        ),
-        ":bookcars-helper": path.resolve(
-          __dirname,
-          "../packages/bookcars-helper",
-        ),
-        ":disable-react-devtools": path.resolve(
-          __dirname,
-          "../packages/disable-react-devtools",
-        ),
+        ":bookcars-types": path.resolve(__dirname, "../packages/bookcars-types"),
+        ":bookcars-helper": path.resolve(__dirname, "../packages/bookcars-helper"),
+        ":disable-react-devtools": path.resolve(__dirname, "../packages/disable-react-devtools"),
       },
     },
 
     server: {
       host: "0.0.0.0",
-      port: Number.parseInt(process.env.VITE_PORT || "3002", 10),
+      port: Number.parseInt(process.env.VITE_PORT || "3003", 10),
+      // watch: {
+      //   usePolling: true, // Usa esta opción si los cambios no se detectan automáticamente
+      //   //ignored: ["!**/packages/**"], // Asegúrate de que Vite observe cambios en los paquetes locales
+      // },
     },
 
     build: {

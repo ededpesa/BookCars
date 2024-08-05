@@ -57,7 +57,19 @@ const bookingSchema = new Schema<env.Booking>(
       type: Boolean,
       default: false,
     },
-    amendments: {
+    // amendments: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    gps: {
+      type: Boolean,
+      default: false,
+    },
+    homeDelivery: {
+      type: Boolean,
+      default: false,
+    },
+    babyChair: {
       type: Boolean,
       default: false,
     },
@@ -116,7 +128,7 @@ const bookingSchema = new Schema<env.Booking>(
     timestamps: true,
     strict: true,
     collection: "Booking",
-  },
+  }
 );
 
 const Booking = model<env.Booking>("Booking", bookingSchema);
