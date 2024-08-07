@@ -17,12 +17,16 @@ div.create-user {
   color: #121212;
 }
 
+h3.user-form-title {
+  margin-bottom: 0;
+}
+
 /* Device width is less than or equal to 960px */
 
 @media only screen and (width <=960px) {
   .user-form {
     width: 360px;
-    height: 950px;
+    /* height: 950px; */
     padding: 30px;
   }
 }
@@ -32,7 +36,7 @@ div.create-user {
 @media only screen and (width >=960px) {
   .user-form {
     width: 550px;
-    height: 840px;
+    /* height: 840px; */
     padding: 30px;
   }
 }

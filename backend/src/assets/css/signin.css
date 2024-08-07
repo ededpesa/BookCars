@@ -22,7 +22,7 @@ div.signin {
 
 .form-error {
   clear: both;
-  height: 65px;
+  /* height: 65px; */
   padding-top: 10px;
   text-align: center;
 }
@@ -33,7 +33,7 @@ div.signin div.stay-connected {
   align-items: center;
 }
 
-div.signin div.stay-connected input[type='checkbox'] {
+div.signin div.stay-connected input[type="checkbox"] {
   margin-right: 5px;
 }
 

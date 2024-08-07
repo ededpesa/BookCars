@@ -12,8 +12,10 @@ import {
   Switch,
   SelectChangeEvent,
   TextField,
+  FormGroup,
 } from "@mui/material";
 import { Info as InfoIcon } from "@mui/icons-material";
+import { useMask } from "@react-input/mask";
 import validator from "validator";
 import { intervalToDuration } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +29,7 @@ import { strings } from "../lang/create-user";
 import * as helper from "../common/helper";
 import * as UserService from "../services/UserService";
 import * as SupplierService from "../services/SupplierService";
+import * as EnterpriseService from "../services/EnterpriseService";
 import Error from "../components/Error";
 import Backdrop from "../components/SimpleBackdrop";
 import Avatar from "../components/Avatar";
@@ -39,6 +42,7 @@ const CreateUser = () => {
   const [user, setUser] = useState<bookcarsTypes.User>();
   const [admin, setAdmin] = useState(false);
   const [fullName, setFullName] = useState("");
+  const [enterpriseName, setEnterpriseName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [location, setLocation] = useState("");
@@ -48,6 +52,7 @@ const CreateUser = () => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fullNameError, setFullNameError] = useState(false);
+  const [enterpriseNameError, setEnterpriseNameError] = useState(false);
   const [avatar, setAvatar] = useState("");
   const [avatarError, setAvatarError] = useState(false);
   const [type, setType] = useState("");
@@ -56,12 +61,28 @@ const CreateUser = () => {
   const [payLater, setPayLater] = useState(true);
   const [birthDate, setBirthDate] = useState<Date>();
   const [birthDateValid, setBirthDateValid] = useState(true);
+  const [commercialActivity, setCommercialActivity] = useState("");
+  const [webPage, setWebPage] = useState("");
+  const [enterpriseEmail, setEnterpriseEmail] = useState("");
+  const [rif, setRif] = useState("");
+  const [rifType, setRifType] = useState("V");
+  const [address, setAddress] = useState("");
+
+  const inputRef = useMask({ mask: "T___________", replacement: { _: /\d/, T: /[vVeE]/ } });
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value);
 
     if (!e.target.value) {
       setFullNameError(false);
+    }
+  };
+
+  const handleEnterpriseNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEnterpriseName(e.target.value);
+
+    if (!e.target.value) {
+      setEnterpriseNameError(false);
     }
   };
 
@@ -107,6 +128,10 @@ const CreateUser = () => {
     } else {
       setFullNameError(false);
     }
+  };
+
+  const handleEnterpriseNameBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    await validateFullName(e.target.value);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,6 +221,26 @@ const CreateUser = () => {
 
   const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBio(e.target.value);
+  };
+
+  const handleCommercialActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommercialActivity(e.target.value);
+  };
+
+  const handleEnterpriseEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEnterpriseEmail(e.target.value);
+  };
+
+  const handleWebPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWebPage(e.target.value);
+  };
+
+  const handleRifChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRif(e.target.value);
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
   };
 
   const onBeforeUpload = () => {
@@ -294,6 +339,17 @@ const CreateUser = () => {
         data.payLater = payLater;
       }
 
+      if (type === bookcarsTypes.RecordType.Enterprise) {
+        data.enterprise = {
+          name: enterpriseEmail,
+          commercialActivity,
+          web: webPage,
+          email: enterpriseEmail,
+          rif,
+          address,
+        };
+      }
+
       const status = await UserService.create(data);
 
       if (status === 200) {
@@ -308,6 +364,7 @@ const CreateUser = () => {
 
   const supplier = type === bookcarsTypes.RecordType.Supplier;
   const driver = type === bookcarsTypes.RecordType.User;
+  const enterprise = type === bookcarsTypes.RecordType.Enterprise;
 
   return (
     <Layout onLoad={onLoad} strict>
@@ -358,6 +415,102 @@ const CreateUser = () => {
                 // </FormControl>
               )}
 
+              {enterprise && (
+                <>
+                  <h3 className="user-form-title mb-0"> {commonStrings.ENTERPRISE_DATA}</h3>
+                  <FormControl fullWidth margin="dense">
+                    <TextField
+                      id="enterprise-name"
+                      type="text"
+                      //error={!emailValid || emailError}
+                      onBlur={handleEnterpriseNameBlur}
+                      onChange={handleEnterpriseNameChange}
+                      autoComplete="off"
+                      required
+                      variant="standard"
+                      label={commonStrings.ENTERPRISE_NAME}
+                    />
+                    {/* <FormHelperText error={!emailValid || emailError}>
+                  {(!emailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                  {(emailError && commonStrings.EMAIL_ALREADY_REGISTERED) || ""}
+                </FormHelperText> */}
+                  </FormControl>
+
+                  <FormControl fullWidth margin="dense">
+                    <TextField
+                      id="commercial-activity"
+                      type="text"
+                      onChange={handleCommercialActivityChange}
+                      autoComplete="off"
+                      required
+                      variant="standard"
+                      label={commonStrings.COMMERCIAL_ACTIVITY}
+                    />
+                  </FormControl>
+
+                  <FormControl fullWidth margin="dense">
+                    <TextField id="web" type="text" onChange={handleWebPageChange} autoComplete="off" variant="standard" label={commonStrings.WEB} />
+                  </FormControl>
+
+                  <FormControl fullWidth margin="dense">
+                    <TextField
+                      id="enterprise-email"
+                      type="text"
+                      //error={!emailValid || emailError}
+                      //onBlur={handleEmailBlur}
+                      onChange={handleEnterpriseEmailChange}
+                      autoComplete="off"
+                      required
+                      variant="standard"
+                      label={commonStrings.ENTERPRISE_EMAIL}
+                    />
+                    {/* <FormHelperText error={!emailValid || emailError}>
+                  {(!emailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                  {(emailError && commonStrings.EMAIL_ALREADY_REGISTERED) || ""}
+                </FormHelperText> */}
+                  </FormControl>
+
+                  <FormControl fullWidth margin="dense" variant="standard" style={{ flexDirection: "row" }}>
+                    {/* <InputLabel>RIF</InputLabel> */}
+                    {/* <Select label={" "} value={rifType} onChange={(e) => setRifType(e.target.value)} style={{ maxWidth: 50 }}>
+                      <MenuItem value="V">V</MenuItem>
+                      <MenuItem value="E">E</MenuItem>
+                    </Select> */}
+                    <TextField
+                      id="rif"
+                      type="text"
+                      //error={!emailValid || emailError}
+                      //onBlur={handleEmailBlur}
+                      onChange={handleRifChange}
+                      autoComplete="off"
+                      required
+                      variant="standard"
+                      label={"RIF (V1234567)"}
+                      style={{ flexGrow: 1 }}
+                    />
+
+                    {/* <FormHelperText error={!emailValid || emailError}>
+                  {(!emailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                  {(emailError && commonStrings.EMAIL_ALREADY_REGISTERED) || ""}
+                </FormHelperText> */}
+                  </FormControl>
+
+                  <FormControl fullWidth margin="dense">
+                    <TextField
+                      id="address"
+                      type="text"
+                      onChange={handleAddressChange}
+                      autoComplete="off"
+                      required
+                      variant="standard"
+                      label={commonStrings.ADDRESS}
+                    />
+                  </FormControl>
+
+                  <h3 className="user-form-title mb-0"> {commonStrings.CONTACT_DATA}</h3>
+                </>
+              )}
+
               <FormControl fullWidth margin="dense">
                 {/* <InputLabel className="required">{commonStrings.FULL_NAME}</InputLabel>
                 <Input
@@ -382,7 +535,6 @@ const CreateUser = () => {
                 />
                 <FormHelperText error={fullNameError}>{(fullNameError && ccStrings.INVALID_SUPPLIER_NAME) || ""}</FormHelperText>
               </FormControl>
-
               <FormControl fullWidth margin="dense">
                 <TextField
                   id="email"
@@ -432,17 +584,19 @@ const CreateUser = () => {
                   autoComplete="off"
                   variant="standard"
                   label={commonStrings.PHONE}
+                  // ref={inputRef}
+                  inputRef={inputRef}
                 />
                 <FormHelperText error={!phoneValid}>{(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}</FormHelperText>
               </FormControl>
-
-              <FormControl fullWidth margin="dense">
+              {/* <input ref={inputRef} /> */}
+              {/* <FormControl fullWidth margin="dense">
                 <TextField id="location" type="text" onChange={handleLocationChange} autoComplete="off" variant="standard" label={commonStrings.LOCATION} />
               </FormControl>
 
               <FormControl fullWidth margin="dense">
                 <TextField id="bio" type="text" onChange={handleBioChange} autoComplete="off" variant="standard" label={commonStrings.BIO} />
-              </FormControl>
+              </FormControl> */}
 
               {supplier && (
                 <FormControl component="fieldset" style={{ marginTop: 15 }}>

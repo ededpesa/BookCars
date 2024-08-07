@@ -215,6 +215,14 @@ export interface CreateUserPayload {
   blacklisted?: boolean;
   payLater?: boolean;
   supplier?: string;
+  enterprise?: {
+    name: string;
+    commercialActivity: string;
+    web?: string;
+    email: string;
+    rif: string;
+    address: string;
+  };
 }
 
 export interface UpdateUserPayload extends CreateUserPayload {
@@ -265,6 +273,14 @@ export interface ValidateSupplierPayload {
   fullName: string;
 }
 
+export interface ValidateEnterprisePayload {
+  enterpriseName: string;
+}
+
+export interface ValidateRifPayload {
+  rif: string;
+}
+
 export interface ValidateLocationPayload {
   language: string;
   name: string;
@@ -298,6 +314,14 @@ export interface User {
   checked?: boolean;
   customerId?: string;
   carCount?: number;
+  enterprise?: {
+    name: string;
+    commercialActivity: string;
+    web?: string;
+    email: string;
+    rif: string;
+    address: string;
+  };
 }
 
 export interface Option {

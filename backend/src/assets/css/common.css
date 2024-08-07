@@ -48,7 +48,7 @@
 
 .form-error {
   clear: both;
-  height: 65px;
+  /* height: 65px; */
   padding-top: 10px;
   text-align: center;
 }

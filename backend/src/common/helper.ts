@@ -590,6 +590,10 @@ export const getUserTypes = () => [
     label: commonStrings.RECORD_TYPE_SUPPLIER,
   },
   {
+    value: bookcarsTypes.UserType.Enterprise,
+    label: commonStrings.RECORD_TYPE_ENTERPRISE,
+  },
+  {
     value: bookcarsTypes.UserType.User,
     label: commonStrings.RECORD_TYPE_USER,
   },

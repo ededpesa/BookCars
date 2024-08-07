@@ -52,6 +52,10 @@ div.user-type-filter ul.user-type-list li span.bs-supplier {
   background: #e98003;
 }
 
+div.user-type-filter ul.user-type-list li span.bs-enterprise {
+  background: #654bad;
+}
+
 div.user-type-filter ul.user-type-list li span.bs-user {
   background: #22bba7;
 }

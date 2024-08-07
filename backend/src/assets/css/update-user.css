@@ -18,6 +18,10 @@ div.update-user .user-form-title {
   color: #121212;
 }
 
+div.update-user h3.user-form-title {
+  margin-bottom: 0;
+}
+
 div.update-user .resend-activation-link {
   cursor: pointer;
   margin: 20px 0 10px;

@@ -29,6 +29,10 @@ div.us-list span.us-supplier {
   background: #e98003;
 }
 
+div.us-list span.us-enterprise {
+  background: #654bad;
+}
+
 div.us-list span.us-user {
   background: #22bba7;
 }
