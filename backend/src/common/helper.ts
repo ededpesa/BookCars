@@ -625,6 +625,25 @@ export const getUserType = (status?: bookcarsTypes.UserType) => {
 };
 
 /**
+ * Get document type label.
+ *
+ * @param {string} status
+ * @returns {string}
+ */
+export const getDocumentType = (type?: bookcarsTypes.DocumentType) => {
+  switch (type) {
+    case bookcarsTypes.DocumentType.IdentityCard:
+      return commonStrings.IDENTITY_CARD;
+
+    case bookcarsTypes.DocumentType.Passport:
+      return commonStrings.PASSPORT;
+
+    default:
+      return "";
+  }
+};
+
+/**
  * Get days label.
  *
  * @param {number} days

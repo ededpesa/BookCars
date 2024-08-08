@@ -85,6 +85,10 @@ const strings = new LocalizedStrings({
     ADDRESS: "Fiscal address",
     ENTERPRISE_DATA: "Enterprise data",
     CONTACT_DATA: "Contact data",
+    DOCUMENT_TYPE: "Document type",
+    DOCUMENT_NUMBER: "Document number",
+    IDENTITY_CARD: "Identity card",
+    PASSPORT: "Passport",
   },
   en: {
     GENERIC_ERROR: "An unhandled error occurred.",
@@ -169,6 +173,10 @@ const strings = new LocalizedStrings({
     ADDRESS: "Fiscal address",
     ENTERPRISE_DATA: "Enterprise data",
     CONTACT_DATA: "Contact data",
+    DOCUMENT_TYPE: "Document type",
+    DOCUMENT_NUMBER: "Document number",
+    IDENTITY_CARD: "Identity card",
+    PASSPORT: "Passport",
   },
   es: {
     GENERIC_ERROR: "Se produjo un error no controlado.",
@@ -253,6 +261,10 @@ const strings = new LocalizedStrings({
     ADDRESS: "Dirección fiscal",
     ENTERPRISE_DATA: "Datos de empresa",
     CONTACT_DATA: "Datos de contacto",
+    DOCUMENT_TYPE: "Tipo de documento",
+    DOCUMENT_NUMBER: "Número de documento",
+    IDENTITY_CARD: "Cédula de identidad",
+    PASSPORT: "Pasaporte",
   },
 });
 

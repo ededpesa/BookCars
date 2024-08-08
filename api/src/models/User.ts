@@ -106,12 +106,10 @@ const userSchema = new Schema<env.User>(
     enterprise: {
       name: {
         type: String,
-        required: [true, "can't be blank"],
         trim: true,
       },
       commercialActivity: {
         type: String,
-        required: [true, "can't be blank"],
         trim: true,
       },
       web: String,
@@ -119,18 +117,15 @@ const userSchema = new Schema<env.User>(
         type: String,
         lowercase: true,
         unique: true,
-        required: [true, "can't be blank"],
         validate: [validator.isEmail, "is not valid"],
         trim: true,
       },
       rif: {
         type: String,
-        required: [true, "can't be blank"],
         trim: true,
       },
       address: {
         type: String,
-        required: [true, "can't be blank"],
         trim: true,
       },
     },

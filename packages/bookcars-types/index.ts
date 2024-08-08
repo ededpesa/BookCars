@@ -8,6 +8,7 @@ export enum UserType {
 export enum AppType {
   Backend = "backend",
   Frontend = "frontend",
+  Enterprise = "enterprise",
 }
 
 export enum CarType {
@@ -55,6 +56,11 @@ export enum RecordType {
   User = "user",
   Car = "car",
   Location = "location",
+}
+
+export enum DocumentType {
+  IdentityCard = "1",
+  Passport = "2",
 }
 
 export interface Booking {
@@ -215,6 +221,8 @@ export interface CreateUserPayload {
   blacklisted?: boolean;
   payLater?: boolean;
   supplier?: string;
+  documentType?: string;
+  documentNumber?: string;
   enterprise?: {
     name: string;
     commercialActivity: string;
@@ -314,6 +322,8 @@ export interface User {
   checked?: boolean;
   customerId?: string;
   carCount?: number;
+  documentType?: number;
+  documentNumber?: string;
   enterprise?: {
     name: string;
     commercialActivity: string;

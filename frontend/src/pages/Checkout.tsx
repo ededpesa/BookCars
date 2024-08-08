@@ -742,7 +742,7 @@ const Checkout = () => {
                       </FormControl> */}
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.gps === -1 || car.gps === 0 || !!clientSecret}
+                          disabled={!car.gps || car.gps === -1 || car.gps === 0 || !!clientSecret}
                           control={<Switch checked={gps} onChange={handleGpsChange} color="primary" />}
                           label={
                             <span>
@@ -806,7 +806,7 @@ const Checkout = () => {
 
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.homeDelivery === -1 || car.homeDelivery === 0 || !!clientSecret}
+                          disabled={!car.homeDelivery || car.homeDelivery === -1 || car.homeDelivery === 0 || !!clientSecret}
                           control={<Switch checked={homeDelivery} onChange={handleHomeDeliveryChange} color="primary" />}
                           label={
                             <span>
@@ -818,7 +818,7 @@ const Checkout = () => {
                       </FormControl>
                       <FormControl fullWidth margin="dense">
                         <FormControlLabel
-                          disabled={car.babyChair === -1 || car.babyChair === 0 || !!clientSecret}
+                          disabled={!car.babyChair || car.babyChair === -1 || car.babyChair === 0 || !!clientSecret}
                           control={<Switch checked={babyChair} onChange={handleBabyChairChange} color="primary" />}
                           label={
                             <span>

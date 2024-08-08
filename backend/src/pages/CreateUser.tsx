@@ -65,10 +65,13 @@ const CreateUser = () => {
   const [webPage, setWebPage] = useState("");
   const [enterpriseEmail, setEnterpriseEmail] = useState("");
   const [rif, setRif] = useState("");
-  const [rifType, setRifType] = useState("V");
+  // const [rifType, setRifType] = useState("V");
   const [address, setAddress] = useState("");
+  const [documentType, setDocumentType] = useState(`${bookcarsTypes.DocumentType.IdentityCard}`);
+  const [documentNumber, setDocumentNumber] = useState("");
 
-  const inputRef = useMask({ mask: "T___________", replacement: { _: /\d/, T: /[vVeE]/ } });
+  const maskCedRef = useMask({ mask: "T___________", replacement: { _: /\d/, T: /[vVeE]/ } });
+  const maskRifRef = useMask({ mask: "T___________", replacement: { _: /\d/, T: /[vVjJ]/ } });
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value);
@@ -120,6 +123,10 @@ const CreateUser = () => {
     } else {
       setFullNameError(false);
     }
+  };
+
+  const handleDocumentTypeChange = (e: SelectChangeEvent<string>) => {
+    setDocumentType(e.target.value);
   };
 
   const handleFullNameBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
@@ -333,6 +340,8 @@ const CreateUser = () => {
         birthDate,
         language,
         supplier,
+        documentType,
+        documentNumber,
       };
 
       if (type === bookcarsTypes.RecordType.Supplier) {
@@ -471,8 +480,8 @@ const CreateUser = () => {
                   </FormControl>
 
                   <FormControl fullWidth margin="dense" variant="standard" style={{ flexDirection: "row" }}>
-                    {/* <InputLabel>RIF</InputLabel> */}
-                    {/* <Select label={" "} value={rifType} onChange={(e) => setRifType(e.target.value)} style={{ maxWidth: 50 }}>
+                    {/* <InputLabel>RIF *</InputLabel>
+                    <Select label={" "} value={rifType} onChange={(e) => setRifType(e.target.value)} style={{ minWidth: 50, textAlign: "center" }}>
                       <MenuItem value="V">V</MenuItem>
                       <MenuItem value="E">E</MenuItem>
                     </Select> */}
@@ -483,10 +492,13 @@ const CreateUser = () => {
                       //onBlur={handleEmailBlur}
                       onChange={handleRifChange}
                       autoComplete="off"
-                      required
                       variant="standard"
-                      label={"RIF (V1234567)"}
+                      label={"RIF (J1234567)"}
                       style={{ flexGrow: 1 }}
+                      inputProps={{ style: { textTransform: "uppercase" } }}
+                      inputRef={maskRifRef}
+                      required
+                      fullWidth
                     />
 
                     {/* <FormHelperText error={!emailValid || emailError}>
@@ -553,6 +565,42 @@ const CreateUser = () => {
                 </FormHelperText>
               </FormControl>
 
+              <FormControl fullWidth margin="dense" variant="standard">
+                <InputLabel className="required">{commonStrings.DOCUMENT_TYPE}</InputLabel>
+                <Select label={commonStrings.TYPE} value={documentType} onChange={handleDocumentTypeChange} required fullWidth>
+                  <MenuItem value={bookcarsTypes.DocumentType.IdentityCard}>{helper.getDocumentType(bookcarsTypes.DocumentType.IdentityCard)}</MenuItem>
+                  <MenuItem value={bookcarsTypes.DocumentType.Passport}>{helper.getDocumentType(bookcarsTypes.DocumentType.Passport)}</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth margin="dense" variant="standard" style={{ flexDirection: "row" }}>
+                {/* <InputLabel>RIF *</InputLabel>
+                    <Select label={" "} value={rifType} onChange={(e) => setRifType(e.target.value)} style={{ minWidth: 50, textAlign: "center" }}>
+                      <MenuItem value="V">V</MenuItem>
+                      <MenuItem value="E">E</MenuItem>
+                    </Select> */}
+                <TextField
+                  id="document-number"
+                  type="text"
+                  //error={!emailValid || emailError}
+                  //onBlur={handleEmailBlur}
+                  onChange={handleRifChange}
+                  autoComplete="off"
+                  variant="standard"
+                  label={commonStrings.DOCUMENT_NUMBER}
+                  style={{ flexGrow: 1 }}
+                  inputProps={{ style: { textTransform: "uppercase" } }}
+                  // inputRef={inputRef}
+                  required
+                  fullWidth
+                />
+
+                {/* <FormHelperText error={!emailValid || emailError}>
+                  {(!emailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                  {(emailError && commonStrings.EMAIL_ALREADY_REGISTERED) || ""}
+                </FormHelperText> */}
+              </FormControl>
+
               {driver && (
                 <FormControl fullWidth margin="dense">
                   <DatePicker
@@ -584,8 +632,6 @@ const CreateUser = () => {
                   autoComplete="off"
                   variant="standard"
                   label={commonStrings.PHONE}
-                  // ref={inputRef}
-                  inputRef={inputRef}
                 />
                 <FormHelperText error={!phoneValid}>{(!phoneValid && commonStrings.PHONE_NOT_VALID) || ""}</FormHelperText>
               </FormControl>

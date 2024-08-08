@@ -606,7 +606,7 @@ export const getAmendmentsOption = (amendments: number, language: string) => {
 export const getGpsOption = (gps: number, days: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
-  if (gps === -1) {
+  if (gps === undefined || gps === -1) {
     return strings.UNAVAILABLE;
   }
   if (gps === 0) {
@@ -630,7 +630,7 @@ export const getGpsOption = (gps: number, days: number, language: string) => {
 export const getHomeDeliveryOption = (homeDelivery: number, days: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
-  if (homeDelivery === -1) {
+  if (homeDelivery === undefined || homeDelivery === -1) {
     return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
   }
   if (homeDelivery === 0) {
@@ -654,7 +654,7 @@ export const getHomeDeliveryOption = (homeDelivery: number, days: number, langua
 export const getBabyChairOption = (babyChair: number, days: number, language: string) => {
   const fr = bookcarsHelper.isFrench(language);
 
-  if (babyChair === -1) {
+  if (babyChair === undefined || babyChair === -1) {
     return `${strings.UNAVAILABLE}${fr ? "s" : ""}`;
   }
   if (babyChair === 0) {

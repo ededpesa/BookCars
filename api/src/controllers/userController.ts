@@ -31,8 +31,7 @@ import * as logger from "../common/logger";
  * @param {string} msg
  * @returns {string}
  */
-const getStatusMessage = (lang: string, msg: string) =>
-  `<!DOCTYPE html><html lang="'${lang}'"><head></head><body><p>${msg}</p></body></html>`;
+const getStatusMessage = (lang: string, msg: string) => `<!DOCTYPE html><html lang="'${lang}'"><head></head><body><p>${msg}</p></body></html>`;
 
 /**
  * Sign Up.
@@ -43,11 +42,7 @@ const getStatusMessage = (lang: string, msg: string) =>
  * @param {bookcarsTypes.UserType} userType
  * @returns {unknown}
  */
-const _signup = async (
-  req: Request,
-  res: Response,
-  userType: bookcarsTypes.UserType,
-) => {
+const _signup = async (req: Request, res: Response, userType: bookcarsTypes.UserType) => {
   const { body }: { body: bookcarsTypes.SignUpPayload } = req;
 
   //
@@ -81,10 +76,7 @@ const _signup = async (
       }
     }
   } catch (err) {
-    logger.error(
-      `[user.signup] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`,
-      err,
-    );
+    logger.error(`[user.signup] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 
@@ -120,10 +112,7 @@ const _signup = async (
       //
       await user.deleteOne();
     } catch (deleteErr) {
-      logger.error(
-        `[user.signup] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`,
-        deleteErr,
-      );
+      logger.error(`[user.signup] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`, deleteErr);
     }
     logger.error(`[user.signup] ${i18n.t("SMTP_ERROR")}`, err);
     return res.status(400).send(i18n.t("SMTP_ERROR") + err);
@@ -211,8 +200,8 @@ export const create = async (req: Request, res: Response) => {
       html: `<p>
         ${i18n.t("HELLO")}${user.fullName},<br><br>
         ${i18n.t("ACCOUNT_ACTIVATION_LINK")}<br><br>
-        ${helper.joinURL(user.type === bookcarsTypes.UserType.User ? env.FRONTEND_HOST : env.BACKEND_HOST, "activate")}/?u=${encodeURIComponent(
-          user.id,
+        ${helper.joinURL(user.type === bookcarsTypes.UserType.User || user.type === bookcarsTypes.UserType.Enterprise ? env.FRONTEND_HOST : env.BACKEND_HOST, "activate")}/?u=${encodeURIComponent(
+          user.id
         )}&e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(token.token)}<br><br>
         ${i18n.t("REGARDS")}<br>
         </p>`,
@@ -221,10 +210,7 @@ export const create = async (req: Request, res: Response) => {
     await mailHelper.sendMail(mailOptions);
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[user.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`,
-      err,
-    );
+    logger.error(`[user.create] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -249,16 +235,10 @@ export const checkToken = async (req: Request, res: Response) => {
 
     if (user) {
       const type = req.params.type.toLowerCase() as bookcarsTypes.AppType;
-
       if (
-        ![
-          bookcarsTypes.AppType.Frontend,
-          bookcarsTypes.AppType.Backend,
-        ].includes(type) ||
-        (type === bookcarsTypes.AppType.Backend &&
-          user.type === bookcarsTypes.UserType.User) ||
-        (type === bookcarsTypes.AppType.Frontend &&
-          user.type !== bookcarsTypes.UserType.User) ||
+        ![bookcarsTypes.AppType.Frontend, bookcarsTypes.AppType.Backend].includes(type) ||
+        (type === bookcarsTypes.AppType.Backend && user.type === bookcarsTypes.UserType.User) ||
+        (type === bookcarsTypes.AppType.Frontend && user.type !== bookcarsTypes.UserType.User && user.type !== bookcarsTypes.UserType.Enterprise) ||
         user.active
       ) {
         return res.sendStatus(204);
@@ -278,10 +258,7 @@ export const checkToken = async (req: Request, res: Response) => {
 
     return res.sendStatus(204);
   } catch (err) {
-    logger.error(
-      `[user.checkToken] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.params)}`,
-      err,
-    );
+    logger.error(`[user.checkToken] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.params)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -336,14 +313,9 @@ export const resend = async (req: Request, res: Response) => {
       const type = req.params.type.toLowerCase() as bookcarsTypes.AppType;
 
       if (
-        ![
-          bookcarsTypes.AppType.Frontend,
-          bookcarsTypes.AppType.Backend,
-        ].includes(type) ||
-        (type === bookcarsTypes.AppType.Backend &&
-          user.type === bookcarsTypes.UserType.User) ||
-        (type === bookcarsTypes.AppType.Frontend &&
-          user.type !== bookcarsTypes.UserType.User)
+        ![bookcarsTypes.AppType.Frontend, bookcarsTypes.AppType.Backend].includes(type) ||
+        (type === bookcarsTypes.AppType.Backend && user.type === bookcarsTypes.UserType.User) ||
+        (type === bookcarsTypes.AppType.Frontend && user.type !== bookcarsTypes.UserType.User)
       ) {
         return res.sendStatus(403);
       }
@@ -365,17 +337,13 @@ export const resend = async (req: Request, res: Response) => {
       const mailOptions: nodemailer.SendMailOptions = {
         from: env.SMTP_FROM,
         to: user.email,
-        subject: reset
-          ? i18n.t("PASSWORD_RESET_SUBJECT")
-          : i18n.t("ACCOUNT_ACTIVATION_SUBJECT"),
+        subject: reset ? i18n.t("PASSWORD_RESET_SUBJECT") : i18n.t("ACCOUNT_ACTIVATION_SUBJECT"),
         html: `<p>
           ${i18n.t("HELLO")}${user.fullName},<br><br>  
           ${reset ? i18n.t("PASSWORD_RESET_LINK") : i18n.t("ACCOUNT_ACTIVATION_LINK")}<br><br>  
           ${helper.joinURL(
-            user.type === bookcarsTypes.UserType.User
-              ? env.FRONTEND_HOST
-              : env.BACKEND_HOST,
-            reset ? "reset-password" : "activate",
+            user.type === bookcarsTypes.UserType.User ? env.FRONTEND_HOST : env.BACKEND_HOST,
+            reset ? "reset-password" : "activate"
           )}/?u=${encodeURIComponent(user.id)}&e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(token.token)}<br><br>
           ${i18n.t("REGARDS")}<br>
           </p>`,
@@ -414,6 +382,7 @@ export const activate = async (req: Request, res: Response) => {
 
     if (user) {
       const token = await Token.findOne({ user: userId, token: body.token });
+      console.log(token);
 
       if (token) {
         const salt = await bcrypt.genSalt(10);
@@ -462,13 +431,9 @@ export const signin = async (req: Request, res: Response) => {
       !password ||
       !user ||
       !user.password ||
-      ![bookcarsTypes.AppType.Frontend, bookcarsTypes.AppType.Backend].includes(
-        type,
-      ) ||
-      (type === bookcarsTypes.AppType.Backend &&
-        user.type === bookcarsTypes.UserType.User) ||
-      (type === bookcarsTypes.AppType.Frontend &&
-        user.type !== bookcarsTypes.UserType.User)
+      ![bookcarsTypes.AppType.Frontend, bookcarsTypes.AppType.Backend].includes(type) ||
+      (type === bookcarsTypes.AppType.Backend && user.type === bookcarsTypes.UserType.User) ||
+      (type === bookcarsTypes.AppType.Frontend && user.type !== bookcarsTypes.UserType.User)
     ) {
       return res.sendStatus(204);
     }
@@ -535,11 +500,7 @@ export const signin = async (req: Request, res: Response) => {
       const cookieName = authHelper.getAuthCookieName(req);
 
       // logger.info("login", { ...loggedUser, cookie: { cookieName, token, cookieOptions } });
-      return res
-        .clearCookie(cookieName)
-        .cookie(cookieName, token, cookieOptions)
-        .status(200)
-        .send(loggedUser);
+      return res.clearCookie(cookieName).cookie(cookieName, token, cookieOptions).status(200).send(loggedUser);
     }
 
     return res.sendStatus(204);
@@ -692,8 +653,7 @@ export const validateEmail = async (req: Request, res: Response) => {
  * @param {Response} res
  * @returns {*}
  */
-export const validateAccessToken = async (req: Request, res: Response) =>
-  res.sendStatus(200);
+export const validateAccessToken = async (req: Request, res: Response) => res.sendStatus(200);
 
 /**
  * Get Validation result as HTML.
@@ -725,28 +685,14 @@ export const confirmEmail = async (req: Request, res: Response) => {
     // token is not found into database i.e. token may have expired
     if (!token) {
       logger.error(i18n.t("ACCOUNT_ACTIVATION_LINK_EXPIRED"), req.params);
-      return res
-        .status(400)
-        .send(
-          getStatusMessage(
-            user.language,
-            i18n.t("ACCOUNT_ACTIVATION_LINK_EXPIRED"),
-          ),
-        );
+      return res.status(400).send(getStatusMessage(user.language, i18n.t("ACCOUNT_ACTIVATION_LINK_EXPIRED")));
     }
 
     // if token is found then check valid user
     // not valid user
     if (user.verified) {
       // user is already verified
-      return res
-        .status(200)
-        .send(
-          getStatusMessage(
-            user.language,
-            i18n.t("ACCOUNT_ACTIVATION_ACCOUNT_VERIFIED"),
-          ),
-        );
+      return res.status(200).send(getStatusMessage(user.language, i18n.t("ACCOUNT_ACTIVATION_ACCOUNT_VERIFIED")));
     }
 
     // verify user
@@ -754,16 +700,9 @@ export const confirmEmail = async (req: Request, res: Response) => {
     user.verified = true;
     user.verifiedAt = new Date();
     await user.save();
-    return res
-      .status(200)
-      .send(
-        getStatusMessage(user.language, i18n.t("ACCOUNT_ACTIVATION_SUCCESS")),
-      );
+    return res.status(200).send(getStatusMessage(user.language, i18n.t("ACCOUNT_ACTIVATION_SUCCESS")));
   } catch (err) {
-    logger.error(
-      `[user.confirmEmail] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.params)}`,
-      err,
-    );
+    logger.error(`[user.confirmEmail] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.params)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -791,26 +730,12 @@ export const resendLink = async (req: Request, res: Response) => {
     // user is not found into database
     if (!user) {
       logger.error("[user.resendLink] User not found:", email);
-      return res
-        .status(400)
-        .send(
-          getStatusMessage(
-            env.DEFAULT_LANGUAGE,
-            i18n.t("ACCOUNT_ACTIVATION_RESEND_ERROR"),
-          ),
-        );
+      return res.status(400).send(getStatusMessage(env.DEFAULT_LANGUAGE, i18n.t("ACCOUNT_ACTIVATION_RESEND_ERROR")));
     }
 
     if (user.verified) {
       // user has been already verified
-      return res
-        .status(200)
-        .send(
-          getStatusMessage(
-            user.language,
-            i18n.t("ACCOUNT_ACTIVATION_ACCOUNT_VERIFIED"),
-          ),
-        );
+      return res.status(200).send(getStatusMessage(user.language, i18n.t("ACCOUNT_ACTIVATION_ACCOUNT_VERIFIED")));
     }
 
     // send verification link
@@ -835,14 +760,7 @@ export const resendLink = async (req: Request, res: Response) => {
     await mailHelper.sendMail(mailOptions);
     return res
       .status(200)
-      .send(
-        getStatusMessage(
-          user.language,
-          i18n.t("ACCOUNT_ACTIVATION_EMAIL_SENT_PART_1") +
-            user.email +
-            i18n.t("ACCOUNT_ACTIVATION_EMAIL_SENT_PART_2"),
-        ),
-      );
+      .send(getStatusMessage(user.language, i18n.t("ACCOUNT_ACTIVATION_EMAIL_SENT_PART_1") + user.email + i18n.t("ACCOUNT_ACTIVATION_EMAIL_SENT_PART_2")));
   } catch (err) {
     logger.error(`[user.resendLink] ${i18n.t("DB_ERROR")} ${email}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
@@ -874,16 +792,7 @@ export const update = async (req: Request, res: Response) => {
       return res.sendStatus(204);
     }
 
-    const {
-      fullName,
-      phone,
-      bio,
-      location,
-      type,
-      birthDate,
-      enableEmailNotifications,
-      payLater,
-    } = body;
+    const { fullName, phone, bio, location, type, birthDate, enableEmailNotifications, payLater } = body;
 
     if (fullName) {
       user.fullName = fullName;
@@ -905,10 +814,7 @@ export const update = async (req: Request, res: Response) => {
     await user.save();
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[user.update] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err,
-    );
+    logger.error(`[user.update] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -945,10 +851,7 @@ export const updateEmailNotifications = async (req: Request, res: Response) => {
 
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[user.updateEmailNotifications] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`,
-      err,
-    );
+    logger.error(`[user.updateEmailNotifications] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -981,10 +884,7 @@ export const updateLanguage = async (req: Request, res: Response) => {
     await user.save();
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[user.updateLanguage] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err,
-    );
+    logger.error(`[user.updateLanguage] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -1160,19 +1060,14 @@ export const deleteTempAvatar = async (req: Request, res: Response) => {
   try {
     const avatarFile = path.join(env.CDN_TEMP_USERS, avatar);
     if (!(await helper.exists(avatarFile))) {
-      throw new Error(
-        `[user.deleteTempAvatar] temp avatar ${avatarFile} not found`,
-      );
+      throw new Error(`[user.deleteTempAvatar] temp avatar ${avatarFile} not found`);
     }
 
     await fs.unlink(avatarFile);
 
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[user.deleteTempAvatar] ${i18n.t("DB_ERROR")} ${avatar}`,
-      err,
-    );
+    logger.error(`[user.deleteTempAvatar] ${i18n.t("DB_ERROR")} ${avatar}`, err);
     return res.status(400).send(i18n.t("ERROR") + err);
   }
 };
@@ -1216,10 +1111,7 @@ export const changePassword = async (req: Request, res: Response) => {
     };
 
     if (strict) {
-      const passwordMatch = await bcrypt.compare(
-        currentPassword,
-        user.password,
-      );
+      const passwordMatch = await bcrypt.compare(currentPassword, user.password);
       if (passwordMatch) {
         return _changePassword();
       }
@@ -1332,11 +1224,7 @@ export const getUsers = async (req: Request, res: Response) => {
         },
         {
           $facet: {
-            resultData: [
-              { $sort: { fullName: 1, _id: 1 } },
-              { $skip: (page - 1) * size },
-              { $limit: size },
-            ],
+            resultData: [{ $sort: { fullName: 1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
             pageInfo: [
               {
                 $count: "totalRecords",
@@ -1345,7 +1233,7 @@ export const getUsers = async (req: Request, res: Response) => {
           },
         },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
     );
 
     return res.json(users);
@@ -1367,9 +1255,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const deleteUsers = async (req: Request, res: Response) => {
   try {
     const { body }: { body: string[] } = req;
-    const ids: mongoose.Types.ObjectId[] = body.map(
-      (id: string) => new mongoose.Types.ObjectId(id),
-    );
+    const ids: mongoose.Types.ObjectId[] = body.map((id: string) => new mongoose.Types.ObjectId(id));
 
     for (const id of ids) {
       const user = await User.findById(id);
@@ -1385,12 +1271,9 @@ export const deleteUsers = async (req: Request, res: Response) => {
         }
 
         if (user.type === bookcarsTypes.UserType.Supplier) {
-          const additionalDrivers = (
-            await Booking.find(
-              { supplier: id, _additionalDriver: { $ne: null } },
-              { _id: 0, _additionalDriver: 1 },
-            )
-          ).map((b) => b._additionalDriver);
+          const additionalDrivers = (await Booking.find({ supplier: id, _additionalDriver: { $ne: null } }, { _id: 0, _additionalDriver: 1 })).map(
+            (b) => b._additionalDriver
+          );
           await AdditionalDriver.deleteMany({
             _id: { $in: additionalDrivers },
           });
@@ -1417,10 +1300,7 @@ export const deleteUsers = async (req: Request, res: Response) => {
 
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[user.delete] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err,
-    );
+    logger.error(`[user.delete] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -1437,7 +1317,7 @@ export const verifyRecaptcha = async (req: Request, res: Response) => {
   try {
     const { token, ip } = req.params;
     const result = await axios.get(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(env.RECAPTCHA_SECRET)}&response=${encodeURIComponent(token)}&remoteip=${ip}`,
+      `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(env.RECAPTCHA_SECRET)}&response=${encodeURIComponent(token)}&remoteip=${ip}`
     );
     const { success } = result.data;
 
@@ -1446,10 +1326,7 @@ export const verifyRecaptcha = async (req: Request, res: Response) => {
     }
     return res.sendStatus(204);
   } catch (err) {
-    logger.error(
-      `[user.delete] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err,
-    );
+    logger.error(`[user.delete] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -1467,7 +1344,7 @@ export const sendEmail = async (req: Request, res: Response) => {
     const { body }: { body: bookcarsTypes.SendEmailPayload } = req;
     const { from, to, subject, message, recaptchaToken: token, ip } = body;
     const result = await axios.get(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(env.RECAPTCHA_SECRET)}&response=${encodeURIComponent(token)}&remoteip=${ip}`,
+      `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(env.RECAPTCHA_SECRET)}&response=${encodeURIComponent(token)}&remoteip=${ip}`
     );
     const { success } = result.data;
 
@@ -1489,10 +1366,7 @@ export const sendEmail = async (req: Request, res: Response) => {
 
     return res.sendStatus(200);
   } catch (err) {
-    logger.error(
-      `[user.delete] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`,
-      err,
-    );
+    logger.error(`[user.delete] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };

@@ -361,12 +361,12 @@ export interface User extends Document {
   documentType?: number;
   documentNumber?: string;
   enterprise?: {
-    name: string;
-    commercialActivity: string;
+    name?: string;
+    commercialActivity?: string;
     web?: string;
-    email: string;
-    rif: string;
-    address: string;
+    email?: string;
+    rif?: string;
+    address?: string;
   };
 }
 
