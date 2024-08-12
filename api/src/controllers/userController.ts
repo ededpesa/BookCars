@@ -792,7 +792,7 @@ export const update = async (req: Request, res: Response) => {
       return res.sendStatus(204);
     }
 
-    const { fullName, phone, bio, location, type, birthDate, enableEmailNotifications, payLater } = body;
+    const { fullName, phone, bio, location, type, birthDate, enableEmailNotifications, payLater, documentType, documentNumber, enterprise } = body;
 
     if (fullName) {
       user.fullName = fullName;
@@ -801,6 +801,9 @@ export const update = async (req: Request, res: Response) => {
     user.location = location;
     user.bio = bio;
     user.birthDate = birthDate ? new Date(birthDate) : undefined;
+    if (documentType) user.documentType = parseInt(documentType, 10);
+    user.documentNumber = documentNumber;
+
     if (type) {
       user.type = type as bookcarsTypes.UserType;
     }
@@ -809,6 +812,17 @@ export const update = async (req: Request, res: Response) => {
     }
     if (typeof payLater !== "undefined") {
       user.payLater = payLater;
+    }
+
+    if (enterprise) {
+      user.enterprise = {
+        name: enterprise.name,
+        commercialActivity: enterprise.commercialActivity,
+        web: enterprise.web,
+        email: enterprise.email,
+        rif: enterprise.rif,
+        address: enterprise.address,
+      };
     }
 
     await user.save();
@@ -921,6 +935,9 @@ export const getUser = async (req: Request, res: Response) => {
       birthDate: 1,
       payLater: 1,
       customerId: 1,
+      documentType: 1,
+      documentNumber: 1,
+      enterprise: 1,
     }).lean();
 
     if (!user) {
