@@ -106,6 +106,7 @@ describe("POST /api/create-car", () => {
       collisionDamageWaiver: 120,
       fullInsurance: 200,
       additionalDriver: 200,
+      inventory: 1,
     };
     let res = await request(app).post("/api/create-car").set(env.X_ACCESS_TOKEN, token).send(payload);
     expect(res.statusCode).toBe(200);
@@ -155,6 +156,7 @@ describe("PUT /api/update-car", () => {
       collisionDamageWaiver: 130,
       fullInsurance: 210,
       additionalDriver: 220,
+      inventory: 1,
     };
     let res = await request(app).put("/api/update-car").set(env.X_ACCESS_TOKEN, token).send(payload);
     expect(res.statusCode).toBe(200);

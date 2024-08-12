@@ -78,6 +78,7 @@ beforeAll(async () => {
     collisionDamageWaiver: 120,
     fullInsurance: 200,
     additionalDriver: 0,
+    inventory: 1,
   };
 
   // car 1
