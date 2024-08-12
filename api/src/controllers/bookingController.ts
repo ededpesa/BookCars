@@ -985,3 +985,79 @@ export const cancelBooking = async (req: Request, res: Response) => {
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
+
+/**
+ * Checks availability.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const checkAvailability = async (req: Request, res: Response) => {
+  const { body }: { body: bookcarsTypes.CheckAvailabilityPayload } = req;
+  const { car, from, to } = body;
+
+  const fromDate = new Date(from);
+  const toDate = new Date(to);
+
+  try {
+    const availability = await Car.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(car) },
+      },
+      {
+        $lookup: {
+          from: "Booking",
+          localField: "_id",
+          foreignField: "car",
+          as: "bookings",
+        },
+      },
+      {
+        $addFields: {
+          overlappingBookings: {
+            $size: {
+              $filter: {
+                input: "$bookings",
+                as: "booking",
+                cond: {
+                  $and: [
+                    { $lte: ["$$booking.from", toDate] },
+                    { $gte: ["$$booking.to", fromDate] },
+                    { $ne: ["$$booking.status", bookcarsTypes.BookingStatus.Void] },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          isAvailable: {
+            $gt: ["$inventory", "$overlappingBookings"],
+          },
+        },
+      },
+    ]);
+    const isAvailable = availability.length > 0 ? availability[0].isAvailable : false;
+
+    if (!isAvailable) {
+      throw new Error("Not available");
+    }
+
+    // const exists = await User.exists({ email });
+
+    // if (!isAvailable) {
+    //   return res.sendStatus(204);
+    // }
+
+    // email does not exist in db (can be added)
+    return res.sendStatus(200);
+  } catch (err) {
+    logger.error(`[booking.checkAvailability] ${i18n.t("DB_ERROR")} ${car}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};

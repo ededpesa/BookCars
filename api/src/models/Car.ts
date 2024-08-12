@@ -25,8 +25,7 @@ const carSchema = new Schema<env.Car>(
     locations: {
       type: [Schema.Types.ObjectId],
       ref: "Location",
-      validate: (value: any): boolean =>
-        Array.isArray(value) && value.length > 0,
+      validate: (value: any): boolean => Array.isArray(value) && value.length > 0,
     },
     price: {
       type: Number,
@@ -55,10 +54,7 @@ const carSchema = new Schema<env.Car>(
     },
     gearbox: {
       type: String,
-      enum: [
-        bookcarsTypes.GearboxType.Manual,
-        bookcarsTypes.GearboxType.Automatic,
-      ],
+      enum: [bookcarsTypes.GearboxType.Manual, bookcarsTypes.GearboxType.Automatic],
       required: [true, "can't be blank"],
     },
     aircon: {
@@ -86,10 +82,7 @@ const carSchema = new Schema<env.Car>(
     },
     fuelPolicy: {
       type: String,
-      enum: [
-        bookcarsTypes.FuelPolicy.LikeForlike,
-        bookcarsTypes.FuelPolicy.FreeTank,
-      ],
+      enum: [bookcarsTypes.FuelPolicy.LikeForlike, bookcarsTypes.FuelPolicy.FreeTank],
       required: [true, "can't be blank"],
     },
     mileage: {
@@ -132,12 +125,16 @@ const carSchema = new Schema<env.Car>(
       type: Number,
       required: [true, "can't be blank"],
     },
+    inventory: {
+      type: Number,
+      required: [true, "can't be blank"],
+    },
   },
   {
     timestamps: true,
     strict: true,
     collection: "Car",
-  },
+  }
 );
 
 const Car = model<env.Car>("Car", carSchema);

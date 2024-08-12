@@ -117,7 +117,9 @@ const CarList = ({
     _gearbox?: string[],
     _mileage?: string[],
     _fuelPolicy?: string[],
-    _deposit?: number
+    _deposit?: number,
+    _from?: Date,
+    _to?: Date
   ) => {
     try {
       setLoading(true);
@@ -130,7 +132,10 @@ const CarList = ({
         mileage: _mileage,
         fuelPolicy: _fuelPolicy,
         deposit: _deposit,
+        from: _from,
+        to: _to,
       };
+      console.log(payload);
 
       const data = await CarService.getCars(payload, _page, env.CARS_PAGE_SIZE);
 
@@ -174,7 +179,7 @@ const CarList = ({
   useEffect(() => {
     if (suppliers) {
       if (suppliers.length > 0) {
-        fetchData(page, suppliers, pickupLocation, carSpecs, _carType, gearbox, mileage, fuelPolicy, deposit);
+        fetchData(page, suppliers, pickupLocation, carSpecs, _carType, gearbox, mileage, fuelPolicy, deposit, from, to);
       } else {
         setRows([]);
         setFetch(false);
@@ -205,7 +210,7 @@ const CarList = ({
   useEffect(() => {
     if (reload) {
       setPage(1);
-      fetchData(1, suppliers, pickupLocation, carSpecs, _carType, gearbox, mileage, fuelPolicy, deposit);
+      fetchData(1, suppliers, pickupLocation, carSpecs, _carType, gearbox, mileage, fuelPolicy, deposit, from, to);
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reload, suppliers, pickupLocation, carSpecs, _carType, gearbox, mileage, fuelPolicy, deposit]);
 

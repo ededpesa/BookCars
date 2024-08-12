@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Input,
-  InputLabel,
-  FormControl,
-  Button,
-  Paper,
-  FormControlLabel,
-  Switch,
-  TextField,
-  FormHelperText,
-} from "@mui/material";
+import { Input, InputLabel, FormControl, Button, Paper, FormControlLabel, Switch, TextField, FormHelperText } from "@mui/material";
 import { Info as InfoIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import * as bookcarsTypes from ":bookcars-types";
@@ -66,6 +56,7 @@ const CreateCar = () => {
   const [minimumAgeValid, setMinimumAgeValid] = useState(true);
   const [formError, setFormError] = useState(false);
   const [deposit, setDeposit] = useState("");
+  const [inventory, setInventory] = useState("");
 
   const handleBeforeUpload = () => {
     setLoading(true);
@@ -192,28 +183,24 @@ const CreateCar = () => {
     setBabyChair(e.target.value);
   };
 
-  const handleTheftProtectionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleTheftProtectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTheftProtection(e.target.value);
   };
 
-  const handleCollisionDamageWaiverChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleCollisionDamageWaiverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCollisionDamageWaiver(e.target.value);
   };
 
-  const handleFullinsuranceChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFullinsuranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullInsurance(e.target.value);
   };
 
-  const handleAdditionalDriverChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleAdditionalDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAdditionalDriver(e.target.value);
+  };
+
+  const handleInventoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInventory(e.target.value);
   };
 
   const extraToNumber = (extra: string) => (extra === "" ? -1 : Number(extra));
@@ -260,6 +247,7 @@ const CreateCar = () => {
         collisionDamageWaiver: extraToNumber(collisionDamageWaiver),
         fullInsurance: extraToNumber(fullInsurance),
         additionalDriver: extraToNumber(additionalDriver),
+        inventory: Number(inventory),
       };
 
       const car = await CarService.create(data);
@@ -288,11 +276,7 @@ const CreateCar = () => {
   return (
     <Layout onLoad={onLoad} strict>
       <div className="create-car">
-        <Paper
-          className="car-form car-form-wrapper"
-          elevation={10}
-          style={visible ? {} : { display: "none" }}
-        >
+        <Paper className="car-form car-form-wrapper" elevation={10} style={visible ? {} : { display: "none" }}>
           <h1 className="car-form-title"> {strings.NEW_CAR_HEADING} </h1>
           <form onSubmit={handleSubmit}>
             <Avatar
@@ -315,30 +299,17 @@ const CreateCar = () => {
 
             <FormControl fullWidth margin="dense">
               <InputLabel className="required">{strings.NAME}</InputLabel>
-              <Input
-                type="text"
-                required
-                value={name}
-                autoComplete="off"
-                onChange={handleNameChange}
-              />
+              <Input type="text" required value={name} autoComplete="off" onChange={handleNameChange} />
             </FormControl>
 
             {!isSupplier && (
               <FormControl fullWidth margin="dense">
-                <SupplierSelectList
-                  label={strings.SUPPLIER}
-                  required
-                  variant="standard"
-                  onChange={handleSupplierChange}
-                />
+                <SupplierSelectList label={strings.SUPPLIER} required variant="standard" onChange={handleSupplierChange} />
               </FormControl>
             )}
 
             <FormControl fullWidth margin="dense">
-              <InputLabel className="required">
-                {strings.MINIMUM_AGE}
-              </InputLabel>
+              <InputLabel className="required">{strings.MINIMUM_AGE}</InputLabel>
               <Input
                 type="text"
                 required
@@ -348,19 +319,11 @@ const CreateCar = () => {
                 onChange={handleMinimumAgeChange}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d{2}$" }}
               />
-              <FormHelperText error={!minimumAgeValid}>
-                {(!minimumAgeValid && strings.MINIMUM_AGE_NOT_VALID) || ""}
-              </FormHelperText>
+              <FormHelperText error={!minimumAgeValid}>{(!minimumAgeValid && strings.MINIMUM_AGE_NOT_VALID) || ""}</FormHelperText>
             </FormControl>
 
             <FormControl fullWidth margin="dense">
-              <LocationSelectList
-                label={strings.LOCATIONS}
-                multiple
-                required
-                variant="standard"
-                onChange={handleLocationsChange}
-              />
+              <LocationSelectList label={strings.LOCATIONS} multiple required variant="standard" onChange={handleLocationsChange} />
             </FormControl>
 
             <FormControl fullWidth margin="dense">
@@ -387,63 +350,46 @@ const CreateCar = () => {
               />
             </FormControl>
 
+            <FormControl fullWidth margin="dense">
+              <InputLabel className="required">{strings.INVENTORY}</InputLabel>
+              <Input
+                type="text"
+                required
+                // error={!minimumAgeValid}
+                value={inventory}
+                autoComplete="off"
+                onChange={handleInventoryChange}
+                inputProps={{ inputMode: "numeric", pattern: "^\\d+$" }}
+              />
+              {/* <FormHelperText error={!minimumAgeValid}>{(!minimumAgeValid && strings.MINIMUM_AGE_NOT_VALID) || ""}</FormHelperText> */}
+            </FormControl>
+
             <FormControl fullWidth margin="dense" className="checkbox-fc">
               <FormControlLabel
-                control={
-                  <Switch
-                    checked={available}
-                    onChange={handleAvailableChange}
-                    color="primary"
-                  />
-                }
+                control={<Switch checked={available} onChange={handleAvailableChange} color="primary" />}
                 label={strings.AVAILABLE}
                 className="checkbox-fcl"
               />
             </FormControl>
 
             <FormControl fullWidth margin="dense">
-              <CarTypeList
-                label={strings.CAR_TYPE}
-                variant="standard"
-                required
-                onChange={handleCarTypeChange}
-              />
+              <CarTypeList label={strings.CAR_TYPE} variant="standard" required onChange={handleCarTypeChange} />
             </FormControl>
 
             <FormControl fullWidth margin="dense">
-              <GearboxList
-                label={strings.GEARBOX}
-                variant="standard"
-                required
-                onChange={handleGearboxChange}
-              />
+              <GearboxList label={strings.GEARBOX} variant="standard" required onChange={handleGearboxChange} />
             </FormControl>
 
             <FormControl fullWidth margin="dense">
-              <SeatsList
-                label={strings.SEATS}
-                variant="standard"
-                required
-                onChange={handleSeatsChange}
-              />
+              <SeatsList label={strings.SEATS} variant="standard" required onChange={handleSeatsChange} />
             </FormControl>
 
             <FormControl fullWidth margin="dense">
-              <DoorsList
-                label={strings.DOORS}
-                variant="standard"
-                required
-                onChange={handleDoorsChange}
-              />
+              <DoorsList label={strings.DOORS} variant="standard" required onChange={handleDoorsChange} />
             </FormControl>
 
             <FormControl fullWidth margin="dense">
-              <FuelPolicyList
-                label={csStrings.FUEL_POLICY}
-                variant="standard"
-                required
-                onChange={handleFuelPolicyChange}
-              />
+              <FuelPolicyList label={csStrings.FUEL_POLICY} variant="standard" required onChange={handleFuelPolicyChange} />
             </FormControl>
 
             <div className="info">
@@ -453,13 +399,7 @@ const CreateCar = () => {
 
             <FormControl fullWidth margin="dense" className="checkbox-fc">
               <FormControlLabel
-                control={
-                  <Switch
-                    checked={aircon}
-                    onChange={handleAirconChange}
-                    color="primary"
-                  />
-                }
+                control={<Switch checked={aircon} onChange={handleAirconChange} color="primary" />}
                 label={strings.AIRCON}
                 className="checkbox-fcl"
               />
@@ -575,12 +515,7 @@ const CreateCar = () => {
             </FormControl>
 
             <div className="buttons">
-              <Button
-                type="submit"
-                variant="contained"
-                className="btn-primary btn-margin-bottom"
-                size="small"
-              >
+              <Button type="submit" variant="contained" className="btn-primary btn-margin-bottom" size="small">
                 {commonStrings.CREATE}
               </Button>
               <Button
@@ -600,9 +535,7 @@ const CreateCar = () => {
 
             <div className="form-error">
               {imageError && <Error message={commonStrings.IMAGE_REQUIRED} />}
-              {imageSizeError && (
-                <Error message={strings.CAR_IMAGE_SIZE_ERROR} />
-              )}
+              {imageSizeError && <Error message={strings.CAR_IMAGE_SIZE_ERROR} />}
               {formError && <Error message={commonStrings.FORM_ERROR} />}
             </div>
           </form>

@@ -19,6 +19,7 @@ const strings = new LocalizedStrings({
     AIRCON: "Climatisation",
     MINIMUM_AGE: "Âge minimum",
     MINIMUM_AGE_NOT_VALID: `L'âge minimum doit être supérieur ou égal à ${env.MINIMUM_AGE} ans.`,
+    INVENTORY: "Inventory",
   },
   en: {
     NEW_CAR_HEADING: "New car",
@@ -36,6 +37,7 @@ const strings = new LocalizedStrings({
     AIRCON: "Aircon",
     MINIMUM_AGE: "Minimum age",
     MINIMUM_AGE_NOT_VALID: `Minimum age must be greater than or equal to ${env.MINIMUM_AGE} years old.`,
+    INVENTORY: "Inventory",
   },
   es: {
     NEW_CAR_HEADING: "Nuevo vehículo",
@@ -53,6 +55,7 @@ const strings = new LocalizedStrings({
     AIRCON: "Aire acondicionado",
     MINIMUM_AGE: "Edad mínima",
     MINIMUM_AGE_NOT_VALID: `La edad mínima debe ser mayor o igual a ${env.MINIMUM_AGE} años.`,
+    INVENTORY: "Inventario",
   },
 });
 

@@ -99,6 +99,7 @@ export const update = async (req: Request, res: Response) => {
         additionalDriver,
         homeDelivery,
         babyChair,
+        inventory,
       } = body;
 
       car.supplier = new mongoose.Types.ObjectId(supplier);
@@ -124,6 +125,7 @@ export const update = async (req: Request, res: Response) => {
       car.additionalDriver = additionalDriver;
       car.homeDelivery = homeDelivery;
       car.babyChair = babyChair;
+      car.inventory = inventory;
 
       await car.save();
       return res.json(car);
@@ -567,7 +569,9 @@ export const getFrontendCars = async (req: Request, res: Response) => {
     const size = Number.parseInt(req.params.size, 10);
     const suppliers = body.suppliers!.map((id) => new mongoose.Types.ObjectId(id));
     const pickupLocation = new mongoose.Types.ObjectId(body.pickupLocation);
-    const { carType, gearbox, mileage, fuelPolicy, deposit, carSpecs } = body;
+    const { carType, gearbox, mileage, fuelPolicy, deposit, carSpecs, from, to } = body;
+
+    console.log(from, to);
 
     const $match: mongoose.FilterQuery<any> = {
       $and: [{ supplier: { $in: suppliers } }, { locations: pickupLocation }, { available: true }, { type: { $in: carType } }, { gearbox: { $in: gearbox } }],
@@ -603,8 +607,8 @@ export const getFrontendCars = async (req: Request, res: Response) => {
       $match.$and!.push({ deposit: { $lte: deposit } });
     }
 
-    const fromDate = new Date("2024-08-13T00:00:00Z");
-    const toDate = new Date("2024-08-15T23:59:59Z");
+    const fromDate = from ? new Date(from) : new Date();
+    const toDate = to ? new Date(to) : new Date();
 
     const data = await Car.aggregate(
       [
@@ -654,7 +658,11 @@ export const getFrontendCars = async (req: Request, res: Response) => {
                   input: "$bookings",
                   as: "booking",
                   cond: {
-                    $and: [{ $lte: ["$$booking.from", toDate] }, { $gte: ["$$booking.to", fromDate] }],
+                    $and: [
+                      { $lte: ["$$booking.from", toDate] },
+                      { $gte: ["$$booking.to", fromDate] },
+                      { $ne: ["$$booking.status", bookcarsTypes.BookingStatus.Void] },
+                    ],
                   },
                 },
               },

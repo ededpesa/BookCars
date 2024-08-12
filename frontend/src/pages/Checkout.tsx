@@ -523,6 +523,13 @@ const Checkout = () => {
         }
       }
 
+      try {
+        await BookingService.checkAvailability({ car: car._id, from, to });
+      } catch (error) {
+        helper.error(null, "El vehiculo ya no se encuentra disponible.");
+        return;
+      }
+
       setLoading(true);
       setPaymentFailed(false);
 
@@ -670,6 +677,13 @@ const Checkout = () => {
       }
 
       if (!_dropOffLocation) {
+        setNoMatch(true);
+        return;
+      }
+
+      try {
+        await BookingService.checkAvailability({ car: _car._id, from: _from, to: _to });
+      } catch (error) {
         setNoMatch(true);
         return;
       }
@@ -916,7 +930,7 @@ const Checkout = () => {
                             {(emailInfo && strings.EMAIL_INFO) || ""}
                           </FormHelperText>
                         </FormControl>
-                        <FormControl fullWidth margin="dense">
+                        {/* <FormControl fullWidth margin="dense">
                           <InputLabel htmlFor="outlined-documentType-native-simple">{commonStrings.DOCUMENT_TYPE}</InputLabel>
                           <Select
                             native
@@ -931,7 +945,7 @@ const Checkout = () => {
                             <option value={1}>{commonStrings.IDENTIFICATION_CARD}</option>
                             <option value={2}>{commonStrings.PASSPORT}</option>
                           </Select>
-                        </FormControl>
+                        </FormControl> */}
                         <FormControl fullWidth margin="dense">
                           <InputLabel className="required">{commonStrings.PHONE}</InputLabel>
                           <OutlinedInput

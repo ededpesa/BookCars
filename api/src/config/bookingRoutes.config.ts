@@ -9,6 +9,7 @@ const routes = {
   getBookings: "/api/bookings/:page/:size/:language",
   hasBookings: "/api/has-bookings/:driver",
   cancelBooking: "/api/cancel-booking/:id",
+  checkAvailability: "/api/check-availability",
 };
 
 export default routes;

@@ -481,6 +481,7 @@ export interface Car extends Document {
   additionalDriver: number;
   homeDelivery: number;
   babyChair: number;
+  inventory: number;
 }
 
 /**

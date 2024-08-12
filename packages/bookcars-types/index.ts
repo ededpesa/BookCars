@@ -168,6 +168,7 @@ export interface CreateCarPayload {
   additionalDriver: number;
   homeDelivery: number;
   babyChair: number;
+  inventory: number;
 }
 
 export interface UpdateCarPayload extends CreateCarPayload {
@@ -190,6 +191,8 @@ export interface GetCarsPayload {
   deposit?: number;
   availability?: string[];
   pickupLocation?: string;
+  from?: Date;
+  to?: Date;
 }
 
 export interface SignUpPayload {
@@ -254,6 +257,12 @@ export interface ActivatePayload {
 
 export interface ValidateEmailPayload {
   email: string;
+}
+
+export interface CheckAvailabilityPayload {
+  car: string;
+  from: Date;
+  to: Date;
 }
 
 export interface SignInPayload {
@@ -378,6 +387,7 @@ export interface Car {
   additionalDriver: number;
   homeDelivery: number;
   babyChair: number;
+  inventory: number;
   [propKey: string]: any;
 }
 

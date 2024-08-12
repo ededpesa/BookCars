@@ -8,12 +8,8 @@ import * as UserService from "./UserService";
  * @param {bookcarsTypes.CheckoutPayload} data
  * @returns {Promise<number>}
  */
-export const checkout = (
-  data: bookcarsTypes.CheckoutPayload,
-): Promise<{ status: number; bookingId: string }> =>
-  axiosInstance
-    .post("/api/checkout", data)
-    .then((res) => ({ status: res.status, bookingId: res.data.bookingId }));
+export const checkout = (data: bookcarsTypes.CheckoutPayload): Promise<{ status: number; bookingId: string }> =>
+  axiosInstance.post("/api/checkout", data).then((res) => ({ status: res.status, bookingId: res.data.bookingId }));
 
 /**
  * Update a Booking.
@@ -21,12 +17,8 @@ export const checkout = (
  * @param {bookcarsTypes.UpsertBookingPayload} data
  * @returns {Promise<number>}
  */
-export const update = (
-  data: bookcarsTypes.UpsertBookingPayload,
-): Promise<number> =>
-  axiosInstance
-    .put("/api/update-booking", data, { withCredentials: true })
-    .then((res) => res.status);
+export const update = (data: bookcarsTypes.UpsertBookingPayload): Promise<number> =>
+  axiosInstance.put("/api/update-booking", data, { withCredentials: true }).then((res) => res.status);
 
 /**
  * Get bookings.
@@ -36,18 +28,8 @@ export const update = (
  * @param {number} size
  * @returns {Promise<bookcarsTypes.Result<bookcarsTypes.Booking>>}
  */
-export const getBookings = (
-  payload: bookcarsTypes.GetBookingsPayload,
-  page: number,
-  size: number,
-): Promise<bookcarsTypes.Result<bookcarsTypes.Booking>> =>
-  axiosInstance
-    .post(
-      `/api/bookings/${page}/${size}/${UserService.getLanguage()}`,
-      payload,
-      { withCredentials: true },
-    )
-    .then((res) => res.data);
+export const getBookings = (payload: bookcarsTypes.GetBookingsPayload, page: number, size: number): Promise<bookcarsTypes.Result<bookcarsTypes.Booking>> =>
+  axiosInstance.post(`/api/bookings/${page}/${size}/${UserService.getLanguage()}`, payload, { withCredentials: true }).then((res) => res.data);
 
 /**
  * Get a Booking by ID.
@@ -56,12 +38,7 @@ export const getBookings = (
  * @returns {Promise<bookcarsTypes.Booking>}
  */
 export const getBooking = (id: string): Promise<bookcarsTypes.Booking> =>
-  axiosInstance
-    .get(
-      `/api/booking/${encodeURIComponent(id)}/${UserService.getLanguage()}`,
-      { withCredentials: true },
-    )
-    .then((res) => res.data);
+  axiosInstance.get(`/api/booking/${encodeURIComponent(id)}/${UserService.getLanguage()}`, { withCredentials: true }).then((res) => res.data);
 
 /**
  * Cancel a Booking.
@@ -83,10 +60,14 @@ export const cancel = (id: string): Promise<number> =>
  * @param {string} sessionId
  * @returns {Promise<number>}
  */
-export const deleteTempBooking = (
-  bookingId: string,
-  sessionId: string,
-): Promise<number> =>
-  axiosInstance
-    .delete(`/api/delete-temp-booking/${bookingId}/${sessionId}`)
-    .then((res) => res.status);
+export const deleteTempBooking = (bookingId: string, sessionId: string): Promise<number> =>
+  axiosInstance.delete(`/api/delete-temp-booking/${bookingId}/${sessionId}`).then((res) => res.status);
+
+/**
+ * Check Booking availability.
+ *
+ * @param {bookcarsTypes.CheckAvailabilityPayload} data
+ * @returns {Promise<number>}
+ */
+export const checkAvailability = (data: bookcarsTypes.CheckAvailabilityPayload): Promise<number> =>
+  axiosInstance.post("/api/check-availability", data).then((exist) => exist.status);
