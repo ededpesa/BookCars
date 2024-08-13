@@ -89,6 +89,14 @@ export interface Booking {
   paymentIntentId?: string;
   customerId?: string;
   expireAt?: Date;
+  beneficiary?: BookingBeneficiary;
+}
+
+export interface BookingBeneficiary {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  birthDate?: Date;
 }
 
 export interface CheckoutPayload {

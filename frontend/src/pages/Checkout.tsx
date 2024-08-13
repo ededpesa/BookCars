@@ -534,6 +534,7 @@ const Checkout = () => {
       setPaymentFailed(false);
 
       let driver: bookcarsTypes.User | undefined;
+      let beneficiary: bookcarsTypes.BookingBeneficiary | undefined;
       let _additionalDriver: bookcarsTypes.AdditionalDriver | undefined;
 
       if (!authenticated) {
@@ -543,6 +544,14 @@ const Checkout = () => {
           fullName,
           birthDate,
           language: UserService.getLanguage(),
+        };
+      }
+      if (user?.type === bookcarsTypes.UserType.Enterprise) {
+        beneficiary = {
+          email,
+          phone,
+          fullName,
+          birthDate,
         };
       }
 
@@ -565,6 +574,7 @@ const Checkout = () => {
         fullInsurance,
         additionalDriver,
         price,
+        beneficiary,
       };
 
       if (adRequired && additionalDriver && addiontalDriverBirthDate) {
@@ -889,7 +899,7 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  {!authenticated && (
+                  {(!authenticated || user?.type === bookcarsTypes.UserType.Enterprise) && (
                     <div className="driver-details">
                       <div className="booking-info">
                         <DriverIcon />

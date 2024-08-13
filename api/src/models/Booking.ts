@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import validator from "validator";
 import * as bookcarsTypes from ":bookcars-types";
 import * as env from "../config/env.config";
 
@@ -122,6 +123,35 @@ const bookingSchema = new Schema<env.Booking>(
         expireAfterSeconds: env.BOOKING_EXPIRE_AT,
         background: true,
       },
+    },
+    beneficiary: {
+      fullName: {
+        type: String,
+        trim: true,
+      },
+      email: {
+        type: String,
+        lowercase: true,
+        validate: [validator.isEmail, "is not valid"],
+        trim: true,
+      },
+      phone: {
+        type: String,
+        validate: {
+          validator: (value: string) => {
+            // Check if value is empty then return true.
+            if (!value) {
+              return true;
+            }
+
+            // If value is empty will not validate for mobile phone.
+            return validator.isMobilePhone(value);
+          },
+          message: "{VALUE} is not valid",
+        },
+        trim: true,
+      },
+      birthDate: Date,
     },
   },
   {

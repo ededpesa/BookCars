@@ -446,6 +446,12 @@ export interface Booking extends Document {
   paymentIntentId?: string;
   customerId?: string;
   expireAt?: Date;
+  beneficiary?: {
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    birthDate?: Date;
+  };
 }
 
 /**

@@ -315,7 +315,7 @@ export const resend = async (req: Request, res: Response) => {
       if (
         ![bookcarsTypes.AppType.Frontend, bookcarsTypes.AppType.Backend].includes(type) ||
         (type === bookcarsTypes.AppType.Backend && user.type === bookcarsTypes.UserType.User) ||
-        (type === bookcarsTypes.AppType.Frontend && user.type !== bookcarsTypes.UserType.User)
+        (type === bookcarsTypes.AppType.Frontend && user.type !== bookcarsTypes.UserType.User && user.type !== bookcarsTypes.UserType.Enterprise)
       ) {
         return res.sendStatus(403);
       }
@@ -342,7 +342,7 @@ export const resend = async (req: Request, res: Response) => {
           ${i18n.t("HELLO")}${user.fullName},<br><br>  
           ${reset ? i18n.t("PASSWORD_RESET_LINK") : i18n.t("ACCOUNT_ACTIVATION_LINK")}<br><br>  
           ${helper.joinURL(
-            user.type === bookcarsTypes.UserType.User ? env.FRONTEND_HOST : env.BACKEND_HOST,
+            user.type === bookcarsTypes.UserType.User || user.type === bookcarsTypes.UserType.Enterprise ? env.FRONTEND_HOST : env.BACKEND_HOST,
             reset ? "reset-password" : "activate"
           )}/?u=${encodeURIComponent(user.id)}&e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(token.token)}<br><br>
           ${i18n.t("REGARDS")}<br>
@@ -382,7 +382,6 @@ export const activate = async (req: Request, res: Response) => {
 
     if (user) {
       const token = await Token.findOne({ user: userId, token: body.token });
-      console.log(token);
 
       if (token) {
         const salt = await bcrypt.genSalt(10);
@@ -397,7 +396,7 @@ export const activate = async (req: Request, res: Response) => {
         return res.sendStatus(200);
       }
     }
-
+    console.log(user);
     return res.sendStatus(204);
   } catch (err) {
     logger.error(`[user.activate] ${i18n.t("DB_ERROR")} ${userId}`, err);
@@ -433,7 +432,7 @@ export const signin = async (req: Request, res: Response) => {
       !user.password ||
       ![bookcarsTypes.AppType.Frontend, bookcarsTypes.AppType.Backend].includes(type) ||
       (type === bookcarsTypes.AppType.Backend && user.type === bookcarsTypes.UserType.User) ||
-      (type === bookcarsTypes.AppType.Frontend && user.type !== bookcarsTypes.UserType.User)
+      (type === bookcarsTypes.AppType.Frontend && user.type !== bookcarsTypes.UserType.User && user.type !== bookcarsTypes.UserType.Enterprise)
     ) {
       return res.sendStatus(204);
     }
@@ -1226,7 +1225,14 @@ export const getUsers = async (req: Request, res: Response) => {
             supplier: 1,
             email: 1,
             phone: 1,
-            fullName: 1,
+            // fullName: 1,
+            fullName: {
+              $cond: {
+                if: { $eq: ["$type", "enterprise"] },
+                then: "$enterprise.name",
+                else: "$fullName",
+              },
+            },
             verified: 1,
             language: 1,
             enableEmailNotifications: 1,
