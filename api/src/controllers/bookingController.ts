@@ -202,7 +202,7 @@ export const checkout = async (req: Request, res: Response) => {
           logger.error(message, body);
           return res.status(400).send(message);
         }
-
+        console.log(paymentIntentId);
         body.booking.paymentIntentId = paymentIntentId;
         body.booking.status = bookcarsTypes.BookingStatus.Paid;
       } else {
