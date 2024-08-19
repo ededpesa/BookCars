@@ -106,6 +106,7 @@ const bookingSchema = new Schema<env.Booking>(
       type: String,
       index: true,
     },
+    paymentType: String,
     paymentIntentId: {
       type: String,
     },

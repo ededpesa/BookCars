@@ -39,7 +39,8 @@ div.booking div.booking-info span {
 
 div.booking div.booking-options-container,
 div.booking div.booking-details-container,
-div.booking div.payment-options-container {
+div.booking div.payment-options-container,
+div.booking div.payment-wallet-container {
   background: #fbfbfb;
   border: 1px solid #d9d8d9;
   border-radius: 5px;
@@ -57,6 +58,31 @@ div.booking div.payment-options span.payment-info {
   margin-left: 10px;
   color: rgb(0 0 0 / 55%);
   font-size: 13px;
+}
+
+div.wallet-payment-body {
+  display: flex;
+  justify-content: center;
+}
+
+div.wallet-form {
+  padding: 10px;
+}
+
+span.copy-link {
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+svg.copy-icon {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+div.mobile-payment-container {
+  display: flex;
+  justify-content: center;
 }
 
 @media only screen and (width <=960px) {
@@ -217,7 +243,14 @@ div.booking .btn-cancel {
     width: 800px;
   }
 
-  div.booking div.driver-details-form {
+  div.booking div.driver-details-form,
+  div.mobile-payment-form {
     width: 390px;
+  }
+}
+
+@media only screen and (width < 576px) {
+  div.wallet-payment-body {
+    flex-wrap: wrap;
   }
 }

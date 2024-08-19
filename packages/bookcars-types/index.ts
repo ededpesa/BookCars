@@ -106,6 +106,7 @@ export interface CheckoutPayload {
   payLater?: boolean;
   sessionId?: string;
   paymentIntentId?: string;
+  paymentType?: string;
   customerId?: string;
 }
 
@@ -367,6 +368,13 @@ export interface Location {
   _id: string;
   name?: string;
   values?: LocationValue[];
+}
+
+export interface MobilePaymentPayload {
+  reference?: string;
+  date?: Date;
+  phone?: string;
+  bankId?: string;
 }
 
 export interface Car {

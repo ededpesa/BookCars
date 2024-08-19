@@ -443,6 +443,7 @@ export interface Booking extends Document {
   cancelRequest?: boolean;
   price: number;
   sessionId?: string;
+  paymentType?: string;
   paymentIntentId?: string;
   customerId?: string;
   expireAt?: Date;
