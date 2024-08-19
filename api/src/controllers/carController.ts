@@ -76,7 +76,7 @@ export const update = async (req: Request, res: Response) => {
 
     if (car) {
       const {
-        supplier,
+        suppliers,
         name,
         minimumAge,
         available,
@@ -99,10 +99,14 @@ export const update = async (req: Request, res: Response) => {
         additionalDriver,
         homeDelivery,
         babyChair,
-        inventory,
+        // inventory,
       } = body;
 
-      car.supplier = new mongoose.Types.ObjectId(supplier);
+      // car.supplier = new mongoose.Types.ObjectId(supplier);
+      // eslint-disable-next-line arrow-body-style
+      car.suppliers = suppliers?.map((c) => {
+        return { supplier: new mongoose.Types.ObjectId(c.supplier), inventory: c.inventory };
+      });
       car.minimumAge = minimumAge;
       car.locations = locations.map((l) => new mongoose.Types.ObjectId(l));
       car.name = name;
@@ -125,7 +129,7 @@ export const update = async (req: Request, res: Response) => {
       car.additionalDriver = additionalDriver;
       car.homeDelivery = homeDelivery;
       car.babyChair = babyChair;
-      car.inventory = inventory;
+      // car.inventory = inventory;
 
       await car.save();
       return res.json(car);

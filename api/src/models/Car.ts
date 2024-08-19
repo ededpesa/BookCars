@@ -16,6 +16,21 @@ const carSchema = new Schema<env.Car>(
       ref: "User",
       index: true,
     },
+    suppliers: [
+      {
+        supplier: {
+          type: Schema.Types.ObjectId,
+          required: [true, "can't be blank"],
+          ref: "User",
+          index: true,
+        },
+        inventory: {
+          type: Number,
+          required: true,
+          min: [0, "Inventory can't be negative"],
+        },
+      },
+    ],
     minimumAge: {
       type: Number,
       required: [true, "can't be blank"],
@@ -127,7 +142,7 @@ const carSchema = new Schema<env.Car>(
     },
     inventory: {
       type: Number,
-      required: [true, "can't be blank"],
+      // required: [true, "can't be blank"],
     },
   },
   {

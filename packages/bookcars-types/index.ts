@@ -145,7 +145,8 @@ export interface UpdateSupplierPayload {
 
 export interface CreateCarPayload {
   name: string;
-  supplier: string;
+  // supplier: string;
+  suppliers?: { supplier: string; inventory: number }[];
   minimumAge: number;
   locations: string[];
   price: number;
@@ -168,7 +169,7 @@ export interface CreateCarPayload {
   additionalDriver: number;
   homeDelivery: number;
   babyChair: number;
-  inventory: number;
+  inventory?: number;
 }
 
 export interface UpdateCarPayload extends CreateCarPayload {

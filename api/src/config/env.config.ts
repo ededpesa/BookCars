@@ -459,6 +459,7 @@ export interface Booking extends Document {
 export interface Car extends Document {
   name: string;
   supplier: Types.ObjectId;
+  suppliers?: { supplier: Types.ObjectId; inventory: number }[];
   minimumAge: number;
   locations: Types.ObjectId[];
   price: number;
