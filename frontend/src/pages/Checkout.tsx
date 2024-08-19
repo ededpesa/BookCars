@@ -1236,10 +1236,10 @@ const Checkout = () => {
                       <div className="mobile-payment-container">
                         <div className="mobile-payment-form">
                           <FormControl fullWidth margin="dense">
-                            <InputLabel className="required">Número de referencia</InputLabel>
+                            <InputLabel className="required">{strings.REFERENCE_NUMBER}</InputLabel>
                             <OutlinedInput
                               type="text"
-                              label={"Número de referencia"}
+                              label={strings.REFERENCE_NUMBER}
                               required
                               onChange={(e) => {
                                 setMobilePaymentPayload((data: bookcarsTypes.MobilePaymentPayload | null) => {
@@ -1251,7 +1251,7 @@ const Checkout = () => {
                           </FormControl>
                           <FormControl fullWidth margin="dense">
                             <DatePicker
-                              label={commonStrings.BIRTH_DATE}
+                              label={strings.PAYMENT_DATE}
                               variant="outlined"
                               required
                               onChange={(_date) => {
@@ -1267,6 +1267,24 @@ const Checkout = () => {
                             />
                             <FormHelperText error={!addiontalDriverBirthDateValid}>
                               {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}
+                            </FormHelperText>
+                          </FormControl>
+                          <FormControl fullWidth margin="dense">
+                            <InputLabel className="required">{commonStrings.PHONE}</InputLabel>
+                            <OutlinedInput
+                              type="text"
+                              label={commonStrings.PHONE}
+                              error={!addiontalDriverPhoneValid}
+                              onChange={(e) => {
+                                setMobilePaymentPayload((data: bookcarsTypes.MobilePaymentPayload | null) => {
+                                  return { ...data, phone: e.target.value };
+                                });
+                              }}
+                              required
+                              autoComplete="off"
+                            />
+                            <FormHelperText error={!addiontalDriverPhoneValid}>
+                              {(!addiontalDriverPhoneValid && commonStrings.PHONE_NOT_VALID) || ""}
                             </FormHelperText>
                           </FormControl>
                           <FormControl fullWidth margin="dense">
@@ -1290,29 +1308,6 @@ const Checkout = () => {
                             />
                             <FormHelperText error={!addiontalDriverEmailValid}>
                               {(!addiontalDriverEmailValid && commonStrings.EMAIL_NOT_VALID) || ""}
-                            </FormHelperText>
-                          </FormControl>
-                          <FormControl fullWidth margin="dense">
-                            <InputLabel className="required">{commonStrings.PHONE}</InputLabel>
-                            <OutlinedInput
-                              type="text"
-                              label={commonStrings.PHONE}
-                              error={!addiontalDriverPhoneValid}
-                              onBlur={(e) => {
-                                _validatePhone(e.target.value);
-                              }}
-                              onChange={(e) => {
-                                setAddiontalDriverPhone(e.target.value);
-
-                                if (!e.target.value) {
-                                  setAddiontalDriverPhoneValid(true);
-                                }
-                              }}
-                              required={adRequired}
-                              autoComplete="off"
-                            />
-                            <FormHelperText error={!addiontalDriverPhoneValid}>
-                              {(!addiontalDriverPhoneValid && commonStrings.PHONE_NOT_VALID) || ""}
                             </FormHelperText>
                           </FormControl>
                         </div>
