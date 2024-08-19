@@ -20,15 +20,7 @@ import * as bookingController from "./bookingController";
  * @returns {unknown}
  */
 export const createCheckoutSession = async (req: Request, res: Response) => {
-  const {
-    amount,
-    currency,
-    locale,
-    receiptEmail,
-    name,
-    description,
-    customerName,
-  }: bookcarsTypes.CreatePaymentPayload = req.body;
+  const { amount, currency, locale, receiptEmail, name, description, customerName }: bookcarsTypes.CreatePaymentPayload = req.body;
 
   try {
     //
@@ -49,9 +41,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
     //
     // 2. Create checkout session
     //
-    const expireAt = Math.floor(
-      Date.now() / 1000 + env.STRIPE_SESSION_EXPIRE_AT,
-    );
+    const expireAt = Math.floor(Date.now() / 1000 + env.STRIPE_SESSION_EXPIRE_AT);
 
     const session = await stripeAPI.checkout.sessions.create({
       ui_mode: "embedded",
@@ -108,10 +98,7 @@ export const checkCheckoutSession = async (req: Request, res: Response) => {
     try {
       session = await stripeAPI.checkout.sessions.retrieve(sessionId);
     } catch (err) {
-      logger.error(
-        `[stripe.checkCheckoutSession] retrieve session error: ${sessionId}`,
-        err,
-      );
+      logger.error(`[stripe.checkCheckoutSession] retrieve session error: ${sessionId}`, err);
     }
 
     if (!session) {
@@ -199,13 +186,7 @@ export const checkCheckoutSession = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const createPaymentIntent = async (req: Request, res: Response) => {
-  const {
-    amount,
-    currency,
-    receiptEmail,
-    description,
-    customerName,
-  }: bookcarsTypes.CreatePaymentPayload = req.body;
+  const { amount, currency, receiptEmail, description, customerName }: bookcarsTypes.CreatePaymentPayload = req.body;
 
   try {
     //
