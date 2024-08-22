@@ -4,6 +4,7 @@ import { v1 as uuid } from "uuid";
 import escapeStringRegexp from "escape-string-regexp";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
+import CarSupplier from "src/models/CarSupplier";
 import * as bookcarsTypes from ":bookcars-types";
 import Booking from "../models/Booking";
 import Car from "../models/Car";
@@ -56,6 +57,61 @@ export const create = async (req: Request, res: Response) => {
 };
 
 /**
+ * Validate car assign.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const validateAssign = async (req: Request, res: Response) => {
+  const { body }: { body: bookcarsTypes.ValidateCarAssignPayload } = req;
+  const { car, supplier } = body;
+
+  try {
+    const exists = await CarSupplier.exists({ supplier, car, status: { $ne: bookcarsTypes.CarStatus.Deleted } });
+
+    if (exists) {
+      return res.sendStatus(204);
+    }
+
+    return res.sendStatus(200);
+  } catch (err) {
+    logger.error(`[car.validateAssign] ${i18n.t("DB_ERROR")} ${{ car, supplier }}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};
+
+/**
+ * Assign a Car.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const assign = async (req: Request, res: Response) => {
+  const { body }: { body: bookcarsTypes.AssignCarPayload } = req;
+
+  try {
+    if (await CarSupplier.exists({ supplier: body.supplier, car: body.car, status: { $ne: bookcarsTypes.CarStatus.Deleted } })) {
+      logger.error(`[car.assign] ${i18n.t("CAR_ALREADY_ASSIGNED")} ${JSON.stringify(body)}`);
+      return res.status(400).send(i18n.t("CAR_ALREADY_ASSIGNED"));
+    }
+
+    const carSupplier = new CarSupplier(body);
+    await carSupplier.save();
+    await carSupplier.save();
+    return res.json(carSupplier);
+  } catch (err) {
+    logger.error(`[car.assign] ${i18n.t("DB_ERROR")} ${JSON.stringify(body)}`, err);
+    return res.status(400).send(i18n.t("ERROR") + err);
+  }
+};
+
+/**
  * Update a Car.
  *
  * @export
@@ -76,59 +132,59 @@ export const update = async (req: Request, res: Response) => {
 
     if (car) {
       const {
-        suppliers,
+        // suppliers,
         name,
         minimumAge,
-        available,
+        // available,
         type,
-        locations,
-        price,
-        deposit,
+        // locations,
+        // price,
+        // deposit,
         seats,
         doors,
         aircon,
         gearbox,
-        fuelPolicy,
-        mileage,
-        cancellation,
-        // amendments,
-        gps,
-        theftProtection,
-        collisionDamageWaiver,
-        fullInsurance,
-        additionalDriver,
-        homeDelivery,
-        babyChair,
+        // fuelPolicy,
+        // mileage,
+        // cancellation,
+        // // amendments,
+        // gps,
+        // theftProtection,
+        // collisionDamageWaiver,
+        // fullInsurance,
+        // additionalDriver,
+        // homeDelivery,
+        // babyChair,
         // inventory,
       } = body;
 
       // car.supplier = new mongoose.Types.ObjectId(supplier);
       // eslint-disable-next-line arrow-body-style
-      car.suppliers = suppliers?.map((c) => {
-        return { supplier: new mongoose.Types.ObjectId(c.supplier), inventory: c.inventory };
-      });
+      // car.suppliers = suppliers?.map((c) => {
+      //   return { supplier: new mongoose.Types.ObjectId(c.supplier), inventory: c.inventory };
+      // });
       car.minimumAge = minimumAge;
-      car.locations = locations.map((l) => new mongoose.Types.ObjectId(l));
+      // car.locations = locations.map((l) => new mongoose.Types.ObjectId(l));
       car.name = name;
-      car.available = available;
+      // car.available = available;
       car.type = type as bookcarsTypes.CarType;
-      car.price = price;
-      car.deposit = deposit;
+      // car.price = price;
+      // car.deposit = deposit;
       car.seats = seats;
       car.doors = doors;
       car.aircon = aircon;
       car.gearbox = gearbox as bookcarsTypes.GearboxType;
-      car.fuelPolicy = fuelPolicy as bookcarsTypes.FuelPolicy;
-      car.mileage = mileage;
-      car.cancellation = cancellation;
+      // car.fuelPolicy = fuelPolicy as bookcarsTypes.FuelPolicy;
+      // car.mileage = mileage;
+      // car.cancellation = cancellation;
       // car.amendments = amendments;
-      car.gps = gps;
-      car.theftProtection = theftProtection;
-      car.collisionDamageWaiver = collisionDamageWaiver;
-      car.fullInsurance = fullInsurance;
-      car.additionalDriver = additionalDriver;
-      car.homeDelivery = homeDelivery;
-      car.babyChair = babyChair;
+      // car.gps = gps;
+      // car.theftProtection = theftProtection;
+      // car.collisionDamageWaiver = collisionDamageWaiver;
+      // car.fullInsurance = fullInsurance;
+      // car.additionalDriver = additionalDriver;
+      // car.homeDelivery = homeDelivery;
+      // car.babyChair = babyChair;
       // car.inventory = inventory;
 
       await car.save();
@@ -350,11 +406,59 @@ export const deleteTempImage = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const getCar = async (req: Request, res: Response) => {
-  const { id, language } = req.params;
+  const { id } = req.params;
 
   try {
     const car = await Car.findById(id)
+      // .populate<{ supplier: env.UserInfo }>("supplier")
+      // .populate<{ locations: env.LocationInfo[] }>({
+      //   path: "locations",
+      //   populate: {
+      //     path: "values",
+      //     model: "LocationValue",
+      //   },
+      // })
+      .lean();
+
+    if (car) {
+      // const { _id, fullName, avatar, payLater } = car.supplier;
+      // car.supplier = {
+      //   _id,
+      //   fullName,
+      //   avatar,
+      //   payLater,
+      // };
+
+      // for (const location of car.locations) {
+      //   location.name = location.values.filter((value) => value.language === language)[0].value;
+      // }
+
+      return res.json(car);
+    }
+    logger.error("[car.getCar] Car not found:", id);
+    return res.sendStatus(204);
+  } catch (err) {
+    logger.error(`[car.getCar] ${i18n.t("DB_ERROR")} ${id}`, err);
+    return res.status(400).send(i18n.t("ERROR") + err);
+  }
+};
+
+/**
+ * Get a Car by ID.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const getCarSupplier = async (req: Request, res: Response) => {
+  const { id, language } = req.params;
+
+  try {
+    const carSupplier = await CarSupplier.findById(id)
       .populate<{ supplier: env.UserInfo }>("supplier")
+      .populate<{ car: env.CarInfo }>("car")
       .populate<{ locations: env.LocationInfo[] }>({
         path: "locations",
         populate: {
@@ -364,20 +468,26 @@ export const getCar = async (req: Request, res: Response) => {
       })
       .lean();
 
-    if (car) {
-      const { _id, fullName, avatar, payLater } = car.supplier;
-      car.supplier = {
+    if (carSupplier) {
+      const { _id, fullName, avatar, payLater } = carSupplier.supplier;
+      carSupplier.supplier = {
         _id,
         fullName,
         avatar,
         payLater,
       };
 
-      for (const location of car.locations) {
+      carSupplier.car = {
+        _id: carSupplier.car._id,
+        name: carSupplier.car.name,
+        image: carSupplier.car.image,
+      };
+
+      for (const location of carSupplier.locations) {
         location.name = location.values.filter((value) => value.language === language)[0].value;
       }
 
-      return res.json(car);
+      return res.json(carSupplier);
     }
     logger.error("[car.getCar] Car not found:", id);
     return res.sendStatus(204);
@@ -401,18 +511,26 @@ export const getCars = async (req: Request, res: Response) => {
     const { body }: { body: bookcarsTypes.GetCarsPayload } = req;
     const page = Number.parseInt(req.params.page, 10);
     const size = Number.parseInt(req.params.size, 10);
-    const suppliers = body.suppliers!.map((id) => new mongoose.Types.ObjectId(id));
-    const { carType, gearbox, mileage, deposit, availability, fuelPolicy, carSpecs } = body;
+    // const suppliers = body.suppliers!.map((id) => new mongoose.Types.ObjectId(id));
+    const {
+      carType,
+      gearbox,
+      // mileage, deposit, availability, fuelPolicy,
+      carSpecs,
+    } = body;
     const keyword = escapeStringRegexp(String(req.query.s || ""));
     const options = "i";
 
     const $match: mongoose.FilterQuery<any> = {
-      $and: [{ name: { $regex: keyword, $options: options } }, { supplier: { $in: suppliers } }],
+      $and: [
+        { name: { $regex: keyword, $options: options } },
+        // { supplier: { $in: suppliers } }
+      ],
     };
 
-    if (fuelPolicy) {
-      $match.$and!.push({ fuelPolicy: { $in: fuelPolicy } });
-    }
+    // if (fuelPolicy) {
+    //   $match.$and!.push({ fuelPolicy: { $in: fuelPolicy } });
+    // }
 
     if (carSpecs) {
       if (typeof carSpecs.aircon !== "undefined") {
@@ -434,48 +552,71 @@ export const getCars = async (req: Request, res: Response) => {
       $match.$and!.push({ gearbox: { $in: gearbox } });
     }
 
-    if (mileage) {
-      if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Limited) {
-        $match.$and!.push({ mileage: { $gt: -1 } });
-      } else if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Unlimited) {
-        $match.$and!.push({ mileage: -1 });
-      } else if (mileage.length === 0) {
-        return res.json([{ resultData: [], pageInfo: [] }]);
-      }
-    }
+    // if (mileage) {
+    //   if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Limited) {
+    //     $match.$and!.push({ mileage: { $gt: -1 } });
+    //   } else if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Unlimited) {
+    //     $match.$and!.push({ mileage: -1 });
+    //   } else if (mileage.length === 0) {
+    //     return res.json([{ resultData: [], pageInfo: [] }]);
+    //   }
+    // }
 
-    if (deposit && deposit > -1) {
-      $match.$and!.push({ deposit: { $lte: deposit } });
-    }
+    // if (deposit && deposit > -1) {
+    //   $match.$and!.push({ deposit: { $lte: deposit } });
+    // }
 
-    if (Array.isArray(availability)) {
-      if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Available) {
-        $match.$and!.push({ available: true });
-      } else if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Unavailable) {
-        $match.$and!.push({ available: false });
-      } else if (availability.length === 0) {
-        return res.json([{ resultData: [], pageInfo: [] }]);
-      }
-    }
+    // if (Array.isArray(availability)) {
+    //   if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Available) {
+    //     $match.$and!.push({ available: true });
+    //   } else if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Unavailable) {
+    //     $match.$and!.push({ available: false });
+    //   } else if (availability.length === 0) {
+    //     return res.json([{ resultData: [], pageInfo: [] }]);
+    //   }
+    // }
 
     const data = await Car.aggregate(
       [
         { $match },
-        {
-          $lookup: {
-            from: "User",
-            let: { userId: "$supplier" },
-            pipeline: [
-              {
-                $match: {
-                  $expr: { $eq: ["$_id", "$$userId"] },
-                },
-              },
-            ],
-            as: "supplier",
-          },
-        },
-        { $unwind: { path: "$supplier", preserveNullAndEmptyArrays: false } },
+        // {
+        //   $lookup: {
+        //     from: "User",
+        //     let: { userId: "$supplier" },
+        //     pipeline: [
+        //       {
+        //         $match: {
+        //           $expr: { $eq: ["$_id", "$$userId"] },
+        //         },
+        //       },
+        //     ],
+        //     as: "supplier",
+        //   },
+        // },
+        // {
+        //   $lookup: {
+        //     from: "CarSupplier",
+        //     localField: "_id",
+        //     foreignField: "car",
+        //     as: "carSuppliers",
+        //   },
+        // },
+        // { $unwind: { path: "$carSuppliers", preserveNullAndEmptyArrays: false } },
+        // {
+        //   $lookup: {
+        //     from: "User",
+        //     let: { userId: "$carSuppliers.supplier" },
+        //     pipeline: [
+        //       {
+        //         $match: {
+        //           $expr: { $eq: ["$_id", "$$userId"] },
+        //         },
+        //       },
+        //     ],
+        //     as: "supplier",
+        //   },
+        // },
+        // { $unwind: { path: "$supplier", preserveNullAndEmptyArrays: false } },
         // {
         //   $lookup: {
         //     from: 'Location',
@@ -505,14 +646,202 @@ export const getCars = async (req: Request, res: Response) => {
       { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
     );
 
-    for (const car of data[0].resultData) {
-      const { _id, fullName, avatar } = car.supplier;
-      car.supplier = { _id, fullName, avatar };
-    }
+    // for (const car of data[0].resultData) {
+    //   const { _id, fullName, avatar } = car.supplier;
+    //   car.supplier = { _id, fullName, avatar };
+    // }
 
     return res.json(data);
   } catch (err) {
     logger.error(`[car.getCars] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};
+
+/**
+ * Get Cars.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const getSupplierCars = async (req: Request, res: Response) => {
+  try {
+    const { body }: { body: bookcarsTypes.GetCarsPayload } = req;
+    const page = Number.parseInt(req.params.page, 10);
+    const size = Number.parseInt(req.params.size, 10);
+    const suppliers = body.suppliers!.map((id) => new mongoose.Types.ObjectId(id));
+    const {
+      carType,
+      gearbox,
+      // mileage, deposit, availability, fuelPolicy,
+      carSpecs,
+    } = body;
+    const keyword = escapeStringRegexp(String(req.query.s || "optra"));
+    const options = "i";
+
+    const $match: mongoose.FilterQuery<any> = {
+      $and: [
+        { name: { $regex: keyword, $options: options } },
+        {
+          carSuppliers: {
+            $elemMatch: { supplier: { $in: suppliers } }, // Filtrado dentro del arreglo `carSuppliers`
+          },
+        },
+      ],
+    };
+
+    // if (fuelPolicy) {
+    //   $match.$and!.push({ fuelPolicy: { $in: fuelPolicy } });
+    // }
+
+    if (carSpecs) {
+      if (typeof carSpecs.aircon !== "undefined") {
+        $match.$and!.push({ aircon: carSpecs.aircon });
+      }
+      if (typeof carSpecs.moreThanFourDoors !== "undefined") {
+        $match.$and!.push({ doors: { $gt: 4 } });
+      }
+      if (typeof carSpecs.moreThanFiveSeats !== "undefined") {
+        $match.$and!.push({ seats: { $gt: 5 } });
+      }
+    }
+
+    if (carType) {
+      $match.$and!.push({ type: { $in: carType } });
+    }
+
+    if (gearbox) {
+      $match.$and!.push({ gearbox: { $in: gearbox } });
+    }
+
+    // if (mileage) {
+    //   if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Limited) {
+    //     $match.$and!.push({ mileage: { $gt: -1 } });
+    //   } else if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Unlimited) {
+    //     $match.$and!.push({ mileage: -1 });
+    //   } else if (mileage.length === 0) {
+    //     return res.json([{ resultData: [], pageInfo: [] }]);
+    //   }
+    // }
+
+    // if (deposit && deposit > -1) {
+    //   $match.$and!.push({ deposit: { $lte: deposit } });
+    // }
+
+    // if (Array.isArray(availability)) {
+    //   if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Available) {
+    //     $match.$and!.push({ available: true });
+    //   } else if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Unavailable) {
+    //     $match.$and!.push({ available: false });
+    //   } else if (availability.length === 0) {
+    //     return res.json([{ resultData: [], pageInfo: [] }]);
+    //   }
+    // }
+
+    const data = await CarSupplier.aggregate(
+      [
+        {
+          $match: {
+            supplier: { $in: suppliers }, // Filtrar por suppliers
+            status: { $ne: bookcarsTypes.CarStatus.Deleted },
+          },
+        },
+        {
+          $lookup: {
+            from: "Car", // Unir con la colección Car
+            localField: "car", // Campo en CarSupplier
+            foreignField: "_id", // Campo en Car
+            as: "carDetails", // Resultado del lookup
+          },
+        },
+        { $unwind: "$carDetails" }, // Desenrollar el array carDetails para acceder a los campos directamente
+        {
+          $addFields: {
+            name: "$carDetails.name",
+            image: "$carDetails.image",
+            type: "$carDetails.type",
+            gearbox: "$carDetails.gearbox",
+            aircon: "$carDetails.aircon",
+            seats: "$carDetails.seats",
+            doors: "$carDetails.doors",
+          },
+        },
+        {
+          $unset: "carDetails", // Eliminar el campo 'carDetails' del resultado final
+        },
+        // {
+        //   $project: {
+        //     _id: 1,
+        //     supplier: 1,
+        //     price: 1,
+        //     deposit: 1,
+        //     "carDetails.name": 1, // Proyectar campos de Car
+        //     "carDetails.image": 1,
+        //     "carDetails.someOtherField": 1, // Otros campos que necesites de Car
+        //   },
+        // },
+        {
+          $facet: {
+            resultData: [{ $sort: { "carDetails.updatedAt": -1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
+            pageInfo: [
+              {
+                $count: "totalRecords",
+              },
+            ],
+          },
+        },
+      ],
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
+    );
+    console.log(suppliers);
+    console.log(data[0].resultData[0]);
+    // for (const car of data[0].resultData) {
+    //   const { _id, fullName, avatar } = car.supplier;
+    //   car.supplier = { _id, fullName, avatar };
+    // }
+    return res.json(data);
+  } catch (err) {
+    logger.error(`[car.getCars] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};
+
+/**
+ * Get Model Cars.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const getModelCars = async (req: Request, res: Response) => {
+  try {
+    const keyword = escapeStringRegexp(String(req.query.s || ""));
+    const options = "i";
+    const page = Number.parseInt(req.params.page, 10);
+    const size = Number.parseInt(req.params.size, 10);
+
+    const cars = await Car.aggregate(
+      [
+        {
+          $match: {
+            $and: [{ name: { $regex: keyword, $options: options } }],
+          },
+        },
+        { $sort: { name: 1, _id: 1 } },
+        { $skip: (page - 1) * size },
+        { $limit: size },
+      ],
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
+    );
+
+    return res.json(cars);
+  } catch (err) {
+    logger.error(`[car.getBookingCars] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };

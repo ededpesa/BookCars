@@ -54,6 +54,14 @@ div.supplier {
   margin-left: 5px;
 }
 
+.assign-button-div {
+  margin: 10px 10px 0;
+}
+
+.assign-button-div > a {
+  width: 100%;
+}
+
 /* Device width is less than or equal to 960px */
 
 @media only screen and (width <=960px) {

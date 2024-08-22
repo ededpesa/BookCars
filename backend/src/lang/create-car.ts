@@ -5,6 +5,8 @@ import * as langHelper from "../common/langHelper";
 const strings = new LocalizedStrings({
   fr: {
     NEW_CAR_HEADING: "Nouvelle voiture",
+    ASSIGN_CAR: "Assign car",
+    EDIT: "Edit",
     NAME: "Nom",
     CAR_IMAGE_SIZE_ERROR: `L'image doit être au format ${env.CAR_IMAGE_WIDTH}x${env.CAR_IMAGE_HEIGHT}`,
     RECOMMENDED_IMAGE_SIZE: `Taille d'image recommandée : ${env.CAR_IMAGE_WIDTH}x${env.CAR_IMAGE_HEIGHT}`,
@@ -23,6 +25,8 @@ const strings = new LocalizedStrings({
   },
   en: {
     NEW_CAR_HEADING: "New car",
+    ASSIGN_CAR: "Assign car",
+    EDIT: "Edit",
     NAME: "Name",
     CAR_IMAGE_SIZE_ERROR: `The image must be in the format ${env.CAR_IMAGE_WIDTH}x${env.CAR_IMAGE_HEIGHT}`,
     RECOMMENDED_IMAGE_SIZE: `Recommended image size: ${env.CAR_IMAGE_WIDTH}x${env.CAR_IMAGE_HEIGHT}`,
@@ -41,6 +45,8 @@ const strings = new LocalizedStrings({
   },
   es: {
     NEW_CAR_HEADING: "Nuevo vehículo",
+    ASSIGN_CAR: "Asignar vehículo",
+    EDIT: "Editar",
     NAME: "Nombre",
     CAR_IMAGE_SIZE_ERROR: `La imagen debe tener formato ${env.CAR_IMAGE_WIDTH}x${env.CAR_IMAGE_HEIGHT}`,
     RECOMMENDED_IMAGE_SIZE: `Tamaño de imagen recomendado: ${env.CAR_IMAGE_WIDTH}x${env.CAR_IMAGE_HEIGHT}`,

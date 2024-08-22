@@ -224,30 +224,30 @@ const CreateCar = () => {
 
       const data = {
         name,
-        supplier,
+        //supplier,
         minimumAge: Number.parseInt(minimumAge, 10),
-        locations: locations.map((l) => l._id),
-        price: Number(price),
-        deposit: Number(deposit),
-        available,
+        //locations: locations.map((l) => l._id),
+        //price: Number(price),
+        //deposit: Number(deposit),
+        //available,
         type,
         gearbox,
         aircon,
         image,
         seats: Number.parseInt(seats, 10),
         doors: Number.parseInt(doors, 10),
-        fuelPolicy,
-        mileage: extraToNumber(mileage),
-        cancellation: extraToNumber(cancellation),
+        //fuelPolicy,
+        // mileage: extraToNumber(mileage),
+        // cancellation: extraToNumber(cancellation),
         // amendments: extraToNumber(amendments),
-        gps: extraToNumber(gps),
-        homeDelivery: extraToNumber(homeDelivery),
-        babyChair: extraToNumber(babyChair),
-        theftProtection: extraToNumber(theftProtection),
-        collisionDamageWaiver: extraToNumber(collisionDamageWaiver),
-        fullInsurance: extraToNumber(fullInsurance),
-        additionalDriver: extraToNumber(additionalDriver),
-        inventory: Number(inventory),
+        // gps: extraToNumber(gps),
+        // homeDelivery: extraToNumber(homeDelivery),
+        // babyChair: extraToNumber(babyChair),
+        // theftProtection: extraToNumber(theftProtection),
+        // collisionDamageWaiver: extraToNumber(collisionDamageWaiver),
+        // fullInsurance: extraToNumber(fullInsurance),
+        // additionalDriver: extraToNumber(additionalDriver),
+        // inventory: Number(inventory),
       };
 
       const car = await CarService.create(data);
@@ -298,35 +298,34 @@ const CreateCar = () => {
             </div>
 
             <FormControl fullWidth margin="dense">
-              <InputLabel className="required">{strings.NAME}</InputLabel>
-              <Input type="text" required value={name} autoComplete="off" onChange={handleNameChange} />
+              <TextField label={strings.NAME} onChange={handleNameChange} variant="standard" autoComplete="off" value={name} required />
             </FormControl>
 
-            {!isSupplier && (
+            {/* {!isSupplier && (
               <FormControl fullWidth margin="dense">
                 <SupplierSelectList label={strings.SUPPLIER} required variant="standard" onChange={handleSupplierChange} />
               </FormControl>
-            )}
+            )} */}
 
             <FormControl fullWidth margin="dense">
-              <InputLabel className="required">{strings.MINIMUM_AGE}</InputLabel>
-              <Input
-                type="text"
+              <TextField
+                label={strings.MINIMUM_AGE}
                 required
                 error={!minimumAgeValid}
                 value={minimumAge}
                 autoComplete="off"
                 onChange={handleMinimumAgeChange}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d{2}$" }}
+                variant="standard"
               />
               <FormHelperText error={!minimumAgeValid}>{(!minimumAgeValid && strings.MINIMUM_AGE_NOT_VALID) || ""}</FormHelperText>
             </FormControl>
 
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <LocationSelectList label={strings.LOCATIONS} multiple required variant="standard" onChange={handleLocationsChange} />
-            </FormControl>
+            </FormControl> */}
 
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <TextField
                 label={`${strings.PRICE} (${csStrings.CAR_CURRENCY})`}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d+(.\\d+)?$" }}
@@ -336,9 +335,9 @@ const CreateCar = () => {
                 autoComplete="off"
                 value={price}
               />
-            </FormControl>
+            </FormControl> */}
 
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <TextField
                 label={`${csStrings.DEPOSIT} (${commonStrings.CURRENCY})`}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d+(.\\d+)?$" }}
@@ -348,9 +347,9 @@ const CreateCar = () => {
                 autoComplete="off"
                 value={deposit}
               />
-            </FormControl>
+            </FormControl> */}
 
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <InputLabel className="required">{strings.INVENTORY}</InputLabel>
               <Input
                 type="text"
@@ -361,36 +360,35 @@ const CreateCar = () => {
                 onChange={handleInventoryChange}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d+$" }}
               />
-              {/* <FormHelperText error={!minimumAgeValid}>{(!minimumAgeValid && strings.MINIMUM_AGE_NOT_VALID) || ""}</FormHelperText> */}
-            </FormControl>
+            </FormControl> */}
 
-            <FormControl fullWidth margin="dense" className="checkbox-fc">
+            {/* <FormControl fullWidth margin="dense" className="checkbox-fc">
               <FormControlLabel
                 control={<Switch checked={available} onChange={handleAvailableChange} color="primary" />}
                 label={strings.AVAILABLE}
                 className="checkbox-fcl"
               />
+            </FormControl> */}
+
+            <FormControl fullWidth margin="dense" variant="standard">
+              <CarTypeList label={strings.CAR_TYPE} required onChange={handleCarTypeChange} />
             </FormControl>
 
-            <FormControl fullWidth margin="dense">
-              <CarTypeList label={strings.CAR_TYPE} variant="standard" required onChange={handleCarTypeChange} />
+            <FormControl fullWidth margin="dense" variant="standard">
+              <GearboxList label={strings.GEARBOX} required onChange={handleGearboxChange} />
             </FormControl>
 
-            <FormControl fullWidth margin="dense">
-              <GearboxList label={strings.GEARBOX} variant="standard" required onChange={handleGearboxChange} />
+            <FormControl fullWidth margin="dense" variant="standard">
+              <SeatsList label={strings.SEATS} required onChange={handleSeatsChange} />
             </FormControl>
 
-            <FormControl fullWidth margin="dense">
-              <SeatsList label={strings.SEATS} variant="standard" required onChange={handleSeatsChange} />
+            <FormControl fullWidth margin="dense" variant="standard">
+              <DoorsList label={strings.DOORS} required onChange={handleDoorsChange} />
             </FormControl>
 
-            <FormControl fullWidth margin="dense">
-              <DoorsList label={strings.DOORS} variant="standard" required onChange={handleDoorsChange} />
-            </FormControl>
-
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <FuelPolicyList label={csStrings.FUEL_POLICY} variant="standard" required onChange={handleFuelPolicyChange} />
-            </FormControl>
+            </FormControl> */}
 
             <div className="info">
               <InfoIcon />
@@ -405,7 +403,7 @@ const CreateCar = () => {
               />
             </FormControl>
 
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <TextField
                 label={`${csStrings.MILEAGE} (${csStrings.MILEAGE_UNIT})`}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d+(.\\d+)?$" }}
@@ -414,9 +412,9 @@ const CreateCar = () => {
                 autoComplete="off"
                 value={mileage}
               />
-            </FormControl>
+            </FormControl> */}
 
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <TextField
                 label={`${csStrings.CANCELLATION} (${commonStrings.CURRENCY})`}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d+(.\\d+)?$" }}
@@ -425,7 +423,7 @@ const CreateCar = () => {
                 autoComplete="off"
                 value={cancellation}
               />
-            </FormControl>
+            </FormControl> */}
 
             {/* <FormControl fullWidth margin="dense">
               <TextField
@@ -437,7 +435,7 @@ const CreateCar = () => {
                 value={amendments}
               />
             </FormControl> */}
-            <FormControl fullWidth margin="dense">
+            {/* <FormControl fullWidth margin="dense">
               <TextField
                 label={`${csStrings.GPS} (${csStrings.CAR_CURRENCY})`}
                 inputProps={{ inputMode: "numeric", pattern: "^\\d+(.\\d+)?$" }}
@@ -512,7 +510,7 @@ const CreateCar = () => {
                 autoComplete="off"
                 value={babyChair}
               />
-            </FormControl>
+            </FormControl> */}
 
             <div className="buttons">
               <Button type="submit" variant="contained" className="btn-primary btn-margin-bottom" size="small">

@@ -10,6 +10,7 @@ const isUS = language === "en" && env.CURRENCY === "$";
 const strings = new LocalizedStrings({
   fr: {
     NEW_CAR: "Nouvelle voiture",
+    ASSIGN_CAR: "Assign car",
     DELETE_CAR: "Êtes-vous sûr de vouloir supprimer cette voiture ?",
     CAR_CURRENCY: `${commonStrings.CURRENCY}/jour`,
     FUEL_POLICY: "Politique carburant",
@@ -42,31 +43,25 @@ const strings = new LocalizedStrings({
     DOORS_TOOLTIP_1: "Cette voiture a ",
     DOORS_TOOLTIP_2: "portes",
     AIRCON_TOOLTIP: "Cette voiture a de la climatisation",
-    FUEL_POLICY_LIKE_FOR_LIKE_TOOLTIP:
-      "Cette voiture est fournie avec du carburant dans le réservoir et doit être rendu avec la même quantité de carburant.",
+    FUEL_POLICY_LIKE_FOR_LIKE_TOOLTIP: "Cette voiture est fournie avec du carburant dans le réservoir et doit être rendu avec la même quantité de carburant.",
     FUEL_POLICY_FREE_TANK_TOOLTIP: "Le prix inclut un plein de carburant",
     MILEAGE: "Kilométrage",
     MILEAGE_UNIT: "KM/jour",
     UNLIMITED: "Illimité",
     LIMITED: "Limité",
     CANCELLATION: "Annulation",
-    CANCELLATION_TOOLTIP:
-      "La réservation peut être annulée avant la date de commencement de la location.",
+    CANCELLATION_TOOLTIP: "La réservation peut être annulée avant la date de commencement de la location.",
     AMENDMENTS: "Modifications",
-    AMENDMENTS_TOOLTIP:
-      "La réservation peut être modifiée avant la date de commencement de la location.",
+    AMENDMENTS_TOOLTIP: "La réservation peut être modifiée avant la date de commencement de la location.",
     GPS: "GPS",
     HOME_DELIVERY: "Home delivery",
     BABY_CHAIR: "Baby chair",
     THEFT_PROTECTION: "Protection contre le vol",
-    THEFT_PROTECTION_TOOLTIP:
-      "La location peut inclure une protection contre le vol.",
+    THEFT_PROTECTION_TOOLTIP: "La location peut inclure une protection contre le vol.",
     COLLISION_DAMAGE_WAVER: "Couverture en cas de collision",
-    COLLISION_DAMAGE_WAVER_TOOLTIP:
-      "La location peut inclure une couverture en cas de collision.",
+    COLLISION_DAMAGE_WAVER_TOOLTIP: "La location peut inclure une couverture en cas de collision.",
     FULL_INSURANCE: "Assurance Tous Risques",
-    FULL_INSURANCE_TOOLTIP:
-      "La location peut inclure une couverture en cas de collision, de dommages et vol du véhicule.",
+    FULL_INSURANCE_TOOLTIP: "La location peut inclure une couverture en cas de collision, de dommages et vol du véhicule.",
     ADDITIONAL_DRIVER: "Conducteur supplémentaire",
     INCLUDED: "Inclus",
     AVAILABLE: "Disponile",
@@ -74,8 +69,7 @@ const strings = new LocalizedStrings({
     CAR_AVAILABLE: "Disponible à la location",
     CAR_AVAILABLE_TOOLTIP: "Cette voiture est disponible à la location.",
     CAR_UNAVAILABLE: "Indisponible à la location",
-    CAR_UNAVAILABLE_TOOLTIP:
-      "Cette voiture n'est pas disponible à la location.",
+    CAR_UNAVAILABLE_TOOLTIP: "Cette voiture n'est pas disponible à la location.",
     VIEW_CAR: "Voir cette voiture",
     EMPTY_LIST: "Pas de voitures.",
     CANNOT_DELETE_CAR:
@@ -90,9 +84,11 @@ const strings = new LocalizedStrings({
     PRICE_DAYS_PART_1: "Prix pour",
     PRICE_DAYS_PART_2: "jour",
     PRICE_PER_DAY: "Prix par jour :",
+    CAR_ALREADY_ASSIGNED: "Selected car is already assigned",
   },
   en: {
     NEW_CAR: "New car",
+    ASSIGN_CAR: "Assign car",
     DELETE_CAR: "Are you sure you want to delete this car?",
     CAR_CURRENCY: `${commonStrings.CURRENCY}/day`,
     FUEL_POLICY: "Fuel policy",
@@ -125,19 +121,16 @@ const strings = new LocalizedStrings({
     DOORS_TOOLTIP_1: "This car has ",
     DOORS_TOOLTIP_2: "doors",
     AIRCON_TOOLTIP: "This car has aircon",
-    FUEL_POLICY_LIKE_FOR_LIKE_TOOLTIP:
-      "This car is supplied with fuel and must be returned with the same amount of fuel.",
+    FUEL_POLICY_LIKE_FOR_LIKE_TOOLTIP: "This car is supplied with fuel and must be returned with the same amount of fuel.",
     FUEL_POLICY_FREE_TANK_TOOLTIP: "The price includes a full tank of fuel.",
     MILEAGE: "Mileage",
     MILEAGE_UNIT: "KM/day",
     UNLIMITED: "Unlimited",
     LIMITED: "Limited",
     CANCELLATION: "Cancellation",
-    CANCELLATION_TOOLTIP:
-      "The booking can be canceled before the start date of the rental.",
+    CANCELLATION_TOOLTIP: "The booking can be canceled before the start date of the rental.",
     AMENDMENTS: "Amendments",
-    AMENDMENTS_TOOLTIP:
-      "The booking can be modified before the start date of the rental.",
+    AMENDMENTS_TOOLTIP: "The booking can be modified before the start date of the rental.",
     GPS: "GPS",
     GPS_TOOLTIP: "The vehicle may have built-in GPS.",
     HOME_DELIVERY: "Home delivery",
@@ -147,11 +140,9 @@ const strings = new LocalizedStrings({
     THEFT_PROTECTION: "Theft protection",
     THEFT_PROTECTION_TOOLTIP: "Rental may include theft protection.",
     COLLISION_DAMAGE_WAVER: "Collision damage waiver",
-    COLLISION_DAMAGE_WAVER_TOOLTIP:
-      "Rental may include collision damage waiver.",
+    COLLISION_DAMAGE_WAVER_TOOLTIP: "Rental may include collision damage waiver.",
     FULL_INSURANCE: "Full insurance",
-    FULL_INSURANCE_TOOLTIP:
-      "The rental may include collision damage waiver and theft protection of the vehicle.",
+    FULL_INSURANCE_TOOLTIP: "The rental may include collision damage waiver and theft protection of the vehicle.",
     ADDITIONAL_DRIVER: "Additional driver",
     INCLUDED: "Included",
     AVAILABLE: "Available",
@@ -162,8 +153,7 @@ const strings = new LocalizedStrings({
     CAR_UNAVAILABLE_TOOLTIP: "This car is unavailable for rental.",
     VIEW_CAR: "View this car",
     EMPTY_LIST: "No cars.",
-    CANNOT_DELETE_CAR:
-      "This car cannot be deleted because it is linked to bookings. However, you can make it unavailable for rental by modifying it.",
+    CANNOT_DELETE_CAR: "This car cannot be deleted because it is linked to bookings. However, you can make it unavailable for rental by modifying it.",
     GEARBOX: "Gearbox",
     ENGINE: "Engine",
     DEPOSIT: "Deposit at pick-up",
@@ -174,9 +164,11 @@ const strings = new LocalizedStrings({
     PRICE_DAYS_PART_1: "Price for",
     PRICE_DAYS_PART_2: "day",
     PRICE_PER_DAY: "Price per day:",
+    CAR_ALREADY_ASSIGNED: "Selected car is already assigned",
   },
   es: {
     NEW_CAR: "Nuevo vehículo",
+    ASSIGN_CAR: "Asignar vehiculo",
     DELETE_CAR: "¿Está seguro de que quiere eliminar este vehículo?",
     CAR_CURRENCY: `${commonStrings.CURRENCY}/día`,
     FUEL_POLICY: "Política de combustible",
@@ -203,27 +195,22 @@ const strings = new LocalizedStrings({
     HYBRID_TOOLTIP: "Este vehículo es híbrido",
     PLUG_IN_HYBRID_TOOLTIP: "Este vehículo es híbrido enchufable",
     GEARBOX_MANUAL_TOOLTIP: "Este vehículo tiene una caja de cambios manual",
-    GEARBOX_AUTOMATIC_TOOLTIP:
-      "Este vehículo tiene una caja de cambios automática",
+    GEARBOX_AUTOMATIC_TOOLTIP: "Este vehículo tiene una caja de cambios automática",
     SEATS_TOOLTIP_1: "Este vehículo tiene ",
     SEATS_TOOLTIP_2: "asientos",
     DOORS_TOOLTIP_1: "Este vehículo tiene ",
     DOORS_TOOLTIP_2: "puertas",
     AIRCON_TOOLTIP: "Este vehículo tiene aire acondicionado",
-    FUEL_POLICY_LIKE_FOR_LIKE_TOOLTIP:
-      "Este vehículo se entrega con combustible y debe devolverse con la misma cantidad de combustible.",
-    FUEL_POLICY_FREE_TANK_TOOLTIP:
-      "El precio incluye un tanque lleno de combustible.",
+    FUEL_POLICY_LIKE_FOR_LIKE_TOOLTIP: "Este vehículo se entrega con combustible y debe devolverse con la misma cantidad de combustible.",
+    FUEL_POLICY_FREE_TANK_TOOLTIP: "El precio incluye un tanque lleno de combustible.",
     MILEAGE: "Kilometraje",
     MILEAGE_UNIT: "KM/día",
     UNLIMITED: "Ilimitado",
     LIMITED: "Limitado",
     CANCELLATION: "Cancelación",
-    CANCELLATION_TOOLTIP:
-      "La reserva puede ser cancelada antes de la fecha de inicio del alquiler.",
+    CANCELLATION_TOOLTIP: "La reserva puede ser cancelada antes de la fecha de inicio del alquiler.",
     AMENDMENTS: "Modificaciones",
-    AMENDMENTS_TOOLTIP:
-      "La reserva puede ser modificada antes de la fecha de inicio del alquiler.",
+    AMENDMENTS_TOOLTIP: "La reserva puede ser modificada antes de la fecha de inicio del alquiler.",
     GPS: "GPS",
     GPS_TOOLTIP: "El vehículo puede tener GPS incorporado.",
     HOME_DELIVERY: "Entrega a domicilio",
@@ -231,14 +218,11 @@ const strings = new LocalizedStrings({
     BABY_CHAIR: "Silla de bebé",
     BABY_CHAIRS_TOOLTIP: "El vehículo puede incluir silla de bebé.",
     THEFT_PROTECTION: "Protección contra robo",
-    THEFT_PROTECTION_TOOLTIP:
-      "El alquiler puede incluir protección contra robo.",
+    THEFT_PROTECTION_TOOLTIP: "El alquiler puede incluir protección contra robo.",
     COLLISION_DAMAGE_WAVER: "Exención de daños por colisión",
-    COLLISION_DAMAGE_WAVER_TOOLTIP:
-      "El alquiler puede incluir exención de daños por colisión.",
+    COLLISION_DAMAGE_WAVER_TOOLTIP: "El alquiler puede incluir exención de daños por colisión.",
     FULL_INSURANCE: "Seguro completo",
-    FULL_INSURANCE_TOOLTIP:
-      "El alquiler puede incluir exención de daños por colisión y protección contra robo del vehículo.",
+    FULL_INSURANCE_TOOLTIP: "El alquiler puede incluir exención de daños por colisión y protección contra robo del vehículo.",
     ADDITIONAL_DRIVER: "Conductor adicional",
     INCLUDED: "Incluido",
     AVAILABLE: "Disponible",
@@ -261,6 +245,7 @@ const strings = new LocalizedStrings({
     PRICE_DAYS_PART_1: "Precio por",
     PRICE_DAYS_PART_2: "día",
     PRICE_PER_DAY: "Precio por día:",
+    CAR_ALREADY_ASSIGNED: "El vehículo seleccionado ya se encuentra asignado",
   },
 });
 

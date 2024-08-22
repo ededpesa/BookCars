@@ -15,6 +15,7 @@ export const en = {
   ACCOUNT_ACTIVATION_EMAIL_SENT_PART_1: "A validation email has been sent to ",
   ACCOUNT_ACTIVATION_EMAIL_SENT_PART_2: ". It will be expire after one day. If you didn't receive validation email click on resend.",
   CAR_IMAGE_REQUIRED: "Car's image field can't be blank: ",
+  CAR_ALREADY_ASSIGNED: "Selected car is already assigned",
   CAR_IMAGE_NOT_FOUND: "Image file not found: ",
   PASSWORD_RESET_SUBJECT: "Password Reset",
   PASSWORD_RESET_LINK: "Please reset your password by clicking the link:",

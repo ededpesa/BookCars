@@ -9,6 +9,7 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const Suppliers = lazy(() => import("./pages/Suppliers"));
 const Supplier = lazy(() => import("./pages/Supplier"));
+const AssignCar = lazy(() => import("./pages/AssignCar"));
 const CreateSupplier = lazy(() => import("./pages/CreateSupplier"));
 const UpdateSupplier = lazy(() => import("./pages/UpdateSupplier"));
 const Locations = lazy(() => import("./pages/Locations"));
@@ -18,6 +19,7 @@ const Cars = lazy(() => import("./pages/Cars"));
 const Car = lazy(() => import("./pages/Car"));
 const CreateCar = lazy(() => import("./pages/CreateCar"));
 const UpdateCar = lazy(() => import("./pages/UpdateCar"));
+const UpdateCarAssign = lazy(() => import("./pages/UpdateCarAssign"));
 const Bookings = lazy(() => import("./pages/Bookings"));
 const UpdateBooking = lazy(() => import("./pages/UpdateBooking"));
 const CreateBooking = lazy(() => import("./pages/CreateBooking"));
@@ -55,7 +57,10 @@ const App = () => (
             <Route path="/cars" element={<Cars />} />
             <Route path="/car" element={<Car />} />
             <Route path="/create-car" element={<CreateCar />} />
+            <Route path="/assign-car" element={<AssignCar />} />
             <Route path="/update-car" element={<UpdateCar />} />
+            <Route path="/update-car-assign" element={<UpdateCarAssign />} />
+            <Route path="/assign-car" element={<AssignCar />} />
             <Route path="/update-booking" element={<UpdateBooking />} />
             <Route path="/create-booking" element={<CreateBooking />} />
             <Route path="/users" element={<Users />} />

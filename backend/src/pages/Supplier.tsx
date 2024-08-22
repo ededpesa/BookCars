@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Typography,
-  IconButton,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Tooltip,
-  Link,
-} from "@mui/material";
+import { Typography, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions, Tooltip, Link } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import * as bookcarsTypes from ":bookcars-types";
@@ -28,6 +18,8 @@ import Error from "./Error";
 import NoMatch from "./NoMatch";
 
 import "../assets/css/supplier.css";
+import CarSupplierList from "../components/CarSupplierList";
+import { strings } from "../lang/cars";
 
 const Supplier = () => {
   const navigate = useNavigate();
@@ -66,9 +58,7 @@ const Supplier = () => {
       try {
         setOpenDeleteDialog(false);
 
-        const status = await SupplierService.deleteSupplier(
-          supplier._id as string,
-        );
+        const status = await SupplierService.deleteSupplier(supplier._id as string);
 
         if (status === 200) {
           navigate("/suppliers");
@@ -87,9 +77,7 @@ const Supplier = () => {
     setOpenDeleteDialog(false);
   };
 
-  const handleCarListLoad: bookcarsTypes.DataEvent<bookcarsTypes.Car> = (
-    data,
-  ) => {
+  const handleCarListLoad: bookcarsTypes.DataEvent<bookcarsTypes.Car> = (data) => {
     if (data) {
       setRowCount(data.rowCount);
     }
@@ -136,10 +124,7 @@ const Supplier = () => {
     }
   };
 
-  const edit =
-    user &&
-    supplier &&
-    (user.type === bookcarsTypes.RecordType.Admin || user._id === supplier._id);
+  const edit = user && supplier && (user.type === bookcarsTypes.RecordType.Admin || user._id === supplier._id);
 
   return (
     <Layout onLoad={onLoad} user={user} strict>
@@ -163,14 +148,7 @@ const Supplier = () => {
               ) : (
                 <div className="car-supplier">
                   <span className="car-supplier-logo">
-                    <img
-                      src={bookcarsHelper.joinURL(
-                        env.CDN_USERS,
-                        supplier.avatar,
-                      )}
-                      alt={supplier.fullName}
-                      style={{ width: env.SUPPLIER_IMAGE_WIDTH }}
-                    />
+                    <img src={bookcarsHelper.joinURL(env.CDN_USERS, supplier.avatar)} alt={supplier.fullName} style={{ width: env.SUPPLIER_IMAGE_WIDTH }} />
                   </span>
                   <span className="car-supplier-info">{supplier.fullName}</span>
                 </div>
@@ -217,15 +195,20 @@ const Supplier = () => {
                 </Tooltip>
               )}
             </div>
-            {rowCount > 0 && (
-              <InfoBox
-                value={`${rowCount} ${rowCount > 1 ? commonStrings.CARS : commonStrings.CAR}`}
-                className="car-count"
-              />
-            )}
+            {rowCount > 0 && <InfoBox value={`${rowCount} ${rowCount > 1 ? commonStrings.CARS : commonStrings.CAR}`} className="car-count" />}
+            <div className="assign-button-div">
+              <Button
+                variant="contained"
+                className="btn-primary cl-new-booking"
+                size="small"
+                href={"/assign-car" + (user?.type === bookcarsTypes.RecordType.Admin ? "?c=" + supplier._id : "")}
+              >
+                {strings.ASSIGN_CAR}
+              </Button>
+            </div>
           </div>
           <div className="col-2">
-            <CarList
+            <CarSupplierList
               user={user}
               suppliers={suppliers}
               keyword=""
@@ -239,23 +222,13 @@ const Supplier = () => {
         </div>
       )}
       <Dialog disableEscapeKeyDown maxWidth="xs" open={openDeleteDialog}>
-        <DialogTitle className="dialog-header">
-          {commonStrings.CONFIRM_TITLE}
-        </DialogTitle>
+        <DialogTitle className="dialog-header">{commonStrings.CONFIRM_TITLE}</DialogTitle>
         <DialogContent>{clStrings.DELETE_SUPPLIER}</DialogContent>
         <DialogActions className="dialog-actions">
-          <Button
-            onClick={handleCancelDelete}
-            variant="contained"
-            className="btn-secondary"
-          >
+          <Button onClick={handleCancelDelete} variant="contained" className="btn-secondary">
             {commonStrings.CANCEL}
           </Button>
-          <Button
-            onClick={handleConfirmDelete}
-            variant="contained"
-            color="error"
-          >
+          <Button onClick={handleConfirmDelete} variant="contained" color="error">
             {commonStrings.DELETE}
           </Button>
         </DialogActions>

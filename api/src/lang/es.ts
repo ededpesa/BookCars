@@ -15,6 +15,7 @@ export const es = {
   ACCOUNT_ACTIVATION_EMAIL_SENT_PART_1: "Se ha enviado un correo electrónico de validación a ",
   ACCOUNT_ACTIVATION_EMAIL_SENT_PART_2: ". Caducará después de un día. Si no recibió el correo electrónico de validación, haga clic en reenviar.",
   CAR_IMAGE_REQUIRED: "El campo de imagen del vehículo no puede estar en blanco: ",
+  CAR_ALREADY_ASSIGNED: "El vehículo seleccionado ya se encuentra asignado",
   CAR_IMAGE_NOT_FOUND: "Archivo de imagen no encontrado: ",
   PASSWORD_RESET_SUBJECT: "Restablecimiento de contraseña",
   PASSWORD_RESET_LINK: "Restablezca su contraseña haciendo clic en el enlace:",

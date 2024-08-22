@@ -450,7 +450,7 @@ const BookingList = ({
       helper.error(err);
     }
   };
-
+  console.log(language);
   const _fr = language === "fr";
   const _locale = _fr ? dfnsFR : dfnsENUS;
   const _format = _fr ? "eee d LLL yyyy kk:mm" : "eee, d LLL yyyy, p";

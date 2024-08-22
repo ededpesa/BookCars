@@ -20,6 +20,11 @@ export enum CarType {
   Unknown = "unknown",
 }
 
+export enum CarStatus {
+  Active = "active",
+  Deleted = "deleted",
+}
+
 export enum GearboxType {
   Manual = "manual",
   Automatic = "automatic",
@@ -146,22 +151,42 @@ export interface UpdateSupplierPayload {
 export interface CreateCarPayload {
   name: string;
   // supplier: string;
-  suppliers?: { supplier: string; inventory: number }[];
+  // suppliers?: { supplier: string; inventory: number }[];
   minimumAge: number;
-  locations: string[];
-  price: number;
-  deposit: number;
-  available: boolean;
+  // locations: string[];
+  // price: number;
+  // deposit: number;
+  // available: boolean;
   type: string;
   gearbox: string;
   aircon: boolean;
   image?: string;
   seats: number;
   doors: number;
+  // fuelPolicy: string;
+  // mileage: number;
+  // cancellation: number;
+  // // amendments: number
+  // gps: number;
+  // theftProtection: number;
+  // collisionDamageWaiver: number;
+  // fullInsurance: number;
+  // additionalDriver: number;
+  // homeDelivery: number;
+  // babyChair: number;
+  // inventory?: number;
+}
+
+export interface AssignCarPayload {
+  car: string | Car;
+  supplier: string;
+  locations: string[];
+  price: number;
+  deposit: number;
+  available: boolean;
   fuelPolicy: string;
   mileage: number;
   cancellation: number;
-  // amendments: number
   gps: number;
   theftProtection: number;
   collisionDamageWaiver: number;
@@ -258,6 +283,11 @@ export interface ActivatePayload {
 
 export interface ValidateEmailPayload {
   email: string;
+}
+
+export interface ValidateCarAssignPayload {
+  supplier: string;
+  car: String;
 }
 
 export interface CheckAvailabilityPayload {
@@ -381,6 +411,28 @@ export interface Car {
   mileage: number;
   cancellation: number;
   // amendments: number;
+  gps: number;
+  theftProtection: number;
+  collisionDamageWaiver: number;
+  fullInsurance: number;
+  additionalDriver: number;
+  homeDelivery: number;
+  babyChair: number;
+  inventory: number;
+  [propKey: string]: any;
+}
+
+export interface CarSupplier {
+  _id: string;
+  car: Car;
+  supplier: User;
+  locations: Location[];
+  price: number;
+  deposit: number;
+  available: boolean;
+  fuelPolicy: FuelPolicy;
+  mileage: number;
+  cancellation: number;
   gps: number;
   theftProtection: number;
   collisionDamageWaiver: number;
