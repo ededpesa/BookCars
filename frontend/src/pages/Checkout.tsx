@@ -59,7 +59,7 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState<bookcarsTypes.User>();
-  const [car, setCar] = useState<bookcarsTypes.Car>();
+  const [car, setCar] = useState<bookcarsTypes.CarSupplier>();
   const [pickupLocation, setPickupLocation] = useState<bookcarsTypes.Location>();
   const [dropOffLocation, setDropOffLocation] = useState<bookcarsTypes.Location>();
   const [from, setFrom] = useState<Date>();
@@ -658,6 +658,7 @@ const Checkout = () => {
 
     try {
       _car = await CarService.getCar(carId);
+      console.log(_car);
       if (!_car) {
         setNoMatch(true);
         return;
@@ -866,7 +867,7 @@ const Checkout = () => {
                       <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                         <span className="booking-detail-title">{strings.CAR}</span>
                         <div className="booking-detail-value">
-                          {`${car.name} (${bookcarsHelper.formatPrice(car.price, commonStrings.CURRENCY, language)}${commonStrings.DAILY})`}
+                          {`${car.car.name} (${bookcarsHelper.formatPrice(car.price, commonStrings.CURRENCY, language)}${commonStrings.DAILY})`}
                         </div>
                       </div>
                       <div className="booking-detail" style={{ height: bookingDetailHeight }}>

@@ -12,6 +12,7 @@ import Notification from "../models/Notification";
 import AdditionalDriver from "../models/AdditionalDriver";
 import Booking from "../models/Booking";
 import Car from "../models/Car";
+import CarSupplier from "../models/CarSupplier";
 import * as helper from "../common/helper";
 import * as logger from "../common/logger";
 
@@ -112,12 +113,9 @@ export const deleteSupplier = async (req: Request, res: Response) => {
 
         await NotificationCounter.deleteMany({ user: id });
         await Notification.deleteMany({ user: id });
-        const additionalDrivers = (
-          await Booking.find(
-            { supplier: id, _additionalDriver: { $ne: null } },
-            { _id: 0, _additionalDriver: 1 },
-          )
-        ).map((b) => b._additionalDriver);
+        const additionalDrivers = (await Booking.find({ supplier: id, _additionalDriver: { $ne: null } }, { _id: 0, _additionalDriver: 1 })).map(
+          (b) => b._additionalDriver
+        );
         await AdditionalDriver.deleteMany({ _id: { $in: additionalDrivers } });
         await Booking.deleteMany({ supplier: id });
         const cars = await Car.find({ supplier: id });
@@ -160,8 +158,7 @@ export const getSupplier = async (req: Request, res: Response) => {
       logger.error("[supplier.getSupplier] Supplier not found:", id);
       return res.sendStatus(204);
     }
-    const { _id, email, fullName, avatar, phone, location, bio, payLater } =
-      user;
+    const { _id, email, fullName, avatar, phone, location, bio, payLater } = user;
 
     return res.json({
       _id,
@@ -205,11 +202,7 @@ export const getSuppliers = async (req: Request, res: Response) => {
         },
         {
           $facet: {
-            resultData: [
-              { $sort: { fullName: 1, _id: 1 } },
-              { $skip: (page - 1) * size },
-              { $limit: size },
-            ],
+            resultData: [{ $sort: { fullName: 1, _id: 1 } }, { $skip: (page - 1) * size }, { $limit: size }],
             pageInfo: [
               {
                 $count: "totalRecords",
@@ -218,7 +211,7 @@ export const getSuppliers = async (req: Request, res: Response) => {
           },
         },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
     );
 
     data[0].resultData = data[0].resultData.map((supplier: env.User) => {
@@ -228,10 +221,7 @@ export const getSuppliers = async (req: Request, res: Response) => {
 
     return res.json(data);
   } catch (err) {
-    logger.error(
-      `[supplier.getSuppliers] ${i18n.t("DB_ERROR")} ${req.query.s}`,
-      err,
-    );
+    logger.error(`[supplier.getSuppliers] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
@@ -247,13 +237,9 @@ export const getSuppliers = async (req: Request, res: Response) => {
  */
 export const getAllSuppliers = async (req: Request, res: Response) => {
   try {
-    let data = await User.aggregate(
-      [
-        { $match: { type: bookcarsTypes.UserType.Supplier } },
-        { $sort: { fullName: 1, _id: 1 } },
-      ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
-    );
+    let data = await User.aggregate([{ $match: { type: bookcarsTypes.UserType.Supplier } }, { $sort: { fullName: 1, _id: 1 } }], {
+      collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 },
+    });
 
     data = data.map((supplier) => {
       const { _id, fullName, avatar } = supplier;
@@ -282,37 +268,29 @@ export const getFrontendSuppliers = async (req: Request, res: Response) => {
     const { carType, gearbox, mileage, fuelPolicy, deposit, carSpecs } = body;
 
     const $match: mongoose.FilterQuery<any> = {
-      $and: [
-        { locations: pickupLocation },
-        { available: true },
-        { type: { $in: carType } },
-        { gearbox: { $in: gearbox } },
-        { fuelPolicy: { $in: fuelPolicy } },
-      ],
+      $and: [{ locations: pickupLocation }, { available: true }, { fuelPolicy: { $in: fuelPolicy } }, { status: { $ne: bookcarsTypes.CarStatus.Deleted } }],
+    };
+
+    const $match2: mongoose.FilterQuery<any> = {
+      $and: [{ type: { $in: carType } }, { gearbox: { $in: gearbox } }],
     };
 
     if (carSpecs) {
       if (typeof carSpecs.aircon !== "undefined") {
-        $match.$and!.push({ aircon: carSpecs.aircon });
+        $match2.$and!.push({ aircon: carSpecs.aircon });
       }
       if (typeof carSpecs.moreThanFourDoors !== "undefined") {
-        $match.$and!.push({ doors: { $gt: 4 } });
+        $match2.$and!.push({ doors: { $gt: 4 } });
       }
       if (typeof carSpecs.moreThanFiveSeats !== "undefined") {
-        $match.$and!.push({ seats: { $gt: 5 } });
+        $match2.$and!.push({ seats: { $gt: 5 } });
       }
     }
 
     if (mileage) {
-      if (
-        mileage.length === 1 &&
-        mileage[0] === bookcarsTypes.Mileage.Limited
-      ) {
+      if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Limited) {
         $match.$and!.push({ mileage: { $gt: -1 } });
-      } else if (
-        mileage.length === 1 &&
-        mileage[0] === bookcarsTypes.Mileage.Unlimited
-      ) {
+      } else if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Unlimited) {
         $match.$and!.push({ mileage: -1 });
       } else if (mileage.length === 0) {
         return res.json([{ resultData: [], pageInfo: [] }]);
@@ -323,7 +301,7 @@ export const getFrontendSuppliers = async (req: Request, res: Response) => {
       $match.$and!.push({ deposit: { $lte: deposit } });
     }
 
-    const data = await Car.aggregate(
+    const data = await CarSupplier.aggregate(
       [
         { $match },
         {
@@ -342,6 +320,30 @@ export const getFrontendSuppliers = async (req: Request, res: Response) => {
         },
         { $unwind: { path: "$supplier", preserveNullAndEmptyArrays: false } },
         {
+          $lookup: {
+            from: "Car", // Unir con la colección Car
+            localField: "car", // Campo en CarSupplier
+            foreignField: "_id", // Campo en Car
+            as: "carDetails", // Resultado del lookup
+          },
+        },
+        { $unwind: "$carDetails" }, // Desenrollar el array carDetails para acceder a los campos directamente
+        {
+          $addFields: {
+            name: "$carDetails.name",
+            image: "$carDetails.image",
+            type: "$carDetails.type",
+            gearbox: "$carDetails.gearbox",
+            aircon: "$carDetails.aircon",
+            seats: "$carDetails.seats",
+            doors: "$carDetails.doors",
+          },
+        },
+        {
+          $unset: "carDetails", // Eliminar el campo 'carDetails' del resultado final
+        },
+        { $match: $match2 },
+        {
           $group: {
             _id: "$supplier._id",
             fullName: { $first: "$supplier.fullName" },
@@ -351,7 +353,7 @@ export const getFrontendSuppliers = async (req: Request, res: Response) => {
         },
         { $sort: { fullName: 1 } },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
     );
 
     return res.json(data);
@@ -372,23 +374,12 @@ export const getFrontendSuppliers = async (req: Request, res: Response) => {
 export const getBackendSuppliers = async (req: Request, res: Response) => {
   try {
     const { body }: { body: bookcarsTypes.GetCarsPayload } = req;
-    const {
-      carType,
-      gearbox,
-      mileage,
-      deposit,
-      availability,
-      fuelPolicy,
-      carSpecs,
-    } = body;
+    const { carType, gearbox, mileage, deposit, availability, fuelPolicy, carSpecs } = body;
     const keyword = escapeStringRegexp(String(req.query.s || ""));
     const options = "i";
 
     const $match: mongoose.FilterQuery<any> = {
-      $and: [
-        { name: { $regex: keyword, $options: options } },
-        { fuelPolicy: { $in: fuelPolicy } },
-      ],
+      $and: [{ name: { $regex: keyword, $options: options } }, { fuelPolicy: { $in: fuelPolicy } }],
     };
 
     if (carSpecs) {
@@ -412,15 +403,9 @@ export const getBackendSuppliers = async (req: Request, res: Response) => {
     }
 
     if (mileage) {
-      if (
-        mileage.length === 1 &&
-        mileage[0] === bookcarsTypes.Mileage.Limited
-      ) {
+      if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Limited) {
         $match.$and!.push({ mileage: { $gt: -1 } });
-      } else if (
-        mileage.length === 1 &&
-        mileage[0] === bookcarsTypes.Mileage.Unlimited
-      ) {
+      } else if (mileage.length === 1 && mileage[0] === bookcarsTypes.Mileage.Unlimited) {
         $match.$and!.push({ mileage: -1 });
       } else if (mileage.length === 0) {
         return res.json([{ resultData: [], pageInfo: [] }]);
@@ -432,15 +417,9 @@ export const getBackendSuppliers = async (req: Request, res: Response) => {
     }
 
     if (Array.isArray(availability)) {
-      if (
-        availability.length === 1 &&
-        availability[0] === bookcarsTypes.Availablity.Available
-      ) {
+      if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Available) {
         $match.$and!.push({ available: true });
-      } else if (
-        availability.length === 1 &&
-        availability[0] === bookcarsTypes.Availablity.Unavailable
-      ) {
+      } else if (availability.length === 1 && availability[0] === bookcarsTypes.Availablity.Unavailable) {
         $match.$and!.push({ available: false });
       } else if (availability.length === 0) {
         return res.json([{ resultData: [], pageInfo: [] }]);
@@ -475,7 +454,7 @@ export const getBackendSuppliers = async (req: Request, res: Response) => {
         },
         { $sort: { fullName: 1 } },
       ],
-      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } },
+      { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
     );
 
     return res.json(data);

@@ -39,6 +39,15 @@ export const update = (data: bookcarsTypes.UpdateCarPayload): Promise<number> =>
   axiosInstance.put("/api/update-car", data, { withCredentials: true }).then((res) => res.status);
 
 /**
+ * Update a Car Assign.
+ *
+ * @param {bookcarsTypes.UpdateCarAssignPayload} data
+ * @returns {Promise<number>}
+ */
+export const updateAssign = (data: bookcarsTypes.UpdateCarAssignPayload): Promise<number> =>
+  axiosInstance.put("/api/update-car-assign", data, { withCredentials: true }).then((res) => res.status);
+
+/**
  * Check if a Car is related to a booking.
  *
  * @param {string} id
@@ -56,6 +65,19 @@ export const check = (id: string): Promise<number> =>
 export const deleteCar = (id: string): Promise<number> =>
   axiosInstance
     .delete(`/api/delete-car/${encodeURIComponent(id)}`, {
+      withCredentials: true,
+    })
+    .then((res) => res.status);
+
+/**
+ * Delete a Car Assign.
+ *
+ * @param {string} id
+ * @returns {Promise<number>}
+ */
+export const deleteCarAssign = (id: string): Promise<number> =>
+  axiosInstance
+    .delete(`/api/delete-car-assign/${encodeURIComponent(id)}`, {
       withCredentials: true,
     })
     .then((res) => res.status);
@@ -142,7 +164,7 @@ export const getCar = (id: string): Promise<bookcarsTypes.Car> =>
  * @param {string} id
  * @returns {Promise<bookcarsTypes.Car>}
  */
-export const getCaSupplier = (id: string): Promise<bookcarsTypes.Car> =>
+export const getCaSupplier = (id: string): Promise<bookcarsTypes.CarSupplier> =>
   axiosInstance
     .get(`/api/car-supplier/${encodeURIComponent(id)}/${UserService.getLanguage()}`, {
       withCredentials: true,

@@ -10,12 +10,14 @@ import Search from "../components/Search";
 import UserList from "../components/UserList";
 
 import "../assets/css/users.css";
+import NoMatch from "./NoMatch";
 
 const Users = () => {
   const [user, setUser] = useState<bookcarsTypes.User>();
   const [admin, setAdmin] = useState(false);
   const [types, setTypes] = useState<bookcarsTypes.UserType[]>();
   const [keyword, setKeyword] = useState("");
+  const [noMatch, setNoMatch] = useState(false);
 
   const handleUserTypeFilterChange = (newTypes: bookcarsTypes.UserType[]) => {
     setTypes(newTypes);
@@ -27,9 +29,11 @@ const Users = () => {
 
   const onLoad = (_user?: bookcarsTypes.User) => {
     const _admin = helper.admin(_user);
-    const _types = _admin
-      ? helper.getUserTypes().map((userType) => userType.value)
-      : [bookcarsTypes.UserType.Supplier, bookcarsTypes.UserType.User];
+    if (!_admin) {
+      setNoMatch(true);
+      return;
+    }
+    const _types = _admin ? helper.getUserTypes().map((userType) => userType.value) : [bookcarsTypes.UserType.Supplier, bookcarsTypes.UserType.User];
 
     setUser(_user);
     setAdmin(_admin);
@@ -44,34 +48,19 @@ const Users = () => {
             <div className="div.col-1-container">
               <Search onSubmit={handleSearch} className="search" />
 
-              {admin && (
-                <UserTypeFilter
-                  className="user-type-filter"
-                  onChange={handleUserTypeFilterChange}
-                />
-              )}
+              {admin && <UserTypeFilter className="user-type-filter" onChange={handleUserTypeFilterChange} />}
 
-              <Button
-                variant="contained"
-                className="btn-primary new-user"
-                size="small"
-                href="/create-user"
-              >
+              <Button variant="contained" className="btn-primary new-user" size="small" href="/create-user">
                 {strings.NEW_USER}
               </Button>
             </div>
           </div>
           <div className="col-2">
-            <UserList
-              user={user}
-              types={types}
-              keyword={keyword}
-              checkboxSelection={!env.isMobile() && admin}
-              hideDesktopColumns={env.isMobile()}
-            />
+            <UserList user={user} types={types} keyword={keyword} checkboxSelection={!env.isMobile() && admin} hideDesktopColumns={env.isMobile()} />
           </div>
         </div>
       )}
+      {noMatch && <NoMatch hideHeader />}
     </Layout>
   );
 };

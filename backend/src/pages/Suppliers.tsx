@@ -9,19 +9,19 @@ import InfoBox from "../components/InfoBox";
 import * as helper from "../common/helper";
 
 import "../assets/css/suppliers.css";
+import NoMatch from "./NoMatch";
 
 const Suppliers = () => {
   const [user, setUser] = useState<bookcarsTypes.User>();
   const [keyword, setKeyword] = useState("");
   const [rowCount, setRowCount] = useState(-1);
+  const [noMatch, setNoMatch] = useState(false);
 
   const handleSearch = (newKeyword: string) => {
     setKeyword(newKeyword);
   };
 
-  const handleSupplierListLoad: bookcarsTypes.DataEvent<bookcarsTypes.User> = (
-    data,
-  ) => {
+  const handleSupplierListLoad: bookcarsTypes.DataEvent<bookcarsTypes.User> = (data) => {
     if (data) {
       setRowCount(data.rowCount);
     }
@@ -32,6 +32,11 @@ const Suppliers = () => {
   };
 
   const onLoad = (_user?: bookcarsTypes.User) => {
+    const admin = helper.admin(_user);
+    if (!admin) {
+      setNoMatch(true);
+      return;
+    }
     setUser(_user);
   };
 
@@ -46,35 +51,20 @@ const Suppliers = () => {
               <Search className="search" onSubmit={handleSearch} />
 
               {rowCount > -1 && admin && (
-                <Button
-                  type="submit"
-                  variant="contained"
-                  className="btn-primary new-supplier"
-                  size="small"
-                  href="/create-supplier"
-                >
+                <Button type="submit" variant="contained" className="btn-primary new-supplier" size="small" href="/create-supplier">
                   {strings.NEW_SUPPLIER}
                 </Button>
               )}
 
-              {rowCount > 0 && (
-                <InfoBox
-                  value={`${rowCount} ${rowCount > 1 ? strings.SUPPLIERS : strings.SUPPLIER}`}
-                  className="supplier-count"
-                />
-              )}
+              {rowCount > 0 && <InfoBox value={`${rowCount} ${rowCount > 1 ? strings.SUPPLIERS : strings.SUPPLIER}`} className="supplier-count" />}
             </div>
           </div>
           <div className="col-2">
-            <SupplierList
-              user={user}
-              keyword={keyword}
-              onLoad={handleSupplierListLoad}
-              onDelete={handleSupplierDelete}
-            />
+            <SupplierList user={user} keyword={keyword} onLoad={handleSupplierListLoad} onDelete={handleSupplierDelete} />
           </div>
         </div>
       )}
+      {noMatch && <NoMatch hideHeader />}
     </Layout>
   );
 };

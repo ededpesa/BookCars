@@ -91,35 +91,57 @@ const Supplier = () => {
     setUser(_user);
     setLanguage(_user?.language as string);
 
-    if (_user && _user.verified) {
-      const params = new URLSearchParams(window.location.search);
-      if (params.has("c")) {
-        const id = params.get("c");
-        if (id && id !== "") {
-          try {
-            const _supplier = await SupplierService.getSupplier(id);
+    if (_user && _user.verified && _user._id) {
+      const admin = helper.admin(_user);
 
-            if (_supplier) {
-              setSupplier(_supplier);
-              setSuppliers([_supplier._id as string]);
-              setVisible(true);
+      if (admin) {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("c")) {
+          const id = params.get("c");
+          if (id && id !== "") {
+            try {
+              const _supplier = await SupplierService.getSupplier(id);
+
+              if (_supplier) {
+                setSupplier(_supplier);
+                setSuppliers([_supplier._id as string]);
+                setVisible(true);
+                setLoading(false);
+              } else {
+                setLoading(false);
+                setNoMatch(true);
+              }
+            } catch {
               setLoading(false);
-            } else {
-              setLoading(false);
-              setNoMatch(true);
+              setError(true);
+              setVisible(false);
             }
-          } catch {
+          } else {
             setLoading(false);
-            setError(true);
-            setVisible(false);
+            setNoMatch(true);
           }
         } else {
           setLoading(false);
           setNoMatch(true);
         }
       } else {
-        setLoading(false);
-        setNoMatch(true);
+        try {
+          const _supplier = await SupplierService.getSupplier(_user._id);
+
+          if (_supplier) {
+            setSupplier(_supplier);
+            setSuppliers([_supplier._id as string]);
+            setVisible(true);
+            setLoading(false);
+          } else {
+            setLoading(false);
+            setNoMatch(true);
+          }
+        } catch {
+          setLoading(false);
+          setError(true);
+          setVisible(false);
+        }
       }
     }
   };

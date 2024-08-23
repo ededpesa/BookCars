@@ -5,6 +5,7 @@ const routes = {
   update: "/api/update-car",
   updateAssign: "/api/update-car-assign",
   delete: "/api/delete-car/:id",
+  deleteAssign: "/api/delete-car-assign/:id",
   createImage: "/api/create-car-image",
   updateImage: "/api/update-car-image/:id",
   deleteImage: "/api/delete-car-image/:id",

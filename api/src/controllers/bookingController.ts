@@ -8,7 +8,8 @@ import i18n from "../lang/i18n";
 import Booking from "../models/Booking";
 import User from "../models/User";
 import Token from "../models/Token";
-import Car from "../models/Car";
+// import Car from "../models/Car";
+import CarSupplier from "../models/CarSupplier";
 import Location from "../models/Location";
 import Notification from "../models/Notification";
 import NotificationCounter from "../models/NotificationCounter";
@@ -119,7 +120,7 @@ export const confirm = async (user: env.User, booking: env.Booking, payLater: bo
   };
   const from = booking.from.toLocaleString(locale, options);
   const to = booking.to.toLocaleString(locale, options);
-  const car = await Car.findById(booking.car).populate<{ supplier: env.User }>("supplier");
+  const car = await CarSupplier.findById(booking.car).populate<{ supplier: env.User }>("supplier").populate<{ car: env.Car }>("car");
   if (!car) {
     logger.info(`Car ${booking.car} not found`);
     return false;
@@ -150,7 +151,7 @@ export const confirm = async (user: env.User, booking: env.Booking, payLater: bo
           "BOOKING_CONFIRMED_PART5"
         )}` +
       `${from} ${i18n.t("BOOKING_CONFIRMED_PART6")}` +
-      `${car.name}${i18n.t("BOOKING_CONFIRMED_PART7")}` +
+      `${car.car.name}${i18n.t("BOOKING_CONFIRMED_PART7")}` +
       `<br><br>${i18n.t("BOOKING_CONFIRMED_PART8")}<br><br>` +
       `${i18n.t("BOOKING_CONFIRMED_PART9")}${car.supplier.fullName}${i18n.t("BOOKING_CONFIRMED_PART10")}${dropOffLocationName}${i18n.t(
         "BOOKING_CONFIRMED_PART11"
@@ -588,15 +589,15 @@ export const deleteBookings = async (req: Request, res: Response) => {
   try {
     const { body }: { body: string[] } = req;
     const ids = body.map((id) => new mongoose.Types.ObjectId(id));
-    const bookings = await Booking.find({
-      _id: { $in: ids },
-      additionalDriver: true,
-      _additionalDriver: { $ne: null },
-    });
+    // const bookings = await Booking.find({
+    //   _id: { $in: ids },
+    //   additionalDriver: true,
+    //   _additionalDriver: { $ne: null },
+    // });
 
-    await Booking.deleteMany({ _id: { $in: ids } });
-    const additionalDivers = bookings.map((booking) => new mongoose.Types.ObjectId(booking._additionalDriver));
-    await AdditionalDriver.deleteMany({ _id: { $in: additionalDivers } });
+    await Booking.updateMany({ _id: { $in: ids } }, { $set: { status: "deleted" } });
+    // const additionalDivers = bookings.map((booking) => new mongoose.Types.ObjectId(booking._additionalDriver));
+    // await AdditionalDriver.deleteMany({ _id: { $in: additionalDivers } });
 
     return res.sendStatus(200);
   } catch (err) {
@@ -651,12 +652,18 @@ export const getBooking = async (req: Request, res: Response) => {
   try {
     const booking = await Booking.findById(id)
       .populate<{ supplier: env.UserInfo }>("supplier")
-      .populate<{ car: env.CarInfo }>({
+      .populate<{ car: bookcarsTypes.CarSupplier }>({
         path: "car",
-        populate: {
-          path: "supplier",
-          model: "User",
-        },
+        populate: [
+          {
+            path: "supplier",
+            model: "User",
+          },
+          {
+            path: "car",
+            model: "Car",
+          },
+        ],
       })
       .populate<{ driver: env.User }>("driver")
       .populate<{ pickupLocation: env.LocationInfo }>({
@@ -686,12 +693,19 @@ export const getBooking = async (req: Request, res: Response) => {
         payLater: booking.supplier.payLater,
       };
 
-      booking.car.supplier = {
-        _id: booking.car.supplier._id,
-        fullName: booking.car.supplier.fullName,
-        avatar: booking.car.supplier.avatar,
-        payLater: booking.car.supplier.payLater,
-      };
+      if (booking.car.supplier) {
+        booking.car.supplier = {
+          _id: booking.car.supplier._id,
+          fullName: booking.car.supplier.fullName,
+          avatar: booking.car.supplier.avatar,
+          payLater: booking.car.supplier.payLater,
+        };
+      }
+
+      if (booking.car.car) {
+        booking.car.name = booking.car.car.name;
+        booking.car.image = booking.car.car.image;
+      }
 
       booking.pickupLocation.name = booking.pickupLocation.values.filter((value) => value.language === language)[0].value;
       booking.dropOffLocation.name = booking.dropOffLocation.values.filter((value) => value.language === language)[0].value;
@@ -800,11 +814,35 @@ export const getBookings = async (req: Request, res: Response) => {
       { $unwind: { path: "$supplier", preserveNullAndEmptyArrays: false } },
       {
         $lookup: {
-          from: "Car",
+          from: "CarSupplier",
           let: { carId: "$car" },
           pipeline: [
             {
               $match: { $expr: { $eq: ["$_id", "$$carId"] } },
+            },
+            {
+              $lookup: {
+                from: "Car",
+                let: { carId: "$car" },
+                pipeline: [
+                  {
+                    $match: { $expr: { $eq: ["$_id", "$$carId"] } },
+                  },
+                ],
+                as: "car",
+              },
+            },
+            { $unwind: { path: "$car", preserveNullAndEmptyArrays: true } },
+            {
+              $addFields: {
+                name: "$car.name",
+                // image: "$car.image",
+                // type: "$car.type",
+                // gearbox: "$car.gearbox",
+                // aircon: "$car.aircon",
+                // seats: "$car.seats",
+                // doors: "$car.doors",
+              },
             },
           ],
           as: "car",
@@ -1003,7 +1041,7 @@ export const checkAvailability = async (req: Request, res: Response) => {
   const toDate = new Date(to);
 
   try {
-    const availability = await Car.aggregate([
+    const availability = await CarSupplier.aggregate([
       {
         $match: { _id: new mongoose.Types.ObjectId(car) },
       },

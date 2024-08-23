@@ -14,12 +14,13 @@ interface CarModelSelectListProps {
   label?: string;
   required?: boolean;
   multiple?: boolean;
+  readOnly?: boolean;
   variant?: TextFieldVariants;
   value?: bookcarsTypes.Car;
   onChange?: (values: bookcarsTypes.Car[]) => void;
 }
 
-const CarModelSelectList = ({ label, required, multiple, variant, value, onChange }: CarModelSelectListProps) => {
+const CarModelSelectList = ({ label, required, multiple, variant, value, onChange, readOnly }: CarModelSelectListProps) => {
   const [init, setInit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetch, setFetch] = useState(true);
@@ -77,6 +78,7 @@ const CarModelSelectList = ({ label, required, multiple, variant, value, onChang
   return (
     <div>
       <MultipleSelect
+        readOnly={readOnly}
         label={label}
         callbackFromMultipleSelect={handleChange}
         options={cars}

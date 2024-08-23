@@ -515,6 +515,7 @@ const UpdateBooking = () => {
                 name: cmp.fullName,
                 image: cmp.avatar,
               });
+              console.log(_booking.car);
               setCar(_booking.car as bookcarsTypes.Car);
               const drv = _booking.driver as bookcarsTypes.User;
               setDriver({

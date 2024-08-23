@@ -34,6 +34,7 @@ const UpdateAssignCar = () => {
   //   const [supplier, setSupplier] = useState<bookcarsTypes.User>();
   const [supplier, setSupplier] = useState<bookcarsTypes.Option>();
   const [car, setCar] = useState<bookcarsTypes.Car>();
+  const [carSupplier, setCarSupplier] = useState<bookcarsTypes.CarSupplier>();
   const [isSupplier, setIsSupplier] = useState(false);
 
   const [price, setPrice] = useState("");
@@ -79,6 +80,7 @@ const UpdateAssignCar = () => {
                 image: _carSupplier.supplier.avatar,
               };
 
+              setCarSupplier(_carSupplier);
               setCar(_carSupplier.car);
               setSupplier(_supplier);
 
@@ -210,9 +212,9 @@ const UpdateAssignCar = () => {
     }
   }, []);
 
-  const validateAssign = async (car: string, supplier: string) => {
+  const validateAssign = async (car: string, supplier: string, carSupplier: string) => {
     try {
-      const status = await CarService.validateAssign({ car, supplier });
+      const status = await CarService.validateAssign({ car, supplier, carSupplier });
 
       if (status === 200) {
         return true;
@@ -232,18 +234,19 @@ const UpdateAssignCar = () => {
     try {
       e.preventDefault();
 
-      if (!car || !supplier) {
+      if (!car || !supplier || !carSupplier) {
         helper.error();
         return;
       }
 
-      const validAssign = await validateAssign(car._id, supplier._id);
+      const validAssign = await validateAssign(car._id, supplier._id, carSupplier._id);
 
       if (!validAssign) {
         return;
       }
 
       const data = {
+        _id: carSupplier._id,
         car: car._id,
         supplier: supplier._id,
         locations: locations.map((l) => l._id),
@@ -263,10 +266,10 @@ const UpdateAssignCar = () => {
         inventory: Number(inventory),
       };
 
-      const carResult = await CarService.assign(data);
+      const status = await CarService.updateAssign(data);
 
-      if (carResult && carResult._id) {
-        navigate("/supplier" + (isSupplier ? "" : "?c=" + supplier?._id));
+      if (status === 200) {
+        helper.info(commonStrings.UPDATED);
       } else {
         helper.error();
       }
@@ -283,10 +286,10 @@ const UpdateAssignCar = () => {
             <h1 className="car-form-title"> {strings.EDIT} </h1>
             <form onSubmit={handleSubmit}>
               <FormControl fullWidth margin="dense">
-                <SupplierSelectList readOnly label={blStrings.SUPPLIER} onChange={handleSupplierChange} value={supplier} required variant="standard" />
+                <SupplierSelectList readOnly label={blStrings.SUPPLIER} value={supplier} required variant="standard" />
               </FormControl>
 
-              <CarModelSelectList label={blStrings.CAR} onChange={handleCarSelectListChange} required value={car} />
+              <CarModelSelectList readOnly label={blStrings.CAR} required value={car} />
 
               <FormControl fullWidth margin="dense">
                 <LocationSelectList label={strings.LOCATIONS} multiple required variant="standard" onChange={handleLocationsChange} value={locations} />
@@ -456,7 +459,7 @@ const UpdateAssignCar = () => {
 
               <div className="buttons">
                 <Button type="submit" variant="contained" className="btn-primary btn-margin-bottom" size="small">
-                  {commonStrings.CREATE}
+                  {commonStrings.SAVE}
                 </Button>
                 <Button
                   variant="contained"

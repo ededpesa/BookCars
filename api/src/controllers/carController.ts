@@ -67,10 +67,10 @@ export const create = async (req: Request, res: Response) => {
  */
 export const validateAssign = async (req: Request, res: Response) => {
   const { body }: { body: bookcarsTypes.ValidateCarAssignPayload } = req;
-  const { car, supplier } = body;
+  const { car, supplier, carSupplier } = body;
 
   try {
-    const exists = await CarSupplier.exists({ supplier, car, status: { $ne: bookcarsTypes.CarStatus.Deleted } });
+    const exists = await CarSupplier.exists({ supplier, car, status: { $ne: bookcarsTypes.CarStatus.Deleted }, _id: { $ne: carSupplier } });
 
     if (exists) {
       return res.sendStatus(204);
@@ -200,6 +200,76 @@ export const update = async (req: Request, res: Response) => {
 };
 
 /**
+ * Update a Car Assign.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const updateAssign = async (req: Request, res: Response) => {
+  const { body }: { body: bookcarsTypes.UpdateCarAssignPayload } = req;
+  const { _id } = body;
+
+  try {
+    if (!helper.isValidObjectId(_id)) {
+      throw new Error("body._id is not valid");
+    }
+    const carSupplier = await CarSupplier.findById(_id);
+
+    if (carSupplier) {
+      const {
+        car,
+        supplier,
+        locations,
+        price,
+        deposit,
+        available,
+        fuelPolicy,
+        mileage,
+        cancellation,
+        gps,
+        homeDelivery,
+        babyChair,
+        theftProtection,
+        collisionDamageWaiver,
+        fullInsurance,
+        additionalDriver,
+        inventory,
+      } = body;
+
+      carSupplier.car = new mongoose.Types.ObjectId(car);
+      carSupplier.supplier = new mongoose.Types.ObjectId(supplier);
+      carSupplier.locations = locations.map((l) => new mongoose.Types.ObjectId(l));
+      carSupplier.available = available;
+      carSupplier.price = price;
+      carSupplier.deposit = deposit;
+      carSupplier.fuelPolicy = fuelPolicy as bookcarsTypes.FuelPolicy;
+      carSupplier.mileage = mileage;
+      carSupplier.cancellation = cancellation;
+      carSupplier.gps = gps;
+      carSupplier.theftProtection = theftProtection;
+      carSupplier.collisionDamageWaiver = collisionDamageWaiver;
+      carSupplier.fullInsurance = fullInsurance;
+      carSupplier.additionalDriver = additionalDriver;
+      carSupplier.homeDelivery = homeDelivery;
+      carSupplier.babyChair = babyChair;
+      carSupplier.inventory = inventory;
+
+      await carSupplier.save();
+      return res.json(carSupplier);
+    }
+
+    logger.error("[carSupplier.update] CarSupplier not found:", _id);
+    return res.sendStatus(204);
+  } catch (err) {
+    logger.error(`[carSupplier.update] ${i18n.t("DB_ERROR")} ${_id}`, err);
+    return res.status(400).send(i18n.t("ERROR") + err);
+  }
+};
+
+/**
  * Check if a Car is related to bookings.
  *
  * @export
@@ -250,6 +320,36 @@ export const deleteCar = async (req: Request, res: Response) => {
         }
       }
       await Booking.deleteMany({ car: car._id });
+    } else {
+      return res.sendStatus(204);
+    }
+    return res.sendStatus(200);
+  } catch (err) {
+    logger.error(`[car.delete] ${i18n.t("DB_ERROR")} ${id}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};
+
+/**
+ * Delete a CarSupplier by ID.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const deleteCarAssign = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const carSupplier = await CarSupplier.findById(id);
+    if (carSupplier) {
+      // await CarSupplier.deleteOne({ _id: id });
+      carSupplier.status = bookcarsTypes.CarStatus.Deleted;
+      await carSupplier.save();
+
+      // await Booking.deleteMany({ car: car._id });
     } else {
       return res.sendStatus(204);
     }
@@ -481,6 +581,11 @@ export const getCarSupplier = async (req: Request, res: Response) => {
         _id: carSupplier.car._id,
         name: carSupplier.car.name,
         image: carSupplier.car.image,
+        type: carSupplier.car.type,
+        gearbox: carSupplier.car.gearbox,
+        seats: carSupplier.car.seats,
+        doors: carSupplier.car.doors,
+        aircon: carSupplier.car.aircon,
       };
 
       for (const location of carSupplier.locations) {
@@ -904,10 +1009,12 @@ export const getFrontendCars = async (req: Request, res: Response) => {
     const pickupLocation = new mongoose.Types.ObjectId(body.pickupLocation);
     const { carType, gearbox, mileage, fuelPolicy, deposit, carSpecs, from, to } = body;
 
-    console.log(from, to);
-
     const $match: mongoose.FilterQuery<any> = {
-      $and: [{ supplier: { $in: suppliers } }, { locations: pickupLocation }, { available: true }, { type: { $in: carType } }, { gearbox: { $in: gearbox } }],
+      $and: [{ supplier: { $in: suppliers } }, { locations: pickupLocation }, { available: true }, { status: { $ne: bookcarsTypes.CarStatus.Deleted } }],
+    };
+
+    const $match2: mongoose.FilterQuery<any> = {
+      $and: [{ type: { $in: carType } }, { gearbox: { $in: gearbox } }],
     };
 
     if (fuelPolicy) {
@@ -916,13 +1023,13 @@ export const getFrontendCars = async (req: Request, res: Response) => {
 
     if (carSpecs) {
       if (typeof carSpecs.aircon !== "undefined") {
-        $match.$and!.push({ aircon: carSpecs.aircon });
+        $match2.$and!.push({ aircon: carSpecs.aircon });
       }
       if (typeof carSpecs.moreThanFourDoors !== "undefined") {
-        $match.$and!.push({ doors: { $gt: 4 } });
+        $match2.$and!.push({ doors: { $gt: 4 } });
       }
       if (typeof carSpecs.moreThanFiveSeats !== "undefined") {
-        $match.$and!.push({ seats: { $gt: 5 } });
+        $match2.$and!.push({ seats: { $gt: 5 } });
       }
     }
 
@@ -943,7 +1050,7 @@ export const getFrontendCars = async (req: Request, res: Response) => {
     const fromDate = from ? new Date(from) : new Date();
     const toDate = to ? new Date(to) : new Date();
 
-    const data = await Car.aggregate(
+    const data = await CarSupplier.aggregate(
       [
         { $match },
         {
@@ -961,6 +1068,30 @@ export const getFrontendCars = async (req: Request, res: Response) => {
           },
         },
         { $unwind: { path: "$supplier", preserveNullAndEmptyArrays: false } },
+        {
+          $lookup: {
+            from: "Car", // Unir con la colección Car
+            localField: "car", // Campo en CarSupplier
+            foreignField: "_id", // Campo en Car
+            as: "car", // Resultado del lookup
+          },
+        },
+        { $unwind: "$car" }, // Desenrollar el array carDetails para acceder a los campos directamente
+        {
+          $addFields: {
+            name: "$car.name",
+            image: "$car.image",
+            type: "$car.type",
+            gearbox: "$car.gearbox",
+            aircon: "$car.aircon",
+            seats: "$car.seats",
+            doors: "$car.doors",
+          },
+        },
+        // {
+        //   $unset: "carDetails", // Eliminar el campo 'carDetails' del resultado final
+        // },
+        { $match: $match2 },
         // {
         //   $lookup: {
         //     from: 'Location',
@@ -1027,6 +1158,8 @@ export const getFrontendCars = async (req: Request, res: Response) => {
       const { _id, fullName, avatar } = car.supplier;
       car.supplier = { _id, fullName, avatar };
     }
+
+    console.log(data[0].resultData);
 
     return res.json(data);
   } catch (err) {

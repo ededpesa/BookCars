@@ -42,6 +42,7 @@ export enum BookingStatus {
   Paid = "paid",
   Reserved = "reserved",
   Cancelled = "cancelled",
+  Deleted = "deleted",
 }
 
 export enum Mileage {
@@ -178,7 +179,7 @@ export interface CreateCarPayload {
 }
 
 export interface AssignCarPayload {
-  car: string | Car;
+  car: string;
   supplier: string;
   locations: string[];
   price: number;
@@ -194,10 +195,14 @@ export interface AssignCarPayload {
   additionalDriver: number;
   homeDelivery: number;
   babyChair: number;
-  inventory?: number;
+  inventory: number;
 }
 
 export interface UpdateCarPayload extends CreateCarPayload {
+  _id: string;
+}
+
+export interface UpdateCarAssignPayload extends AssignCarPayload {
   _id: string;
 }
 
@@ -287,7 +292,8 @@ export interface ValidateEmailPayload {
 
 export interface ValidateCarAssignPayload {
   supplier: string;
-  car: String;
+  car: string;
+  carSupplier?: string;
 }
 
 export interface CheckAvailabilityPayload {
@@ -441,6 +447,9 @@ export interface CarSupplier {
   homeDelivery: number;
   babyChair: number;
   inventory: number;
+  name?: string;
+  minimumAge?: number;
+  image?: string;
   [propKey: string]: any;
 }
 

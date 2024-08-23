@@ -238,7 +238,7 @@ const CarSupplierList = ({
       if (carId !== "" && carIndex > -1) {
         setOpenDeleteDialog(false);
 
-        const status = await CarService.deleteCar(carId);
+        const status = await CarService.deleteCarAssign(carId);
 
         if (status === 200) {
           const _rowCount = rowCount - 1;
@@ -333,7 +333,7 @@ const CarSupplierList = ({
                 </Card>
               )
             : rows.map((car, index) => {
-                const edit = admin || car.supplier._id === user._id;
+                const edit = admin || car.supplier._id === user._id || true;
                 return (
                   <article key={car._id}>
                     <div className="name">
@@ -582,11 +582,11 @@ const CarSupplierList = ({
                     <div className="action">
                       {edit && (
                         <>
-                          <Tooltip title={strings.VIEW_CAR}>
+                          {/* <Tooltip title={strings.VIEW_CAR}>
                             <IconButton href={`/car?cr=${car._id}`}>
                               <ViewIcon />
                             </IconButton>
-                          </Tooltip>
+                          </Tooltip> */}
                           <Tooltip title={commonStrings.UPDATE}>
                             <IconButton href={`/update-car-assign?cr=${car._id}`}>
                               <EditIcon />
