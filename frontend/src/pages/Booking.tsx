@@ -33,7 +33,7 @@ const Booking = () => {
   const [booking, setBooking] = useState<bookcarsTypes.Booking>();
   const [visible, setVisible] = useState(false);
   const [supplier, setSupplier] = useState<bookcarsTypes.Option>();
-  const [car, setCar] = useState<bookcarsTypes.Car>();
+  const [car, setCar] = useState<bookcarsTypes.CarSupplier>();
   const [price, setPrice] = useState<number>();
   const [driver, setDriver] = useState<bookcarsTypes.Option>();
   const [pickupLocation, setPickupLocation] = useState<bookcarsTypes.Option>();
@@ -65,13 +65,13 @@ const Booking = () => {
     setDropOffLocation(values.length > 0 ? values[0] : undefined);
   };
 
-  const handleCarSelectListChange = async (values: bookcarsTypes.Car[]) => {
+  const handleCarSelectListChange = async (values: bookcarsTypes.CarSupplier[]) => {
     try {
       const newCar = values.length > 0 ? values[0] : undefined;
 
       if ((!car && newCar) || (car && newCar && car._id !== newCar._id)) {
         // car changed
-        const _car = await CarService.getCar(newCar._id);
+        const _car = await CarService.getCarSupplier(newCar._id);
 
         if (_car && from && to) {
           const _booking = bookcarsHelper.clone(booking);
@@ -103,7 +103,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.cancellation = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setCancellation(booking.cancellation);
@@ -125,7 +125,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.gps = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setGps(booking.gps);
@@ -136,7 +136,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.homeDelivery = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setHomeDelivery(booking.homeDelivery);
@@ -147,7 +147,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.babyChair = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setBabyChair(booking.babyChair);
@@ -158,7 +158,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.collisionDamageWaiver = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setCollisionDamageWaiver(booking.collisionDamageWaiver);
@@ -169,7 +169,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.theftProtection = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setTheftProtection(booking.theftProtection);
@@ -180,7 +180,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.fullInsurance = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setFullInsurance(booking.fullInsurance);
@@ -191,7 +191,7 @@ const Booking = () => {
     if (booking && booking.car) {
       booking.additionalDriver = e.target.checked;
 
-      const _price = helper.price(booking.car as bookcarsTypes.Car, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
+      const _price = helper.price(booking.car as bookcarsTypes.CarSupplier, new Date(booking.from), new Date(booking.to), booking as bookcarsTypes.CarOptions);
       setBooking(booking);
       setPrice(_price);
       setAdditionalDriver(booking.additionalDriver);
@@ -262,7 +262,7 @@ const Booking = () => {
               name: cmp.fullName,
               image: cmp.avatar,
             });
-            setCar(_booking.car as bookcarsTypes.Car);
+            setCar(_booking.car as bookcarsTypes.CarSupplier);
             const drv = _booking.driver as bookcarsTypes.User;
             setDriver({
               _id: drv._id as string,
@@ -368,7 +368,7 @@ const Booking = () => {
                       booking.from = _from;
 
                       const _price = helper.price(
-                        booking.car as bookcarsTypes.Car,
+                        booking.car as bookcarsTypes.CarSupplier,
                         new Date(booking.from),
                         new Date(booking.to),
                         booking as bookcarsTypes.CarOptions
@@ -395,7 +395,7 @@ const Booking = () => {
                       booking.to = _to;
 
                       const _price = helper.price(
-                        booking.car as bookcarsTypes.Car,
+                        booking.car as bookcarsTypes.CarSupplier,
                         new Date(booking.from),
                         new Date(booking.to),
                         booking as bookcarsTypes.CarOptions
@@ -421,7 +421,9 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={!edit || (booking.car as bookcarsTypes.Car).cancellation === -1 || (booking.car as bookcarsTypes.Car).cancellation === 0}
+                  disabled={
+                    !edit || (booking.car as bookcarsTypes.CarSupplier).cancellation === -1 || (booking.car as bookcarsTypes.CarSupplier).cancellation === 0
+                  }
                   control={<Switch checked={cancellation} onChange={handleCancellationChange} color="primary" />}
                   label={csStrings.CANCELLATION}
                   className="checkbox-fcl"
@@ -438,7 +440,7 @@ const Booking = () => {
               </FormControl> */}
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={!edit || (booking.car as bookcarsTypes.Car).gps === -1 || (booking.car as bookcarsTypes.Car).gps === 0}
+                  disabled={!edit || (booking.car as bookcarsTypes.CarSupplier).gps === -1 || (booking.car as bookcarsTypes.CarSupplier).gps === 0}
                   control={<Switch checked={gps} onChange={handleGpsChange} color="primary" />}
                   label={csStrings.GPS}
                   className="checkbox-fcl"
@@ -448,7 +450,9 @@ const Booking = () => {
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
                   disabled={
-                    !edit || (booking.car as bookcarsTypes.Car).collisionDamageWaiver === -1 || (booking.car as bookcarsTypes.Car).collisionDamageWaiver === 0
+                    !edit ||
+                    (booking.car as bookcarsTypes.CarSupplier).collisionDamageWaiver === -1 ||
+                    (booking.car as bookcarsTypes.CarSupplier).collisionDamageWaiver === 0
                   }
                   control={<Switch checked={collisionDamageWaiver} onChange={handleCollisionDamageWaiverChange} color="primary" />}
                   label={csStrings.COLLISION_DAMAGE_WAVER}
@@ -458,7 +462,11 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={!edit || (booking.car as bookcarsTypes.Car).theftProtection === -1 || (booking.car as bookcarsTypes.Car).theftProtection === 0}
+                  disabled={
+                    !edit ||
+                    (booking.car as bookcarsTypes.CarSupplier).theftProtection === -1 ||
+                    (booking.car as bookcarsTypes.CarSupplier).theftProtection === 0
+                  }
                   control={<Switch checked={theftProtection} onChange={handleTheftProtectionChange} color="primary" />}
                   label={csStrings.THEFT_PROTECTION}
                   className="checkbox-fcl"
@@ -467,7 +475,9 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={!edit || (booking.car as bookcarsTypes.Car).fullInsurance === -1 || (booking.car as bookcarsTypes.Car).fullInsurance === 0}
+                  disabled={
+                    !edit || (booking.car as bookcarsTypes.CarSupplier).fullInsurance === -1 || (booking.car as bookcarsTypes.CarSupplier).fullInsurance === 0
+                  }
                   control={<Switch checked={fullInsurance} onChange={handleFullInsuranceChange} color="primary" />}
                   label={csStrings.FULL_INSURANCE}
                   className="checkbox-fcl"
@@ -476,7 +486,11 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={!edit || (booking.car as bookcarsTypes.Car).additionalDriver === -1 || (booking.car as bookcarsTypes.Car).additionalDriver === 0}
+                  disabled={
+                    !edit ||
+                    (booking.car as bookcarsTypes.CarSupplier).additionalDriver === -1 ||
+                    (booking.car as bookcarsTypes.CarSupplier).additionalDriver === 0
+                  }
                   control={<Switch checked={additionalDriver} onChange={handleAdditionalDriverChange} color="primary" />}
                   label={csStrings.ADDITIONAL_DRIVER}
                   className="checkbox-fcl"
@@ -485,7 +499,9 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={!edit || (booking.car as bookcarsTypes.Car).homeDelivery === -1 || (booking.car as bookcarsTypes.Car).homeDelivery === 0}
+                  disabled={
+                    !edit || (booking.car as bookcarsTypes.CarSupplier).homeDelivery === -1 || (booking.car as bookcarsTypes.CarSupplier).homeDelivery === 0
+                  }
                   control={<Switch checked={homeDelivery} onChange={handleGpsChange} color="primary" />}
                   label={csStrings.HOME_DELIVERY}
                   className="checkbox-fcl"
@@ -494,7 +510,7 @@ const Booking = () => {
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
                 <FormControlLabel
-                  disabled={!edit || (booking.car as bookcarsTypes.Car).babyChair === -1 || (booking.car as bookcarsTypes.Car).babyChair === 0}
+                  disabled={!edit || (booking.car as bookcarsTypes.CarSupplier).babyChair === -1 || (booking.car as bookcarsTypes.CarSupplier).babyChair === 0}
                   control={<Switch checked={babyChair} onChange={handleGpsChange} color="primary" />}
                   label={csStrings.BABY_CHAIR}
                   className="checkbox-fcl"
@@ -524,7 +540,7 @@ const Booking = () => {
                 )}`}</span>
               </div>
             </div>
-            <CarList className="car" booking={booking} cars={[booking.car as bookcarsTypes.Car]} hidePrice />
+            <CarList className="car" booking={booking} cars={[booking.car as bookcarsTypes.CarSupplier]} hidePrice />
           </div>
         </div>
       )}

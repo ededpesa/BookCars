@@ -164,7 +164,7 @@ export const getCar = (id: string): Promise<bookcarsTypes.Car> =>
  * @param {string} id
  * @returns {Promise<bookcarsTypes.Car>}
  */
-export const getCaSupplier = (id: string): Promise<bookcarsTypes.CarSupplier> =>
+export const getCarSupplier = (id: string): Promise<bookcarsTypes.CarSupplier> =>
   axiosInstance
     .get(`/api/car-supplier/${encodeURIComponent(id)}/${UserService.getLanguage()}`, {
       withCredentials: true,
@@ -201,7 +201,7 @@ export const getSupplierCars = (
   data: bookcarsTypes.GetCarsPayload,
   page: number,
   size: number
-): Promise<bookcarsTypes.Result<bookcarsTypes.Car>> =>
+): Promise<bookcarsTypes.Result<bookcarsTypes.CarSupplier>> =>
   axiosInstance
     .post(`/api/supplier-cars/${page}/${size}/?s=${encodeURIComponent(keyword)}`, data, {
       withCredentials: true,
@@ -228,5 +228,5 @@ export const getModelCars = (keyword: string, page: number, size: number): Promi
  * @param {number} size
  * @returns {Promise<bookcarsTypes.Car[]>}
  */
-export const getBookingCars = (keyword: string, data: bookcarsTypes.GetBookingCarsPayload, page: number, size: number): Promise<bookcarsTypes.Car[]> =>
+export const getBookingCars = (keyword: string, data: bookcarsTypes.GetBookingCarsPayload, page: number, size: number): Promise<bookcarsTypes.CarSupplier[]> =>
   axiosInstance.post(`/api/booking-cars/${page}/${size}/?s=${encodeURIComponent(keyword)}`, data, { withCredentials: true }).then((res) => res.data);

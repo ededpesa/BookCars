@@ -426,9 +426,10 @@ const Checkout = () => {
 
   const validateBirthDate = (date?: Date) => {
     if (car && date && bookcarsHelper.isDate(date)) {
+      console.log(car);
       const now = new Date();
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0;
-      const _birthDateValid = sub >= car.minimumAge;
+      const _birthDateValid = sub >= car.car.minimumAge;
 
       setBirthDateValid(_birthDateValid);
       return _birthDateValid;
@@ -442,7 +443,7 @@ const Checkout = () => {
     if (car && date && bookcarsHelper.isDate(date)) {
       const now = new Date();
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0;
-      const _birthDateValid = sub >= car.minimumAge;
+      const _birthDateValid = sub >= car.car.minimumAge;
 
       setAddiontalDriverBirthDateValid(_birthDateValid);
       return _birthDateValid;
@@ -978,7 +979,7 @@ const Checkout = () => {
                             }}
                             language={language}
                           />
-                          <FormHelperText error={!birthDateValid}>{(!birthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}</FormHelperText>
+                          <FormHelperText error={!birthDateValid}>{(!birthDateValid && helper.getBirthDateError(car.car.minimumAge)) || ""}</FormHelperText>
                         </FormControl>
 
                         {env.RECAPTCHA_ENABLED && (
@@ -1088,7 +1089,7 @@ const Checkout = () => {
                             language={language}
                           />
                           <FormHelperText error={!addiontalDriverBirthDateValid}>
-                            {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}
+                            {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.car.minimumAge)) || ""}
                           </FormHelperText>
                         </FormControl>
                       </div>

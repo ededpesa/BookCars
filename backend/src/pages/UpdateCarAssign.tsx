@@ -66,7 +66,7 @@ const UpdateAssignCar = () => {
         const id = params.get("cr");
         if (id && id !== "") {
           try {
-            const _carSupplier = await CarService.getCaSupplier(id);
+            const _carSupplier = await CarService.getCarSupplier(id);
             if (_carSupplier) {
               if (_user.type === bookcarsTypes.RecordType.Supplier && _user._id !== _carSupplier.supplier._id) {
                 setLoading(false);

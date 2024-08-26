@@ -382,7 +382,7 @@ const BookingList = ({
         ) : env.isMobile() ? (
           <>
             {rows.map((booking) => {
-              const _bookingCar = booking.car as bookcarsTypes.Car;
+              const _bookingCar = booking.car as bookcarsTypes.CarSupplier;
               const bookingSupplier = booking.supplier as bookcarsTypes.User;
               const from = new Date(booking.from);
               const to = new Date(booking.to);

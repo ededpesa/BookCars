@@ -525,7 +525,7 @@ export const price = async (
 
   try {
     if (!car) {
-      car = await CarService.getCaSupplier(booking.car as string);
+      car = await CarService.getCarSupplier(booking.car as string);
     }
 
     if (car) {
@@ -882,7 +882,7 @@ export const getBirthDateError = (minimumAge: number) =>
  * @param {string} option
  * @returns {boolean}
  */
-export const carOptionAvailable = (car: bookcarsTypes.Car | undefined, option: string) => car && option in car && (car[option] as number) > -1;
+export const carOptionAvailable = (car: bookcarsTypes.CarSupplier | undefined, option: string) => car && option in car && (car[option] as number) > -1;
 
 /**
  * Validate URL string.

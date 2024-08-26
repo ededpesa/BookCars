@@ -52,7 +52,7 @@ interface CarListProps {
 }
 
 const CarList = ({
-  suppliers: carSuppliers,
+  // suppliers: carSuppliers,
   keyword: carKeyword,
   carSpecs: _carSpecs,
   carType: _carType,
@@ -67,8 +67,8 @@ const CarList = ({
   booking,
   className,
   loading: carLoading,
-  hideSupplier,
-  hidePrice,
+  // hideSupplier,
+  // hidePrice,
   language,
   onLoad,
   onDelete,

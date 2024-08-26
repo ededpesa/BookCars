@@ -39,7 +39,7 @@ interface CarListProps {
   deposit?: number;
   availability?: string[];
   reload?: boolean;
-  cars?: bookcarsTypes.Car[];
+  cars?: bookcarsTypes.CarSupplier[];
   user?: bookcarsTypes.User;
   booking?: bookcarsTypes.Booking;
   className?: string;
@@ -47,7 +47,7 @@ interface CarListProps {
   hideSupplier?: boolean;
   hidePrice?: boolean;
   language?: string;
-  onLoad?: bookcarsTypes.DataEvent<bookcarsTypes.Car>;
+  onLoad?: bookcarsTypes.DataEvent<bookcarsTypes.CarSupplier>;
   onDelete?: (rowCount: number) => void;
 }
 
@@ -77,7 +77,7 @@ const CarSupplierList = ({
   const [init, setInit] = useState(true);
   const [loading, setLoading] = useState(false);
   const [fetch, setFetch] = useState(false);
-  const [rows, setRows] = useState<bookcarsTypes.Car[]>([]);
+  const [rows, setRows] = useState<bookcarsTypes.CarSupplier[]>([]);
   const [page, setPage] = useState(1);
   const [rowCount, setRowCount] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -135,7 +135,7 @@ const CarSupplierList = ({
       }
       const _totalRecords = Array.isArray(_data.pageInfo) && _data.pageInfo.length > 0 ? _data.pageInfo[0].totalRecords : 0;
 
-      let _rows: bookcarsTypes.Car[] = [];
+      let _rows: bookcarsTypes.CarSupplier[] = [];
       if (env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL || env.isMobile()) {
         _rows = _page === 1 ? _data.resultData : [...rows, ..._data.resultData];
       } else {

@@ -23,6 +23,19 @@ export const getCar = (id: string): Promise<bookcarsTypes.CarSupplier> =>
   axiosInstance.get(`/api/car-supplier/${encodeURIComponent(id)}/${UserService.getLanguage()}`).then((res) => res.data);
 
 /**
+ * Get a CarSupplier by ID.
+ *
+ * @param {string} id
+ * @returns {Promise<bookcarsTypes.Car>}
+ */
+export const getCarSupplier = (id: string): Promise<bookcarsTypes.CarSupplier> =>
+  axiosInstance
+    .get(`/api/car-supplier/${encodeURIComponent(id)}/${UserService.getLanguage()}`, {
+      withCredentials: true,
+    })
+    .then((res) => res.data);
+
+/**
  * Get cars by agency and location.
  *
  * @param {string} keyword

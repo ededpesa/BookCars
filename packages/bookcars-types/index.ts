@@ -72,7 +72,7 @@ export enum DocumentType {
 export interface Booking {
   _id?: string;
   supplier: string | User;
-  car: string | Car;
+  car: string | CarSupplier;
   driver?: string | User;
   pickupLocation: string | Location;
   dropOffLocation: string | Location;

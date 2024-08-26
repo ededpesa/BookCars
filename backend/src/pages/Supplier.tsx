@@ -77,7 +77,7 @@ const Supplier = () => {
     setOpenDeleteDialog(false);
   };
 
-  const handleCarListLoad: bookcarsTypes.DataEvent<bookcarsTypes.Car> = (data) => {
+  const handleCarListLoad: bookcarsTypes.DataEvent<bookcarsTypes.CarSupplier> = (data) => {
     if (data) {
       setRowCount(data.rowCount);
     }

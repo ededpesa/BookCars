@@ -4,7 +4,7 @@ import { v1 as uuid } from "uuid";
 import escapeStringRegexp from "escape-string-regexp";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
-import CarSupplier from "src/models/CarSupplier";
+import CarSupplier from "../models/CarSupplier";
 import * as bookcarsTypes from ":bookcars-types";
 import Booking from "../models/Booking";
 import Car from "../models/Car";
@@ -586,6 +586,7 @@ export const getCarSupplier = async (req: Request, res: Response) => {
         seats: carSupplier.car.seats,
         doors: carSupplier.car.doors,
         aircon: carSupplier.car.aircon,
+        minimumAge: carSupplier.car.minimumAge,
       };
 
       for (const location of carSupplier.locations) {
@@ -872,6 +873,7 @@ export const getSupplierCars = async (req: Request, res: Response) => {
             aircon: "$carDetails.aircon",
             seats: "$carDetails.seats",
             doors: "$carDetails.doors",
+            minimumAge: "$carDetails.minimumAge",
           },
         },
         {
@@ -994,6 +996,7 @@ export const getBookingCars = async (req: Request, res: Response) => {
             aircon: "$carDetails.aircon",
             seats: "$carDetails.seats",
             doors: "$carDetails.doors",
+            minimumAge: "$carDetails.minimumAge",
           },
         },
         {
@@ -1125,6 +1128,7 @@ export const getFrontendCars = async (req: Request, res: Response) => {
             aircon: "$car.aircon",
             seats: "$car.seats",
             doors: "$car.doors",
+            minimumAge: "$car.minimumAge",
           },
         },
         // {
