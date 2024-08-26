@@ -43,6 +43,7 @@ import DateTimePicker from "../components/DateTimePicker";
 import DatePicker from "../components/DatePicker";
 
 import "../assets/css/booking.css";
+import CarSupplierList from "../components/CarSupplierList";
 
 const UpdateBooking = () => {
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ const UpdateBooking = () => {
 
         if ((!car && newCar) || (car && newCar && car._id !== newCar._id)) {
           // car changed
-          const _car = await CarService.getCar(newCar._id);
+          const _car = await CarService.getCaSupplier(newCar._id);
 
           if (_car) {
             const _booking = bookcarsHelper.clone(booking);
@@ -515,7 +516,6 @@ const UpdateBooking = () => {
                 name: cmp.fullName,
                 image: cmp.avatar,
               });
-              console.log(_booking.car);
               setCar(_booking.car as bookcarsTypes.Car);
               const drv = _booking.driver as bookcarsTypes.User;
               setDriver({
@@ -907,7 +907,14 @@ const UpdateBooking = () => {
                 )}`}</span>
               </div>
             </div>
-            <CarList className="car" user={user} booking={booking} cars={((car && [booking.car]) as bookcarsTypes.Car[]) || []} language={language} hidePrice />
+            <CarSupplierList
+              className="car"
+              user={user}
+              booking={booking}
+              cars={((car && [booking.car]) as bookcarsTypes.Car[]) || []}
+              language={language}
+              hidePrice
+            />
           </div>
 
           <Dialog disableEscapeKeyDown maxWidth="xs" open={openDeleteDialog}>

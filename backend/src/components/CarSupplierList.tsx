@@ -333,7 +333,18 @@ const CarSupplierList = ({
                 </Card>
               )
             : rows.map((car, index) => {
+                console.log(car);
                 const edit = admin || car.supplier._id === user._id || true;
+
+                if (!car.name && car.car) {
+                  car.name = car.car.name;
+                  car.image = car.car.image;
+                  car.type = car.car.type;
+                  car.gearbox = car.car.gearbox;
+                  car.seats = car.car.seats;
+                  car.doors = car.car.doors;
+                  car.aircon = car.car.aircon;
+                }
                 return (
                   <article key={car._id}>
                     <div className="name">

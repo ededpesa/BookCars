@@ -969,12 +969,51 @@ export const getBookingCars = async (req: Request, res: Response) => {
     const options = "i";
     const page = Number.parseInt(req.params.page, 10);
     const size = Number.parseInt(req.params.size, 10);
-
-    const cars = await Car.aggregate(
+    const cars = await CarSupplier.aggregate(
       [
         {
           $match: {
-            $and: [{ supplier: { $eq: supplier } }, { locations: pickupLocation }, { available: true }, { name: { $regex: keyword, $options: options } }],
+            $and: [{ supplier: { $eq: supplier } }, { locations: pickupLocation }, { available: true }, { status: { $ne: bookcarsTypes.CarStatus.Deleted } }],
+          },
+        },
+        {
+          $lookup: {
+            from: "Car", // Unir con la colección Car
+            localField: "car", // Campo en CarSupplier
+            foreignField: "_id", // Campo en Car
+            as: "carDetails", // Resultado del lookup
+          },
+        },
+        { $unwind: "$carDetails" }, // Desenrollar el array carDetails para acceder a los campos directamente
+        {
+          $addFields: {
+            name: "$carDetails.name",
+            image: "$carDetails.image",
+            type: "$carDetails.type",
+            gearbox: "$carDetails.gearbox",
+            aircon: "$carDetails.aircon",
+            seats: "$carDetails.seats",
+            doors: "$carDetails.doors",
+          },
+        },
+        {
+          $lookup: {
+            from: "User",
+            let: { userId: "$supplier" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$_id", "$$userId"] },
+                },
+              },
+            ],
+            as: "supplier",
+          },
+        },
+        { $unwind: { path: "$supplier", preserveNullAndEmptyArrays: false } },
+        {
+          $match: {
+            $and: [{ name: { $regex: keyword, $options: options } }],
           },
         },
         { $sort: { name: 1, _id: 1 } },
@@ -983,7 +1022,7 @@ export const getBookingCars = async (req: Request, res: Response) => {
       ],
       { collation: { locale: env.DEFAULT_LANGUAGE, strength: 2 } }
     );
-
+    console.log(cars);
     return res.json(cars);
   } catch (err) {
     logger.error(`[car.getBookingCars] ${i18n.t("DB_ERROR")} ${req.query.s}`, err);

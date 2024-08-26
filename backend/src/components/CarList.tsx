@@ -29,7 +29,7 @@ import DoorsIcon from "../assets/img/car-door.png";
 import "../assets/css/car-list.css";
 
 interface CarListProps {
-  // suppliers?: string[];
+  suppliers?: string[];
   keyword?: string;
   carSpecs?: bookcarsTypes.CarSpecs;
   carType?: string[];
@@ -52,7 +52,7 @@ interface CarListProps {
 }
 
 const CarList = ({
-  // suppliers: carSuppliers,
+  suppliers: carSuppliers,
   keyword: carKeyword,
   carSpecs: _carSpecs,
   carType: _carType,
@@ -166,7 +166,7 @@ const CarList = ({
   };
 
   useEffect(() => {
-    if (true) {
+    if (!cars) {
       if (true) {
         fetchData(page, carKeyword, _carSpecs, _carType, carGearbox, carMileage, _fuelPolicy, carDeposit || 0, carAvailability);
       } else {

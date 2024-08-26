@@ -517,7 +517,7 @@ export const getBookingStatuses = (): bookcarsTypes.StatusFilterItem[] => [
  */
 export const price = async (
   booking: bookcarsTypes.Booking,
-  car: bookcarsTypes.Car | undefined | null,
+  car: bookcarsTypes.Car | bookcarsTypes.CarSupplier | undefined | null,
   onSucess: (_price: number) => void,
   onError: (err: unknown) => void
 ) => {
@@ -525,7 +525,7 @@ export const price = async (
 
   try {
     if (!car) {
-      car = await CarService.getCar(booking.car as string);
+      car = await CarService.getCaSupplier(booking.car as string);
     }
 
     if (car) {

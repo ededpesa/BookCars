@@ -705,6 +705,11 @@ export const getBooking = async (req: Request, res: Response) => {
       if (booking.car.car) {
         booking.car.name = booking.car.car.name;
         booking.car.image = booking.car.car.image;
+        booking.car.gearbox = booking.car.car.gearbox;
+        booking.car.type = booking.car.car.type;
+        booking.car.aircon = booking.car.car.aircon;
+        booking.car.seats = booking.car.car.seats;
+        booking.car.doors = booking.car.car.doors;
       }
 
       booking.pickupLocation.name = booking.pickupLocation.values.filter((value) => value.language === language)[0].value;
