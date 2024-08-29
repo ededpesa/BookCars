@@ -225,11 +225,12 @@ const Supplier = () => {
                 size="small"
                 href={"/assign-car" + (user?.type === bookcarsTypes.RecordType.Admin ? "?c=" + supplier._id : "")}
               >
-                {strings.ASSIGN_CAR}
+                {strings.ADD_CAR}
               </Button>
             </div>
           </div>
           <div className="col-2">
+            <h1>{strings.INVENTORY}</h1>
             <CarSupplierList
               user={user}
               suppliers={suppliers}

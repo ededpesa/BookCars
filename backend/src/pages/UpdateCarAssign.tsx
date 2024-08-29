@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import Layout from "../components/Layout";
-import { Button, FormControl, FormControlLabel, Paper, Switch, TextField } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogActions, DialogContent, FormControl, FormControlLabel, Paper, Switch, TextField } from "@mui/material";
 import { strings } from "../lang/create-car";
 import { strings as commonStrings } from "../lang/common";
 import { strings as blStrings } from "../lang/booking-list";
@@ -31,6 +31,7 @@ const UpdateAssignCar = () => {
   const [visible, setVisible] = useState(false);
   const [noMatch, setNoMatch] = useState(false);
   const [error, setError] = useState(false);
+  const [openLocationDialog, setOpenLocationDialog] = useState(false);
   //   const [supplier, setSupplier] = useState<bookcarsTypes.User>();
   const [supplier, setSupplier] = useState<bookcarsTypes.Option>();
   const [car, setCar] = useState<bookcarsTypes.Car>();
@@ -295,6 +296,12 @@ const UpdateAssignCar = () => {
                 <LocationSelectList label={strings.LOCATIONS} multiple required variant="standard" onChange={handleLocationsChange} value={locations} />
               </FormControl>
 
+              <FormControl margin="dense">
+                <Button onClick={() => setOpenLocationDialog(true)} variant="contained" className="btn-secondary">
+                  {commonStrings.NEW_LOCATION}
+                </Button>
+              </FormControl>
+
               <FormControl fullWidth margin="dense">
                 <TextField
                   label={`${strings.PRICE} (${csStrings.CAR_CURRENCY})`}
@@ -478,6 +485,15 @@ const UpdateAssignCar = () => {
           </Paper>
         </div>
       )}
+      <Dialog disableEscapeKeyDown maxWidth="xs" open={openLocationDialog}>
+        <DialogTitle className="dialog-header">{commonStrings.NEW_LOCATION}</DialogTitle>
+        <DialogContent>{commonStrings.NEW_LOCATION_TEXT}</DialogContent>
+        <DialogActions className="dialog-actions">
+          <Button onClick={() => setOpenLocationDialog(false)} variant="contained" className="btn-primary">
+            {commonStrings.CLOSE}
+          </Button>
+        </DialogActions>
+      </Dialog>
       {loading && <SimpleBackdrop text={commonStrings.LOADING} />}
       {error && <ErrorGlobal />}
       {noMatch && <NoMatch hideHeader />}

@@ -11,6 +11,7 @@ const strings = new LocalizedStrings({
   fr: {
     NEW_CAR: "Nouvelle voiture",
     ASSIGN_CAR: "Assign car",
+    ADD_CAR: "Add car",
     DELETE_CAR: "Êtes-vous sûr de vouloir supprimer cette voiture ?",
     CAR_CURRENCY: `${commonStrings.CURRENCY}/jour`,
     FUEL_POLICY: "Politique carburant",
@@ -85,10 +86,12 @@ const strings = new LocalizedStrings({
     PRICE_DAYS_PART_2: "jour",
     PRICE_PER_DAY: "Prix par jour :",
     CAR_ALREADY_ASSIGNED: "Selected car is already assigned",
+    INVENTORY: "Inventory",
   },
   en: {
     NEW_CAR: "New car",
     ASSIGN_CAR: "Assign car",
+    ADD_CAR: "Add car",
     DELETE_CAR: "Are you sure you want to delete this car?",
     CAR_CURRENCY: `${commonStrings.CURRENCY}/day`,
     FUEL_POLICY: "Fuel policy",
@@ -165,10 +168,12 @@ const strings = new LocalizedStrings({
     PRICE_DAYS_PART_2: "day",
     PRICE_PER_DAY: "Price per day:",
     CAR_ALREADY_ASSIGNED: "Selected car is already assigned",
+    INVENTORY: "Inventory",
   },
   es: {
     NEW_CAR: "Nuevo vehículo",
     ASSIGN_CAR: "Asignar vehiculo",
+    ADD_CAR: "Agregar vehículo",
     DELETE_CAR: "¿Está seguro de que quiere eliminar este vehículo?",
     CAR_CURRENCY: `${commonStrings.CURRENCY}/día`,
     FUEL_POLICY: "Política de combustible",
@@ -246,6 +251,7 @@ const strings = new LocalizedStrings({
     PRICE_DAYS_PART_2: "día",
     PRICE_PER_DAY: "Precio por día:",
     CAR_ALREADY_ASSIGNED: "El vehículo seleccionado ya se encuentra asignado",
+    INVENTORY: "Inventario",
   },
 });
 

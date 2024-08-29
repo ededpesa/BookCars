@@ -1,21 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  IconButton,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Tooltip,
-  Card,
-  CardContent,
-  Typography,
-} from "@mui/material";
-import {
-  Visibility as ViewIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-} from "@mui/icons-material";
+import { IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions, Tooltip, Card, CardContent, Typography } from "@mui/material";
+import { Visibility as ViewIcon, Edit as EditIcon, Delete as DeleteIcon, DirectionsCar as CarRentalIcon } from "@mui/icons-material";
 import * as bookcarsTypes from ":bookcars-types";
 import * as bookcarsHelper from ":bookcars-helper";
 import env from "../config/env.config";
@@ -35,12 +20,7 @@ interface SupplierListProps {
   onDelete?: (rowCount: number) => void;
 }
 
-const SupplierList = ({
-  user,
-  keyword: supplierListKeyword,
-  onDelete,
-  onLoad,
-}: SupplierListProps) => {
+const SupplierList = ({ user, keyword: supplierListKeyword, onDelete, onLoad }: SupplierListProps) => {
   const [keyword, setKeyword] = useState(supplierListKeyword);
   const [init, setInit] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -57,29 +37,16 @@ const SupplierList = ({
     try {
       setLoading(true);
 
-      const data = await SupplierService.getSuppliers(
-        _keyword || "",
-        _page,
-        env.PAGE_SIZE,
-      );
-      const _data =
-        data && data.length > 0
-          ? data[0]
-          : { pageInfo: { totalRecord: 0 }, resultData: [] };
+      const data = await SupplierService.getSuppliers(_keyword || "", _page, env.PAGE_SIZE);
+      const _data = data && data.length > 0 ? data[0] : { pageInfo: { totalRecord: 0 }, resultData: [] };
       if (!_data) {
         helper.error();
         return;
       }
-      const _totalRecords =
-        Array.isArray(_data.pageInfo) && _data.pageInfo.length > 0
-          ? _data.pageInfo[0].totalRecords
-          : 0;
+      const _totalRecords = Array.isArray(_data.pageInfo) && _data.pageInfo.length > 0 ? _data.pageInfo[0].totalRecords : 0;
 
       let _rows = [];
-      if (
-        env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL ||
-        env.isMobile()
-      ) {
+      if (env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL || env.isMobile()) {
         _rows = _page === 1 ? _data.resultData : [...rows, ..._data.resultData];
       } else {
         _rows = _data.resultData;
@@ -91,11 +58,8 @@ const SupplierList = ({
       setFetch(_data.resultData.length > 0);
 
       if (
-        ((env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL ||
-          env.isMobile()) &&
-          _page === 1) ||
-        (env.PAGINATION_MODE === Const.PAGINATION_MODE.CLASSIC &&
-          !env.isMobile())
+        ((env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL || env.isMobile()) && _page === 1) ||
+        (env.PAGINATION_MODE === Const.PAGINATION_MODE.CLASSIC && !env.isMobile())
       ) {
         window.scrollTo(0, 0);
       }
@@ -123,21 +87,12 @@ const SupplierList = ({
   }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (
-      env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL ||
-      env.isMobile()
-    ) {
+    if (env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL || env.isMobile()) {
       const element = document.querySelector("body");
 
       if (element) {
         element.onscroll = () => {
-          if (
-            fetch &&
-            !loading &&
-            window.scrollY > 0 &&
-            window.scrollY + window.innerHeight + env.INFINITE_SCROLL_OFFSET >=
-              document.body.scrollHeight
-          ) {
+          if (fetch && !loading && window.scrollY > 0 && window.scrollY + window.innerHeight + env.INFINITE_SCROLL_OFFSET >= document.body.scrollHeight) {
             setLoading(true);
             setPage(page + 1);
           }
@@ -148,9 +103,7 @@ const SupplierList = ({
 
   const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
     const _supplierId = e.currentTarget.getAttribute("data-id") as string;
-    const _supplierIndex = Number(
-      e.currentTarget.getAttribute("data-index") as string,
-    );
+    const _supplierIndex = Number(e.currentTarget.getAttribute("data-index") as string);
 
     setOpenDeleteDialog(true);
     setSupplierId(_supplierId);
@@ -211,9 +164,7 @@ const SupplierList = ({
             !loading && (
               <Card variant="outlined" className="empty-list">
                 <CardContent>
-                  <Typography color="textSecondary">
-                    {strings.EMPTY_LIST}
-                  </Typography>
+                  <Typography color="textSecondary">{strings.EMPTY_LIST}</Typography>
                 </CardContent>
               </Card>
             )
@@ -225,26 +176,14 @@ const SupplierList = ({
                 <article key={supplier._id}>
                   <div className="supplier-item">
                     <div className="supplier-item-avatar">
-                      <img
-                        src={bookcarsHelper.joinURL(
-                          env.CDN_USERS,
-                          supplier.avatar,
-                        )}
-                        alt={supplier.fullName}
-                      />
+                      <img src={bookcarsHelper.joinURL(env.CDN_USERS, supplier.avatar)} alt={supplier.fullName} />
                     </div>
-                    <span className="supplier-item-title">
-                      {supplier.fullName}
-                    </span>
+                    <span className="supplier-item-title">{supplier.fullName}</span>
                   </div>
                   <div className="supplier-actions">
                     {canDelete && (
                       <Tooltip title={commonStrings.DELETE}>
-                        <IconButton
-                          data-id={supplier._id}
-                          data-index={index}
-                          onClick={handleDelete}
-                        >
+                        <IconButton data-id={supplier._id} data-index={index} onClick={handleDelete}>
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
@@ -256,9 +195,9 @@ const SupplierList = ({
                         </IconButton>
                       </Tooltip>
                     )}
-                    <Tooltip title={strings.VIEW_SUPPLIER}>
+                    <Tooltip title={strings.VIEW_INVENTORY}>
                       <IconButton href={`/supplier?c=${supplier._id}`}>
-                        <ViewIcon />
+                        <CarRentalIcon />
                       </IconButton>
                     </Tooltip>
                   </div>
@@ -266,39 +205,28 @@ const SupplierList = ({
               );
             })}
         <Dialog disableEscapeKeyDown maxWidth="xs" open={openDeleteDialog}>
-          <DialogTitle className="dialog-header">
-            {commonStrings.CONFIRM_TITLE}
-          </DialogTitle>
+          <DialogTitle className="dialog-header">{commonStrings.CONFIRM_TITLE}</DialogTitle>
           <DialogContent>{strings.DELETE_SUPPLIER}</DialogContent>
           <DialogActions className="dialog-actions">
-            <Button
-              onClick={handleCancelDelete}
-              variant="contained"
-              className="btn-secondary"
-            >
+            <Button onClick={handleCancelDelete} variant="contained" className="btn-secondary">
               {commonStrings.CANCEL}
             </Button>
-            <Button
-              onClick={handleConfirmDelete}
-              variant="contained"
-              color="error"
-            >
+            <Button onClick={handleConfirmDelete} variant="contained" color="error">
               {commonStrings.DELETE}
             </Button>
           </DialogActions>
         </Dialog>
       </section>
-      {env.PAGINATION_MODE === Const.PAGINATION_MODE.CLASSIC &&
-        !env.isMobile() && (
-          <Pager
-            page={page}
-            pageSize={env.PAGE_SIZE}
-            rowCount={rowCount}
-            totalRecords={totalRecords}
-            onNext={() => setPage(page + 1)}
-            onPrevious={() => setPage(page - 1)}
-          />
-        )}
+      {env.PAGINATION_MODE === Const.PAGINATION_MODE.CLASSIC && !env.isMobile() && (
+        <Pager
+          page={page}
+          pageSize={env.PAGE_SIZE}
+          rowCount={rowCount}
+          totalRecords={totalRecords}
+          onNext={() => setPage(page + 1)}
+          onPrevious={() => setPage(page - 1)}
+        />
+      )}
     </>
   );
 };

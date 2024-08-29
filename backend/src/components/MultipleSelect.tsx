@@ -1,21 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  forwardRef,
-  useRef,
-  useImperativeHandle,
-} from "react";
-import {
-  Autocomplete,
-  TextField,
-  InputAdornment,
-  Avatar,
-  SxProps,
-  Theme,
-  TextFieldVariants,
-  AutocompleteInputChangeReason,
-  Chip,
-} from "@mui/material";
+import React, { useState, useEffect, forwardRef, useRef, useImperativeHandle } from "react";
+import { Autocomplete, TextField, InputAdornment, Avatar, SxProps, Theme, TextFieldVariants, AutocompleteInputChangeReason, Chip } from "@mui/material";
 import { LocationOn as LocationIcon, AccountCircle } from "@mui/icons-material";
 import * as bookcarsTypes from ":bookcars-types";
 import * as bookcarsHelper from ":bookcars-helper";
@@ -39,36 +23,28 @@ interface MultipleSelectProps {
   type: string;
   variant?: TextFieldVariants;
   readOnly?: boolean;
-  callbackFromMultipleSelect?: (
-    newValue: any,
-    _key: string,
-    _reference: any,
-  ) => void;
+  freeSolo?: boolean;
+  callbackFromMultipleSelect?: (newValue: any, _key: string, _reference: any) => void;
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
-  onInputChange?: (
-    event: React.SyntheticEvent<Element, Event>,
-    value?: string,
-    reason?: AutocompleteInputChangeReason,
-  ) => void;
+  onInputChange?: (event: React.SyntheticEvent<Element, Event>, value?: string, reason?: AutocompleteInputChangeReason) => void;
   onClear?: () => void;
   onOpen?: (event: React.SyntheticEvent<Element, Event>) => void;
 }
 
-const ListBox: React.ComponentType<React.HTMLAttributes<HTMLElement>> =
-  forwardRef((props, ref) => {
-    const { children, ...rest }: { children?: React.ReactNode } = props;
+const ListBox: React.ComponentType<React.HTMLAttributes<HTMLElement>> = forwardRef((props, ref) => {
+  const { children, ...rest }: { children?: React.ReactNode } = props;
 
-    const innerRef = useRef(null);
+  const innerRef = useRef(null);
 
-    useImperativeHandle(ref, () => innerRef.current);
+  useImperativeHandle(ref, () => innerRef.current);
 
-    return (
-      // eslint-disable-next-line
-      <ul {...rest} ref={innerRef} role="list-box">
-        {children}
-      </ul>
-    );
-  });
+  return (
+    // eslint-disable-next-line
+    <ul {...rest} ref={innerRef} role="list-box">
+      {children}
+    </ul>
+  );
+});
 
 const MultipleSelect = ({
   label,
@@ -83,6 +59,7 @@ const MultipleSelect = ({
   type,
   variant,
   readOnly,
+  freeSolo,
   callbackFromMultipleSelect,
   onFocus,
   onInputChange,
@@ -108,21 +85,14 @@ const MultipleSelect = ({
   return (
     <div className="multiple-select">
       <Autocomplete
+        freeSolo={freeSolo}
         readOnly={readOnly}
         options={options}
         value={multiple ? values : values.length > 0 ? values[0] : null}
         getOptionLabel={(option) => (option && option.name) || ""}
         isOptionEqualToValue={(option, value) => option._id === value._id}
-        onChange={(
-          event: React.SyntheticEvent<Element, Event>,
-          newValue: any,
-        ) => {
-          if (
-            event &&
-            event.type === "keydown" &&
-            "key" in event &&
-            event.key === "Enter"
-          ) {
+        onChange={(event: React.SyntheticEvent<Element, Event>, newValue: any) => {
+          if (event && event.type === "keydown" && "key" in event && event.key === "Enter") {
             return;
           }
           key = key || "";
@@ -161,12 +131,7 @@ const MultipleSelect = ({
           const { inputProps } = params;
           inputProps.autoComplete = "off";
 
-          if (
-            type === bookcarsTypes.RecordType.User &&
-            !multiple &&
-            values.length === 1 &&
-            values[0]
-          ) {
+          if (type === bookcarsTypes.RecordType.User && !multiple && values.length === 1 && values[0]) {
             const option = values[0];
 
             return (
@@ -181,18 +146,9 @@ const MultipleSelect = ({
                     <>
                       <InputAdornment position="start">
                         {option.image ? (
-                          <Avatar
-                            src={bookcarsHelper.joinURL(
-                              env.CDN_USERS,
-                              option.image,
-                            )}
-                            className="avatar-small suo"
-                          />
+                          <Avatar src={bookcarsHelper.joinURL(env.CDN_USERS, option.image)} className="avatar-small suo" />
                         ) : (
-                          <AccountCircle
-                            className="avatar-small suo"
-                            color="disabled"
-                          />
+                          <AccountCircle className="avatar-small suo" color="disabled" />
                         )}
                       </InputAdornment>
                       {params.InputProps.startAdornment}
@@ -203,12 +159,7 @@ const MultipleSelect = ({
             );
           }
 
-          if (
-            type === bookcarsTypes.RecordType.Supplier &&
-            !multiple &&
-            values.length === 1 &&
-            values[0]
-          ) {
+          if (type === bookcarsTypes.RecordType.Supplier && !multiple && values.length === 1 && values[0]) {
             const option = values[0];
 
             return (
@@ -223,13 +174,7 @@ const MultipleSelect = ({
                     <>
                       <InputAdornment position="start">
                         <div className="supplier-ia">
-                          <img
-                            src={bookcarsHelper.joinURL(
-                              env.CDN_USERS,
-                              option.image,
-                            )}
-                            alt={option.name}
-                          />
+                          <img src={bookcarsHelper.joinURL(env.CDN_USERS, option.image)} alt={option.name} />
                         </div>
                       </InputAdornment>
                       {params.InputProps.startAdornment}
@@ -240,12 +185,7 @@ const MultipleSelect = ({
             );
           }
 
-          if (
-            type === bookcarsTypes.RecordType.Location &&
-            !multiple &&
-            values.length === 1 &&
-            values[0]
-          ) {
+          if (type === bookcarsTypes.RecordType.Location && !multiple && values.length === 1 && values[0]) {
             return (
               <TextField
                 {...params}
@@ -267,12 +207,7 @@ const MultipleSelect = ({
             );
           }
 
-          if (
-            type === bookcarsTypes.RecordType.Car &&
-            !multiple &&
-            values.length === 1 &&
-            values[0]
-          ) {
+          if (type === bookcarsTypes.RecordType.Car && !multiple && values.length === 1 && values[0]) {
             const option = values[0];
 
             return (
@@ -287,10 +222,7 @@ const MultipleSelect = ({
                     <>
                       <InputAdornment position="start">
                         <img
-                          src={bookcarsHelper.joinURL(
-                            env.CDN_CARS,
-                            option.image,
-                          )}
+                          src={bookcarsHelper.joinURL(env.CDN_CARS, option.image)}
                           alt={option.name}
                           style={{
                             height: env.SELECTED_CAR_OPTION_IMAGE_HEIGHT,
@@ -305,14 +237,7 @@ const MultipleSelect = ({
             );
           }
 
-          return (
-            <TextField
-              {...params}
-              label={label}
-              variant={variant || "outlined"}
-              required={required && values && values.length === 0}
-            />
-          );
+          return <TextField {...params} label={label} variant={variant || "outlined"} required={required && values && values.length === 0} />;
         }}
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
@@ -321,31 +246,16 @@ const MultipleSelect = ({
             onInputChange(event);
           }
         }}
-        renderTags={(tagValue, getTagProps) =>
-          tagValue.map((option, index) => (
-            <Chip
-              {...getTagProps({ index })}
-              key={option._id}
-              label={option.name}
-            />
-          ))
-        }
+        renderTags={(tagValue, getTagProps) => tagValue.map((option, index) => <Chip {...getTagProps({ index })} key={option._id} label={option.name} />)}
         renderOption={(props, option) => {
           if ("key" in props) delete props.key;
 
           if (type === bookcarsTypes.RecordType.User) {
             return (
-              <li
-                {...props}
-                key={option._id}
-                className={`${props.className} ms-option`}
-              >
+              <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image">
                   {option.image ? (
-                    <Avatar
-                      src={bookcarsHelper.joinURL(env.CDN_USERS, option.image)}
-                      className="avatar-medium"
-                    />
+                    <Avatar src={bookcarsHelper.joinURL(env.CDN_USERS, option.image)} className="avatar-medium" />
                   ) : (
                     <AccountCircle className="avatar-medium" color="disabled" />
                   )}
@@ -356,16 +266,9 @@ const MultipleSelect = ({
           }
           if (type === bookcarsTypes.RecordType.Supplier) {
             return (
-              <li
-                {...props}
-                key={option._id}
-                className={`${props.className} ms-option`}
-              >
+              <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image supplier-ia">
-                  <img
-                    src={bookcarsHelper.joinURL(env.CDN_USERS, option.image)}
-                    alt={option.name}
-                  />
+                  <img src={bookcarsHelper.joinURL(env.CDN_USERS, option.image)} alt={option.name} />
                 </span>
                 <span className="option-name">{option.name}</span>
               </li>
@@ -373,11 +276,7 @@ const MultipleSelect = ({
           }
           if (type === bookcarsTypes.RecordType.Location) {
             return (
-              <li
-                {...props}
-                key={option._id}
-                className={`${props.className} ms-option`}
-              >
+              <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image">
                   <LocationIcon />
                 </span>
@@ -387,11 +286,7 @@ const MultipleSelect = ({
           }
           if (type === bookcarsTypes.RecordType.Car) {
             return (
-              <li
-                {...props}
-                key={option._id}
-                className={`${props.className} ms-option`}
-              >
+              <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image car-ia">
                   <img
                     src={bookcarsHelper.joinURL(env.CDN_CARS, option.image)}
@@ -407,11 +302,7 @@ const MultipleSelect = ({
           }
 
           return (
-            <li
-              {...props}
-              key={option._id}
-              className={`${props.className} ms-option`}
-            >
+            <li {...props} key={option._id} className={`${props.className} ms-option`}>
               <span>{option.name}</span>
             </li>
           );
