@@ -16,7 +16,7 @@ const bookingSchema = new Schema<env.Booking>(
     car: {
       type: Schema.Types.ObjectId,
       required: [true, "can't be blank"],
-      ref: "Car",
+      ref: "CarSupplier",
     },
     driver: {
       type: Schema.Types.ObjectId,
@@ -51,6 +51,7 @@ const bookingSchema = new Schema<env.Booking>(
         bookcarsTypes.BookingStatus.Paid,
         bookcarsTypes.BookingStatus.Reserved,
         bookcarsTypes.BookingStatus.Cancelled,
+        bookcarsTypes.BookingStatus.Deleted,
       ],
       required: [true, "can't be blank"],
     },

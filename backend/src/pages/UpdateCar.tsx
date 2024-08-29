@@ -35,31 +35,31 @@ const UpdateCar = () => {
   const [imageSizeError, setImageSizeError] = useState(false);
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
-  const [supplier, setSupplier] = useState<bookcarsTypes.Option>();
-  const [locations, setLocations] = useState<bookcarsTypes.Option[]>([]);
-  const [available, setAvailable] = useState(false);
+  // const [supplier, setSupplier] = useState<bookcarsTypes.Option>();
+  // const [locations, setLocations] = useState<bookcarsTypes.Option[]>([]);
+  // const [available, setAvailable] = useState(false);
   const [type, setType] = useState("");
   const [gearbox, setGearbox] = useState("");
-  const [price, setPrice] = useState("");
+  // const [price, setPrice] = useState("");
   const [seats, setSeats] = useState("");
   const [doors, setDoors] = useState("");
   const [aircon, setAircon] = useState(false);
-  const [mileage, setMileage] = useState("");
-  const [fuelPolicy, setFuelPolicy] = useState("");
-  const [cancellation, setCancellation] = useState("");
-  // const [amendments, setAmendments] = useState("");
-  const [gps, setGps] = useState("");
-  const [theftProtection, setTheftProtection] = useState("");
-  const [collisionDamageWaiver, setCollisionDamageWaiver] = useState("");
-  const [fullInsurance, setFullInsurance] = useState("");
-  const [additionalDriver, setAdditionalDriver] = useState("");
-  const [homeDelivery, setHomeDelivery] = useState("");
-  const [babyChair, setBabyChair] = useState("");
+  // const [mileage, setMileage] = useState("");
+  // const [fuelPolicy, setFuelPolicy] = useState("");
+  // const [cancellation, setCancellation] = useState("");
+  // // const [amendments, setAmendments] = useState("");
+  // const [gps, setGps] = useState("");
+  // const [theftProtection, setTheftProtection] = useState("");
+  // const [collisionDamageWaiver, setCollisionDamageWaiver] = useState("");
+  // const [fullInsurance, setFullInsurance] = useState("");
+  // const [additionalDriver, setAdditionalDriver] = useState("");
+  // const [homeDelivery, setHomeDelivery] = useState("");
+  // const [babyChair, setBabyChair] = useState("");
   const [minimumAge, setMinimumAge] = useState(String(env.MINIMUM_AGE));
   const [minimumAgeValid, setMinimumAgeValid] = useState(true);
   const [formError, setFormError] = useState(false);
-  const [deposit, setDeposit] = useState("");
-  const [inventory, setInventory] = useState("");
+  // const [deposit, setDeposit] = useState("");
+  // const [inventory, setInventory] = useState("");
 
   const handleBeforeUpload = () => {
     setLoading(true);
@@ -90,9 +90,9 @@ const UpdateCar = () => {
     setName(e.target.value);
   };
 
-  const handleSupplierChange = (values: bookcarsTypes.Option[]) => {
-    setSupplier(values.length > 0 ? values[0] : undefined);
-  };
+  // const handleSupplierChange = (values: bookcarsTypes.Option[]) => {
+  //   setSupplier(values.length > 0 ? values[0] : undefined);
+  // };
 
   const validateMinimumAge = (age: string, updateState = true) => {
     if (age) {
@@ -121,13 +121,13 @@ const UpdateCar = () => {
     }
   };
 
-  const handleLocationsChange = (_locations: bookcarsTypes.Option[]) => {
-    setLocations(_locations);
-  };
+  // const handleLocationsChange = (_locations: bookcarsTypes.Option[]) => {
+  //   setLocations(_locations);
+  // };
 
-  const handleAvailableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAvailable(e.target.checked);
-  };
+  // const handleAvailableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setAvailable(e.target.checked);
+  // };
 
   const handleCarTypeChange = (value: string) => {
     setType(value);
@@ -141,17 +141,17 @@ const UpdateCar = () => {
     setAircon(e.target.checked);
   };
 
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPrice(e.target.value);
-  };
+  // const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPrice(e.target.value);
+  // };
 
-  const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDeposit(e.target.value);
-  };
+  // const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDeposit(e.target.value);
+  // };
 
-  const handleInventoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInventory(e.target.value);
-  };
+  // const handleInventoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInventory(e.target.value);
+  // };
 
   const handleSeatsChange = (value: string) => {
     setSeats(value);
@@ -161,51 +161,51 @@ const UpdateCar = () => {
     setDoors(value);
   };
 
-  const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMileage(e.target.value);
-  };
-
-  const handleFuelPolicyChange = (value: string) => {
-    setFuelPolicy(value);
-  };
-
-  const handleCancellationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCancellation(e.target.value);
-  };
-
-  // const handleAmendmentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setAmendments(e.target.value);
+  // const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setMileage(e.target.value);
   // };
 
-  const handleGpsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGps(e.target.value);
-  };
+  // const handleFuelPolicyChange = (value: string) => {
+  //   setFuelPolicy(value);
+  // };
 
-  const handleHomeDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHomeDelivery(e.target.value);
-  };
+  // const handleCancellationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCancellation(e.target.value);
+  // };
 
-  const handleBabyChairChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBabyChair(e.target.value);
-  };
+  // // const handleAmendmentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // //   setAmendments(e.target.value);
+  // // };
 
-  const handleTheftProtectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTheftProtection(e.target.value);
-  };
+  // const handleGpsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setGps(e.target.value);
+  // };
 
-  const handleCollisionDamageWaiverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCollisionDamageWaiver(e.target.value);
-  };
+  // const handleHomeDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setHomeDelivery(e.target.value);
+  // };
 
-  const handleFullinsuranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFullInsurance(e.target.value);
-  };
+  // const handleBabyChairChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setBabyChair(e.target.value);
+  // };
 
-  const handleAdditionalDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAdditionalDriver(e.target.value);
-  };
+  // const handleTheftProtectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTheftProtection(e.target.value);
+  // };
 
-  const extraToString = (extra: number) => (extra === -1 ? "" : String(extra));
+  // const handleCollisionDamageWaiverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCollisionDamageWaiver(e.target.value);
+  // };
+
+  // const handleFullinsuranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setFullInsurance(e.target.value);
+  // };
+
+  // const handleAdditionalDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setAdditionalDriver(e.target.value);
+  // };
+
+  // const extraToString = (extra: number) => (extra === -1 ? "" : String(extra));
 
   const extraToNumber = (extra: string) => (extra === "" ? -1 : Number(extra));
 
@@ -219,7 +219,7 @@ const UpdateCar = () => {
         return;
       }
 
-      if (!car || !supplier) {
+      if (!car) {
         helper.error();
         return;
       }
@@ -227,30 +227,31 @@ const UpdateCar = () => {
       const data = {
         _id: car._id,
         name,
-        supplier: supplier._id,
+        //supplier: supplier._id,
+        // suppliers: [{ supplier: supplier._id, inventory: Number(inventory) }],
         minimumAge: Number.parseInt(minimumAge, 10),
-        locations: locations.map((l) => l._id),
-        price: Number(price),
-        deposit: Number(deposit),
-        inventory: Number(inventory),
-        available,
+        // locations: locations.map((l) => l._id),
+        // price: Number(price),
+        // deposit: Number(deposit),
+        //inventory: Number(inventory),
+        // available,
         type,
         gearbox,
         aircon,
         image,
         seats: Number.parseInt(seats, 10),
         doors: Number.parseInt(doors, 10),
-        fuelPolicy,
-        mileage: extraToNumber(mileage),
-        cancellation: extraToNumber(cancellation),
+        // fuelPolicy,
+        // mileage: extraToNumber(mileage),
+        // cancellation: extraToNumber(cancellation),
         // amendments: extraToNumber(amendments),
-        gps: extraToNumber(gps),
-        homeDelivery: extraToNumber(homeDelivery),
-        babyChair: extraToNumber(babyChair),
-        theftProtection: extraToNumber(theftProtection),
-        collisionDamageWaiver: extraToNumber(collisionDamageWaiver),
-        fullInsurance: extraToNumber(fullInsurance),
-        additionalDriver: extraToNumber(additionalDriver),
+        // gps: extraToNumber(gps),
+        // homeDelivery: extraToNumber(homeDelivery),
+        // babyChair: extraToNumber(babyChair),
+        // theftProtection: extraToNumber(theftProtection),
+        // collisionDamageWaiver: extraToNumber(collisionDamageWaiver),
+        // fullInsurance: extraToNumber(fullInsurance),
+        // additionalDriver: extraToNumber(additionalDriver),
       };
 
       const status = await CarService.update(data);
@@ -283,44 +284,44 @@ const UpdateCar = () => {
                 return;
               }
 
-              const _supplier = {
-                _id: _car.supplier._id as string,
-                name: _car.supplier.fullName,
-                image: _car.supplier.avatar,
-              };
+              // const _supplier = {
+              //   _id: _car.supplier._id as string,
+              //   name: _car.supplier.fullName,
+              //   image: _car.supplier.avatar,
+              // };
 
               setCar(_car);
               setImageRequired(!_car.image);
               setName(_car.name);
-              setSupplier(_supplier);
+              // setSupplier(_supplier);
               setMinimumAge(_car.minimumAge.toString());
-              const lcs: bookcarsTypes.Option[] = [];
-              for (const loc of _car.locations) {
-                const { _id, name: _name } = loc;
-                const lc: bookcarsTypes.Option = { _id, name: _name ?? "" };
-                lcs.push(lc);
-              }
-              setLocations(lcs);
-              setPrice(_car.price.toString());
-              setDeposit(_car.deposit.toString());
-              setInventory(_car.inventory?.toString());
-              setAvailable(_car.available);
+              //const lcs: bookcarsTypes.Option[] = [];
+              // for (const loc of _car.locations) {
+              //   const { _id, name: _name } = loc;
+              //   const lc: bookcarsTypes.Option = { _id, name: _name ?? "" };
+              //   lcs.push(lc);
+              // }
+              //setLocations(lcs);
+              //setPrice(_car.price.toString());
+              //setDeposit(_car.deposit.toString());
+              //setInventory(_car.inventory?.toString());
+              //setAvailable(_car.available);
               setType(_car.type);
               setGearbox(_car.gearbox);
               setAircon(_car.aircon);
               setSeats(_car.seats.toString());
               setDoors(_car.doors.toString());
-              setFuelPolicy(_car.fuelPolicy);
-              setMileage(extraToString(_car.mileage));
-              setCancellation(extraToString(_car.cancellation));
-              //setAmendments(extraToString(_car.amendments));
-              setGps(extraToString(_car.gps ?? ""));
-              setHomeDelivery(extraToString(_car.homeDelivery ?? ""));
-              setBabyChair(extraToString(_car.babyChair ?? ""));
-              setTheftProtection(extraToString(_car.theftProtection));
-              setCollisionDamageWaiver(extraToString(_car.collisionDamageWaiver));
-              setFullInsurance(extraToString(_car.fullInsurance));
-              setAdditionalDriver(extraToString(_car.additionalDriver));
+              // setFuelPolicy(_car.fuelPolicy);
+              // setMileage(extraToString(_car.mileage));
+              // setCancellation(extraToString(_car.cancellation));
+              // setAmendments(extraToString(_car.amendments));
+              // setGps(extraToString(_car.gps ?? ""));
+              // setHomeDelivery(extraToString(_car.homeDelivery ?? ""));
+              // setBabyChair(extraToString(_car.babyChair ?? ""));
+              // setTheftProtection(extraToString(_car.theftProtection));
+              // setCollisionDamageWaiver(extraToString(_car.collisionDamageWaiver));
+              // setFullInsurance(extraToString(_car.fullInsurance));
+              // setAdditionalDriver(extraToString(_car.additionalDriver));
               setVisible(true);
               setLoading(false);
             } else {
@@ -376,11 +377,11 @@ const UpdateCar = () => {
                 <Input type="text" required value={name} autoComplete="off" onChange={handleNameChange} />
               </FormControl>
 
-              {admin && (
+              {/* {admin && (
                 <FormControl fullWidth margin="dense">
                   <SupplierSelectList label={strings.SUPPLIER} required value={supplier} variant="standard" onChange={handleSupplierChange} />
                 </FormControl>
-              )}
+              )} */}
 
               <FormControl fullWidth margin="dense">
                 <InputLabel className="required">{strings.MINIMUM_AGE}</InputLabel>
@@ -396,11 +397,11 @@ const UpdateCar = () => {
                 <FormHelperText error={!minimumAgeValid}>{(!minimumAgeValid && strings.MINIMUM_AGE_NOT_VALID) || ""}</FormHelperText>
               </FormControl>
 
-              <FormControl fullWidth margin="dense">
+              {/* <FormControl fullWidth margin="dense">
                 <LocationSelectList label={strings.LOCATIONS} multiple required variant="standard" value={locations} onChange={handleLocationsChange} />
-              </FormControl>
+              </FormControl> */}
 
-              <FormControl fullWidth margin="dense">
+              {/* <FormControl fullWidth margin="dense">
                 <TextField
                   label={`${strings.PRICE} (${csStrings.CAR_CURRENCY})`}
                   inputProps={{
@@ -413,9 +414,9 @@ const UpdateCar = () => {
                   autoComplete="off"
                   value={price}
                 />
-              </FormControl>
+              </FormControl> */}
 
-              <FormControl fullWidth margin="dense">
+              {/* <FormControl fullWidth margin="dense">
                 <TextField
                   label={`${csStrings.DEPOSIT} (${commonStrings.CURRENCY})`}
                   inputProps={{
@@ -441,7 +442,6 @@ const UpdateCar = () => {
                   onChange={handleInventoryChange}
                   inputProps={{ inputMode: "numeric", pattern: "^\\d+$" }}
                 />
-                {/* <FormHelperText error={!minimumAgeValid}>{(!minimumAgeValid && strings.MINIMUM_AGE_NOT_VALID) || ""}</FormHelperText> */}
               </FormControl>
 
               <FormControl fullWidth margin="dense" className="checkbox-fc">
@@ -450,7 +450,7 @@ const UpdateCar = () => {
                   label={strings.AVAILABLE}
                   className="checkbox-fcl"
                 />
-              </FormControl>
+              </FormControl> */}
 
               <FormControl fullWidth margin="dense">
                 <CarTypeList label={strings.CAR_TYPE} variant="standard" required value={type} onChange={handleCarTypeChange} />
@@ -468,9 +468,9 @@ const UpdateCar = () => {
                 <DoorsList label={strings.DOORS} variant="standard" required value={doors} onChange={handleDoorsChange} />
               </FormControl>
 
-              <FormControl fullWidth margin="dense">
+              {/* <FormControl fullWidth margin="dense">
                 <FuelPolicyList label={csStrings.FUEL_POLICY} variant="standard" required value={fuelPolicy} onChange={handleFuelPolicyChange} />
-              </FormControl>
+              </FormControl> */}
 
               <FormControl fullWidth margin="dense">
                 <div className="info">
@@ -487,7 +487,7 @@ const UpdateCar = () => {
                 />
               </FormControl>
 
-              <FormControl fullWidth margin="dense">
+              {/* <FormControl fullWidth margin="dense">
                 <TextField
                   label={`${csStrings.MILEAGE} (${csStrings.MILEAGE_UNIT})`}
                   inputProps={{
@@ -515,19 +515,6 @@ const UpdateCar = () => {
                 />
               </FormControl>
 
-              {/* <FormControl fullWidth margin="dense">
-                <TextField
-                  label={`${csStrings.AMENDMENTS} (${commonStrings.CURRENCY})`}
-                  inputProps={{
-                    inputMode: "numeric",
-                    pattern: "^\\d+(.\\d+)?$",
-                  }}
-                  onChange={handleAmendmentsChange}
-                  variant="standard"
-                  autoComplete="off"
-                  value={amendments}
-                />
-              </FormControl> */}
               <FormControl fullWidth margin="dense">
                 <TextField
                   label={`${csStrings.GPS} (${csStrings.CAR_CURRENCY})`}
@@ -624,7 +611,7 @@ const UpdateCar = () => {
                   autoComplete="off"
                   value={babyChair}
                 />
-              </FormControl>
+              </FormControl> */}
 
               <div className="buttons">
                 <Button type="submit" variant="contained" className="btn-primary btn-margin-bottom" size="small">

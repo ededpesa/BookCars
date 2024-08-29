@@ -67,7 +67,7 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState<bookcarsTypes.User>();
-  const [car, setCar] = useState<bookcarsTypes.Car>();
+  const [car, setCar] = useState<bookcarsTypes.CarSupplier>();
   const [pickupLocation, setPickupLocation] = useState<bookcarsTypes.Location>();
   const [dropOffLocation, setDropOffLocation] = useState<bookcarsTypes.Location>();
   const [from, setFrom] = useState<Date>();
@@ -437,9 +437,10 @@ const Checkout = () => {
 
   const validateBirthDate = (date?: Date) => {
     if (car && date && bookcarsHelper.isDate(date)) {
+      console.log(car);
       const now = new Date();
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0;
-      const _birthDateValid = sub >= car.minimumAge;
+      const _birthDateValid = sub >= car.car.minimumAge;
 
       setBirthDateValid(_birthDateValid);
       return _birthDateValid;
@@ -453,7 +454,7 @@ const Checkout = () => {
     if (car && date && bookcarsHelper.isDate(date)) {
       const now = new Date();
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0;
-      const _birthDateValid = sub >= car.minimumAge;
+      const _birthDateValid = sub >= car.car.minimumAge;
 
       setAddiontalDriverBirthDateValid(_birthDateValid);
       return _birthDateValid;
@@ -710,6 +711,7 @@ const Checkout = () => {
 
     try {
       _car = await CarService.getCar(carId);
+      console.log(_car);
       if (!_car) {
         setNoMatch(true);
         return;
@@ -919,7 +921,7 @@ const Checkout = () => {
                       <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                         <span className="booking-detail-title">{strings.CAR}</span>
                         <div className="booking-detail-value">
-                          {`${car.name} (${bookcarsHelper.formatPrice(car.price, commonStrings.CURRENCY, language)}${commonStrings.DAILY})`}
+                          {`${car.car.name} (${bookcarsHelper.formatPrice(car.price, commonStrings.CURRENCY, language)}${commonStrings.DAILY})`}
                         </div>
                       </div>
                       <div className="booking-detail" style={{ height: bookingDetailHeight }}>
@@ -1030,7 +1032,7 @@ const Checkout = () => {
                             }}
                             language={language}
                           />
-                          <FormHelperText error={!birthDateValid}>{(!birthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}</FormHelperText>
+                          <FormHelperText error={!birthDateValid}>{(!birthDateValid && helper.getBirthDateError(car.car.minimumAge)) || ""}</FormHelperText>
                         </FormControl>
 
                         {env.RECAPTCHA_ENABLED && (
@@ -1140,7 +1142,7 @@ const Checkout = () => {
                             language={language}
                           />
                           <FormHelperText error={!addiontalDriverBirthDateValid}>
-                            {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}
+                            {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.car.minimumAge)) || ""}
                           </FormHelperText>
                         </FormControl>
                       </div>

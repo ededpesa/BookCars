@@ -32,7 +32,7 @@ const CreateBooking = () => {
   const [isSupplier, setIsSupplier] = useState(false);
   const [visible, setVisible] = useState(false);
   const [supplier, setSupplier] = useState("");
-  const [car, setCar] = useState<bookcarsTypes.Car>();
+  const [car, setCar] = useState<bookcarsTypes.CarSupplier>();
   const [driver, setDriver] = useState("");
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropOffLocation, setDropOffLocation] = useState("");
@@ -76,7 +76,7 @@ const CreateBooking = () => {
     setDropOffLocation(values.length > 0 ? values[0]._id : "-1");
   };
 
-  const handleCarSelectListChange = useCallback((values: bookcarsTypes.Car[]) => {
+  const handleCarSelectListChange = useCallback((values: bookcarsTypes.CarSupplier[]) => {
     if (Array.isArray(values) && values.length > 0) {
       const _car = values[0];
       if (_car) {

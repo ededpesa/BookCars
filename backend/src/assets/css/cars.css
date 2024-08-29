@@ -15,6 +15,10 @@ div.cars div.col-1 div.info-box {
   background-color: #fff;
 }
 
+.text-cap {
+  text-transform: capitalize;
+}
+
 /* Device width is less than or equal to 960px */
 
 @media only screen and (width <=960px) {

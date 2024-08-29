@@ -465,30 +465,32 @@ export interface Booking extends Document {
  */
 export interface Car extends Document {
   name: string;
-  supplier: Types.ObjectId;
+  supplier?: Types.ObjectId;
+  // suppliers?: { supplier: Types.ObjectId; inventory: number }[];
   minimumAge: number;
-  locations: Types.ObjectId[];
-  price: number;
-  deposit: number;
-  available: boolean;
+  locations?: Types.ObjectId[];
+  // price: number;
+  // deposit: number;
+  // available: boolean;
   type: bookcarsTypes.CarType;
   gearbox: bookcarsTypes.GearboxType;
   aircon: boolean;
   image: string | null;
   seats: number;
   doors: number;
-  fuelPolicy: bookcarsTypes.FuelPolicy;
-  mileage: number;
-  cancellation: number;
+  status: string;
+  // fuelPolicy: bookcarsTypes.FuelPolicy;
+  // mileage: number;
+  // cancellation: number;
   // amendments: number;
-  gps: number;
-  theftProtection: number;
-  collisionDamageWaiver: number;
-  fullInsurance: number;
-  additionalDriver: number;
-  homeDelivery: number;
-  babyChair: number;
-  inventory: number;
+  // gps: number;
+  // theftProtection: number;
+  // collisionDamageWaiver: number;
+  // fullInsurance: number;
+  // additionalDriver: number;
+  // homeDelivery: number;
+  // babyChair: number;
+  // inventory: number;
 }
 
 /**
@@ -501,26 +503,90 @@ export interface Car extends Document {
 export interface CarInfo {
   _id?: Types.ObjectId;
   name: string;
-  supplier: UserInfo;
+  supplier?: UserInfo;
+  minimumAge?: number;
+  locations?: Types.ObjectId[];
+  price?: number;
+  deposit?: number;
+  available?: boolean;
+  type?: bookcarsTypes.CarType;
+  gearbox?: bookcarsTypes.GearboxType;
+  aircon?: boolean;
+  image?: string;
+  seats?: number;
+  doors?: number;
+  fuelPolicy?: bookcarsTypes.FuelPolicy;
+  mileage?: number;
+  cancellation?: number;
+  amendments?: number;
+  theftProtection?: number;
+  collisionDamageWaiver?: number;
+  fullInsurance?: number;
+  additionalDriver?: number;
+}
+
+/**
+ * CarInfo.
+ *
+ * @export
+ * @interface CarInfo
+ * @typedef {CarInfo}
+ */
+export interface CarSupplierInfo {
+  _id?: Types.ObjectId;
+  car?: bookcarsTypes.Car;
+  name: string;
+  supplier?: UserInfo;
+  minimumAge?: number;
+  locations?: Types.ObjectId[];
+  price?: number;
+  deposit?: number;
+  available?: boolean;
+  type?: bookcarsTypes.CarType;
+  gearbox?: bookcarsTypes.GearboxType;
+  aircon?: boolean;
+  image?: string;
+  seats?: number;
+  doors?: number;
+  fuelPolicy?: bookcarsTypes.FuelPolicy;
+  mileage?: number;
+  cancellation?: number;
+  amendments?: number;
+  theftProtection?: number;
+  collisionDamageWaiver?: number;
+  fullInsurance?: number;
+  additionalDriver?: number;
+}
+
+/**
+ * Car Document.
+ *
+ * @export
+ * @interface CarSupplier
+ * @typedef {CarSupplier}
+ * @extends {Document}
+ */
+export interface CarSupplier extends Document {
+  car: Types.ObjectId;
+  supplier: Types.ObjectId;
   minimumAge: number;
   locations: Types.ObjectId[];
   price: number;
   deposit: number;
   available: boolean;
-  type: bookcarsTypes.CarType;
-  gearbox: bookcarsTypes.GearboxType;
-  aircon: boolean;
-  image?: string;
-  seats: number;
-  doors: number;
   fuelPolicy: bookcarsTypes.FuelPolicy;
   mileage: number;
   cancellation: number;
-  amendments: number;
+  // amendments: number;
+  gps: number;
   theftProtection: number;
   collisionDamageWaiver: number;
   fullInsurance: number;
   additionalDriver: number;
+  homeDelivery: number;
+  babyChair: number;
+  inventory: number;
+  status: string;
 }
 
 /**
