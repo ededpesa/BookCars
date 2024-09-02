@@ -49,6 +49,7 @@ const strings = new LocalizedStrings({
     PAYERS_PHONE: "Payer's phone",
     REFERENCE_NUMBER: "Refence number",
     PAYMENT_DATE: "Payment date",
+    WALLET_PAYMENT_ID_FAILED: "The transaction ID provided is invalid. Verify that the transaction is valid with the specified amount and try again",
   },
   en: {
     BOOKING_HEADING: "Book now",
@@ -97,6 +98,7 @@ const strings = new LocalizedStrings({
     PAYERS_PHONE: "Payer's phone",
     REFERENCE_NUMBER: "Refence number",
     PAYMENT_DATE: "Payment date",
+    WALLET_PAYMENT_ID_FAILED: "The transaction ID provided is invalid. Verify that the transaction is valid with the specified amount and try again",
   },
   es: {
     BOOKING_HEADING: "Reservar ahora",
@@ -145,6 +147,8 @@ const strings = new LocalizedStrings({
     PAYERS_PHONE: "Teléfono del pagador",
     REFERENCE_NUMBER: "Número de referencia",
     PAYMENT_DATE: "Fecha de pago",
+    WALLET_PAYMENT_ID_FAILED:
+      "El ID de transacción proporcionado es invalido. Verifique que la transaccion sea válida con el monto especificado e intente de nuevo",
   },
 });
 

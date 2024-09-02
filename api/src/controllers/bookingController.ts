@@ -185,7 +185,7 @@ export const checkout = async (req: Request, res: Response) => {
       throw new Error("Booking missing");
     }
 
-    if (!body.payLater) {
+    if (body.paymentType === bookcarsTypes.PaymentType.CardPayment) {
       const { paymentIntentId, sessionId } = body;
 
       if (!paymentIntentId && !sessionId) {
@@ -218,6 +218,16 @@ export const checkout = async (req: Request, res: Response) => {
         body.booking.status = bookcarsTypes.BookingStatus.Void;
         body.booking.expireAt = expireAt;
       }
+    } else if (body.paymentType === bookcarsTypes.PaymentType.WalletPayment) {
+      const { paymentIntentId } = body.booking;
+
+      if (!paymentIntentId) {
+        const message = "Payment intent missing";
+        logger.error(message, body);
+        return res.status(400).send(message);
+      }
+
+      body.booking.status = bookcarsTypes.BookingStatus.Paid;
     }
 
     if (driver) {
@@ -277,13 +287,13 @@ export const checkout = async (req: Request, res: Response) => {
       body.booking._additionalDriver = additionalDriver._id.toString();
     }
 
+    body.booking.paymentType = body.paymentType;
     const booking = new Booking(body.booking);
 
     await booking.save();
-
-    if (body.payLater) {
+    if (body.paymentType !== bookcarsTypes.PaymentType.CardPayment) {
       // Send confirmation email
-      if (!(await confirm(user, booking, body.payLater))) {
+      if (!(await confirm(user, booking, body.paymentType === bookcarsTypes.PaymentType.PayLater))) {
         return res.sendStatus(400);
       }
 

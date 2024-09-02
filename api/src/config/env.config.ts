@@ -332,6 +332,27 @@ export const ADMIN_EMAIL = __env__("BC_ADMIN_EMAIL", false);
 export const RECAPTCHA_SECRET = __env__("BC_RECAPTCHA_SECRET", false);
 
 /**
+ * Alchemy key.
+ *
+ * @type {string}
+ */
+export const ALCHEMY_APIKEY: string = __env__("BC_ALCHEMY_APIKEY", false);
+
+// /**
+//  * Tron address.
+//  *
+//  * @type {string}
+//  */
+// export const TRON_ADDRESS: string = __env__("BC_TRON_ADDRESS", false);
+
+// /**
+//  * Ethereum address.
+//  *
+//  * @type {string}
+//  */
+// export const ETH_ADDRESS: string = __env__("BC_ETH_ADDRESS", false);
+
+/**
  * User Document.
  *
  * @export
@@ -737,4 +758,17 @@ export interface Token extends Document {
   user: Types.ObjectId;
   token: string;
   expireAt?: Date;
+}
+
+/**
+ * Wallet Document.
+ *
+ * @export
+ * @interface Wallet
+ * @typedef {Wallet}
+ * @extends {Document}
+ */
+export interface Wallet extends Document {
+  network: string;
+  address?: string;
 }

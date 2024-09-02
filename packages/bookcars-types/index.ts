@@ -69,6 +69,13 @@ export enum DocumentType {
   Passport = "2",
 }
 
+export enum PaymentType {
+  CardPayment = "cardPayment",
+  PayLater = "payLater",
+  MobilePayment = "mobilePayment",
+  WalletPayment = "walletPayment",
+}
+
 export interface Booking {
   _id?: string;
   supplier: string | User;
@@ -96,6 +103,11 @@ export interface Booking {
   customerId?: string;
   expireAt?: Date;
   beneficiary?: BookingBeneficiary;
+  paymentType?: string;
+}
+
+export interface WalletAddress {
+  address?: string;
 }
 
 export interface BookingBeneficiary {
@@ -309,6 +321,11 @@ export interface CheckAvailabilityPayload {
   car: string;
   from: Date;
   to: Date;
+}
+
+export interface CheckWalletPaymentPayload {
+  transactionId: string;
+  amountToValidate?: number;
 }
 
 export interface SignInPayload {

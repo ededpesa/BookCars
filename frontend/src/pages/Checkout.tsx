@@ -111,7 +111,7 @@ const Checkout = () => {
   const [addiontalDriverPhoneValid, setAddiontalDriverPhoneValid] = useState(true);
   const [addiontalDriverBirthDateValid, setAddiontalDriverBirthDateValid] = useState(true);
   // const [payLater, setPayLater] = useState(false);
-  const [paymentType, setPaymentType] = useState("");
+  const [paymentType, setPaymentType] = useState("cardPayment");
   const [recaptchaError, setRecaptchaError] = useState(false);
 
   const [adManuallyChecked, setAdManuallyChecked] = useState(false);
@@ -123,6 +123,10 @@ const Checkout = () => {
   const [sessionId, setSessionId] = useState<string>();
   const [mobilePaymentPayload, setMobilePaymentPayload] = useState<bookcarsTypes.MobilePaymentPayload | null>(null);
   const [paymentDateValid, setPaymentDateValid] = useState(true);
+
+  const [walletPaymentValid, setWalletPaymentValid] = useState(true);
+  const [walletPaymentId, setWalletPaymentId] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
 
   const _fr = language === "fr";
   const _es = language === "es";
@@ -493,7 +497,7 @@ const Checkout = () => {
     }
   }, []);
 
-  const walletAddress = "TULWdGLwHyT52MgrLDs5zpzzwgsKHGcSUf";
+  // const walletAddress = "TULWdGLwHyT52MgrLDs5zpzzwgsKHGcSUf";
   const createQr = async () => {
     const QRCode = await import("qrcode");
     var canvas = document.getElementById("canvas");
@@ -501,6 +505,14 @@ const Checkout = () => {
     QRCode.toCanvas(canvas, walletAddress, { scale: 6 }, function (error: any) {
       if (error) console.error(error);
     });
+  };
+
+  const handlePaymentTypeChange = (type: string) => {
+    if (type === bookcarsTypes.PaymentType.WalletPayment) {
+      createQr();
+    }
+
+    setPaymentType(type);
   };
 
   const handleCopy = async (text: string, success: string) => {
@@ -515,6 +527,7 @@ const Checkout = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
+      setLoading(true);
 
       if (!car || !pickupLocation || !dropOffLocation || !from || !to) {
         helper.error();
@@ -571,7 +584,23 @@ const Checkout = () => {
         return;
       }
 
-      setLoading(true);
+      if (paymentType === bookcarsTypes.PaymentType.WalletPayment) {
+        try {
+          await BookingService.checkWalletPayment({ transactionId: walletPaymentId });
+        } catch (error) {
+          // setWalletPaymentValid(false);
+          helper.error(null, "El ID de transacción proporcionado ya está registrado en el sistema.");
+          return;
+        }
+        try {
+          await BookingService.checkWalletTronPayment({ transactionId: walletPaymentId, amountToValidate: price });
+        } catch (error) {
+          setWalletPaymentValid(false);
+          return;
+        }
+      }
+
+      // setLoading(true);
       setPaymentFailed(false);
 
       let driver: bookcarsTypes.User | undefined;
@@ -632,7 +661,7 @@ const Checkout = () => {
       //
       let _customerId: string | undefined;
       let _sessionId: string | undefined;
-      if (paymentType === "cardPayment") {
+      if (paymentType === bookcarsTypes.PaymentType.CardPayment) {
         const payload: bookcarsTypes.CreatePaymentPayload = {
           amount: price,
           currency: env.STRIPE_CURRENCY_CODE,
@@ -651,6 +680,10 @@ const Checkout = () => {
         //console.log("StripeService", res);
       }
 
+      if (paymentType === bookcarsTypes.PaymentType.WalletPayment) {
+        booking.paymentIntentId = walletPaymentId;
+      }
+
       const payload: bookcarsTypes.CheckoutPayload = {
         driver,
         booking,
@@ -667,7 +700,7 @@ const Checkout = () => {
       setLoading(false);
 
       if (status === 200) {
-        if (paymentType === "payLater") {
+        if (paymentType === "payLater" || paymentType === "walletPayment") {
           setVisible(false);
           setSuccess(true);
         }
@@ -708,6 +741,7 @@ const Checkout = () => {
     let _car;
     let _pickupLocation;
     let _dropOffLocation;
+    let _address;
 
     try {
       _car = await CarService.getCar(carId);
@@ -718,8 +752,9 @@ const Checkout = () => {
       }
 
       _pickupLocation = await LocationService.getLocation(pickupLocationId);
+      _address = await BookingService.getWalletAddress(env.WALLET_NETWORK);
 
-      if (!_pickupLocation) {
+      if (!_pickupLocation || !_address?.address) {
         setNoMatch(true);
         return;
       }
@@ -760,8 +795,9 @@ const Checkout = () => {
       setTheftProtection(included(_car.theftProtection));
       setCollisionDamageWaiver(included(_car.collisionDamageWaiver));
       setFullInsurance(included(_car.fullInsurance));
-      createQr();
+      // createQr();
       setVisible(true);
+      setWalletAddress(_address.address);
     } catch (err) {
       helper.error(err);
     }
@@ -1158,14 +1194,15 @@ const Checkout = () => {
                       <div className="payment-options">
                         <FormControl>
                           <RadioGroup
-                            defaultValue="cardPayment"
+                            defaultValue={bookcarsTypes.PaymentType.CardPayment}
                             onChange={(event) => {
                               //setPayLater(event.target.value === "payLater");
-                              setPaymentType(event.target.value);
+                              handlePaymentTypeChange(event.target.value);
+                              // setPaymentType(event.target.value);
                             }}
                           >
                             <FormControlLabel
-                              value="payLater"
+                              value={bookcarsTypes.PaymentType.PayLater}
                               control={<Radio />}
                               label={
                                 <span className="payment-button">
@@ -1175,7 +1212,7 @@ const Checkout = () => {
                               }
                             />
                             <FormControlLabel
-                              value="cardPayment"
+                              value={bookcarsTypes.PaymentType.CardPayment}
                               control={<Radio />}
                               label={
                                 <span className="payment-button">
@@ -1184,8 +1221,8 @@ const Checkout = () => {
                                 </span>
                               }
                             />
-                            <FormControlLabel
-                              value="mobilePayment"
+                            {/* <FormControlLabel
+                              value={bookcarsTypes.PaymentType.MobilePayment}
                               control={<Radio />}
                               label={
                                 <span className="payment-button">
@@ -1193,9 +1230,9 @@ const Checkout = () => {
                                   <span className="payment-info">{`(${strings.PAY_ONLINE_INFO})`}</span>
                                 </span>
                               }
-                            />
+                            /> */}
                             <FormControlLabel
-                              value="walletPayment"
+                              value={bookcarsTypes.PaymentType.WalletPayment}
                               control={<Radio />}
                               label={
                                 <span className="payment-button">
@@ -1268,7 +1305,7 @@ const Checkout = () => {
                               language={language}
                             />
                             <FormHelperText error={!addiontalDriverBirthDateValid}>
-                              {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.minimumAge)) || ""}
+                              {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.minimumAge ?? 0)) || ""}
                             </FormHelperText>
                           </FormControl>
                           <FormControl fullWidth margin="dense">
@@ -1334,7 +1371,7 @@ const Checkout = () => {
                               </span>{" "}
                             </li>
                             <li>
-                              {strings.NETROWK}: <strong>Tron (TRC20)</strong>
+                              {strings.NETROWK}: <strong>{env.WALLET_NETWORK === "TRX" ? "Tron (TRC20)" : "Ethereum (ERC20)"}</strong>
                             </li>
                             <li>
                               {strings.AMOUNT}: <strong>{bookcarsHelper.formatPrice(price, "USDT", language)}</strong>
@@ -1347,11 +1384,17 @@ const Checkout = () => {
                               type="text"
                               label={"TxID"}
                               required
+                              error={!walletPaymentValid}
                               onChange={(e) => {
-                                setAddiontalDriverFullName(e.target.value);
+                                setWalletPaymentId(e.target.value);
+                                setWalletPaymentValid(true);
+                                // if (!e.target.value) {
+                                //   setWalletPaymentValid(true);
+                                // }
                               }}
                               autoComplete="off"
                             />
+                            <FormHelperText error={!walletPaymentValid}>{(!walletPaymentValid && strings.WALLET_PAYMENT_ID_FAILED) || ""}</FormHelperText>
                           </FormControl>
                         </div>
                       </div>
