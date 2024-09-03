@@ -103,7 +103,14 @@ export interface Booking {
   customerId?: string;
   expireAt?: Date;
   beneficiary?: BookingBeneficiary;
-  paymentType?: string;
+  // paymentType?: string;
+  payments?: [
+    {
+      paymentType: string;
+      amount?: number;
+      ref?: string;
+    }
+  ];
 }
 
 export interface WalletAddress {

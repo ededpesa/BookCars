@@ -50,6 +50,8 @@ const strings = new LocalizedStrings({
     REFERENCE_NUMBER: "Refence number",
     PAYMENT_DATE: "Payment date",
     WALLET_PAYMENT_ID_FAILED: "The transaction ID provided is invalid. Verify that the transaction is valid with the specified amount and try again",
+    CAR_NOT_AVAILABLE: "The vehicle is no longer available",
+    WALLET_PAYMENT_ALERADY_REGISTERED: "The transaction ID provided is already registered in the system.",
   },
   en: {
     BOOKING_HEADING: "Book now",
@@ -99,6 +101,8 @@ const strings = new LocalizedStrings({
     REFERENCE_NUMBER: "Refence number",
     PAYMENT_DATE: "Payment date",
     WALLET_PAYMENT_ID_FAILED: "The transaction ID provided is invalid. Verify that the transaction is valid with the specified amount and try again",
+    CAR_NOT_AVAILABLE: "The vehicle is no longer available",
+    WALLET_PAYMENT_ALERADY_REGISTERED: "The transaction ID provided is already registered in the system.",
   },
   es: {
     BOOKING_HEADING: "Reservar ahora",
@@ -149,6 +153,8 @@ const strings = new LocalizedStrings({
     PAYMENT_DATE: "Fecha de pago",
     WALLET_PAYMENT_ID_FAILED:
       "El ID de transacción proporcionado es invalido. Verifique que la transaccion sea válida con el monto especificado e intente de nuevo",
+    CAR_NOT_AVAILABLE: "El vehiculo ya no se encuentra disponible",
+    WALLET_PAYMENT_ALERADY_REGISTERED: "El ID de transacción proporcionado ya está registrado en el sistema.",
   },
 });
 

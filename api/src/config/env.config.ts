@@ -464,7 +464,7 @@ export interface Booking extends Document {
   cancelRequest?: boolean;
   price: number;
   sessionId?: string;
-  paymentType?: string;
+  // paymentType?: string;
   paymentIntentId?: string;
   customerId?: string;
   expireAt?: Date;
@@ -474,6 +474,13 @@ export interface Booking extends Document {
     phone?: string;
     birthDate?: Date;
   };
+  payments?: [
+    {
+      paymentType: string;
+      amount: number;
+      ref?: string;
+    },
+  ];
 }
 
 /**

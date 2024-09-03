@@ -204,8 +204,9 @@ export const checkout = async (req: Request, res: Response) => {
           return res.status(400).send(message);
         }
         console.log(paymentIntentId);
-        body.booking.paymentIntentId = paymentIntentId;
+        // body.booking.paymentIntentId = paymentIntentId;
         body.booking.status = bookcarsTypes.BookingStatus.Paid;
+        body.booking.payments = [{ paymentType: bookcarsTypes.PaymentType.CardPayment, amount: body.booking.price, ref: paymentIntentId }];
       } else {
         //
         // Bookings created from checkout with Stripe are temporary
@@ -228,6 +229,7 @@ export const checkout = async (req: Request, res: Response) => {
       }
 
       body.booking.status = bookcarsTypes.BookingStatus.Paid;
+      body.booking.payments = [{ paymentType: bookcarsTypes.PaymentType.WalletPayment, amount: body.booking.price, ref: paymentIntentId }];
     }
 
     if (driver) {
@@ -287,7 +289,7 @@ export const checkout = async (req: Request, res: Response) => {
       body.booking._additionalDriver = additionalDriver._id.toString();
     }
 
-    body.booking.paymentType = body.paymentType;
+    // body.booking.paymentType = body.paymentType;
     const booking = new Booking(body.booking);
 
     await booking.save();

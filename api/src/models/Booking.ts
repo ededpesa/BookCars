@@ -107,7 +107,7 @@ const bookingSchema = new Schema<env.Booking>(
       type: String,
       index: true,
     },
-    paymentType: String,
+    // paymentType: String,
     paymentIntentId: {
       type: String,
     },
@@ -155,6 +155,16 @@ const bookingSchema = new Schema<env.Booking>(
       },
       birthDate: Date,
     },
+    payments: [
+      {
+        paymentType: { type: String, required: [true, "can't be blank"] },
+        amount: {
+          type: Number,
+          required: [true, "can't be blank"],
+        },
+        ref: String,
+      },
+    ],
   },
   {
     timestamps: true,

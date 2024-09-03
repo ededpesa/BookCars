@@ -124,6 +124,7 @@ export const checkCheckoutSession = async (req: Request, res: Response) => {
     if (session.payment_status === "paid") {
       booking.expireAt = undefined;
       booking.paymentIntentId = sessionId;
+      booking.payments = [{ paymentType: bookcarsTypes.PaymentType.CardPayment, amount: booking.price, ref: sessionId }];
       booking.status = bookcarsTypes.BookingStatus.Paid;
       await booking.save();
 
