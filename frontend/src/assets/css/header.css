@@ -33,6 +33,7 @@
   font-size: 18px;
   font-weight: 800;
   color: #121212;
+  display: flex;
 }
 
 /* Device width is greater than or equal to 960px */
