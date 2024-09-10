@@ -13,6 +13,7 @@ routes.route(routeNames.delete).post(authJwt.verifyToken, bookingController.dele
 routes.route(routeNames.deleteTempBooking).delete(bookingController.deleteTempBooking);
 routes.route(routeNames.getBooking).get(authJwt.verifyToken, bookingController.getBooking);
 routes.route(routeNames.getBookings).post(authJwt.verifyToken, bookingController.getBookings);
+routes.route(routeNames.insertPayment).post(authJwt.verifyToken, bookingController.insertPayment);
 routes.route(routeNames.hasBookings).get(authJwt.verifyToken, bookingController.hasBookings);
 routes.route(routeNames.cancelBooking).post(authJwt.verifyToken, bookingController.cancelBooking);
 routes.route(routeNames.checkAvailability).post(bookingController.checkAvailability);

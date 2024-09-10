@@ -7,6 +7,7 @@ const routes = {
   deleteTempBooking: "/api/delete-temp-booking/:bookingId/:sessionId",
   getBooking: "/api/booking/:id/:language",
   getBookings: "/api/bookings/:page/:size/:language",
+  insertPayment: "/api/insert-payment",
   hasBookings: "/api/has-bookings/:driver",
   cancelBooking: "/api/cancel-booking/:id",
   checkAvailability: "/api/check-availability",

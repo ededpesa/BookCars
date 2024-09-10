@@ -222,7 +222,7 @@ const BookingList = ({
         headerName: strings.STATUS,
         flex: 1,
         renderCell: ({ value }: GridRenderCellParams<bookcarsTypes.Booking, bookcarsTypes.BookingStatus>) => (
-          <span className={`bs bs-${value?.toLowerCase()}`}>{helper.getBookingStatus(value)}</span>
+          <span className={`bs bs-${value?.toLowerCase()}`}>{helper.getBookingStatus(value).split(" ")[0]}</span>
         ),
         valueGetter: (value: string) => value,
       },
@@ -479,7 +479,7 @@ const BookingList = ({
               return (
                 <div key={booking._id} className="booking-details">
                   <div className={`bs bs-${booking.status}`}>
-                    <span>{helper.getBookingStatus(booking.status)}</span>
+                    <span>{helper.getBookingStatus(booking.status)} a</span>
                   </div>
                   <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                     <span className="booking-detail-title">{strings.CAR}</span>

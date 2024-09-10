@@ -1116,3 +1116,36 @@ export const checkAvailability = async (req: Request, res: Response) => {
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
+
+/**
+ * Insert payment.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const insertPayment = async (req: Request, res: Response) => {
+  const { body }: { body: bookcarsTypes.InsertPaymentPayload } = req;
+  const { booking: bookingId, paymentType, amount, ref } = body;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+      logger.info(`Booking ${bookingId} not found`);
+      return res.sendStatus(204);
+    }
+
+    if (!booking.payments) booking.payments = [{ paymentType, amount: amount ?? 0, ref, createdAt: new Date() }];
+    else booking.payments.push({ paymentType, amount: amount ?? 0, ref, createdAt: new Date() });
+
+    await booking.save();
+
+    return res.sendStatus(200);
+  } catch (err) {
+    logger.error(`[booking.insertPayment] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};

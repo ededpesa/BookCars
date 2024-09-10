@@ -119,7 +119,9 @@ export const checkPayment = async (req: Request, res: Response) => {
   const { transactionId }: { transactionId: string } = req.body;
 
   try {
-    const exists = await Booking.exists({ paymentIntentId: transactionId, status: { $ne: bookcarsTypes.BookingStatus.Deleted } });
+    // const exists = await Booking.exists({ paymentIntentId: transactionId, status: { $ne: bookcarsTypes.BookingStatus.Deleted } });
+    // Same as before but now instead of checking if the transactionId exists in paymentIntentId, we check if transactionId exists in payments.ref
+    const exists = await Booking.exists({ payments: { $elemMatch: { ref: transactionId } }, status: { $ne: bookcarsTypes.BookingStatus.Deleted } });
 
     if (exists) {
       return res.sendStatus(400);
@@ -143,7 +145,6 @@ export const checkPayment = async (req: Request, res: Response) => {
  */
 export const getAddress = async (req: Request, res: Response) => {
   const { network } = req.params;
-  console.log("🚀 ~ getAddress ~ network:", network);
 
   try {
     const wallet = await Wallet.findOne({ network }).lean();

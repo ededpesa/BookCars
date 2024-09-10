@@ -479,6 +479,7 @@ export interface Booking extends Document {
       paymentType: string;
       amount: number;
       ref?: string;
+      createdAt?: Date;
     },
   ];
 }

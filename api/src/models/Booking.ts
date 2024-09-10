@@ -163,6 +163,10 @@ const bookingSchema = new Schema<env.Booking>(
           required: [true, "can't be blank"],
         },
         ref: String,
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },

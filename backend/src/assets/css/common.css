@@ -3,8 +3,13 @@
   margin-left: 0 !important;
 }
 
+.buttons button.margin-right-0 {
+  margin-right: 0;
+}
+
 .btn-primary {
-  background-color: #b90202 !important;
+  background-color: #455fee !important;
+  /* background-color: #3547a9 !important; */
   color: #fff !important;
   opacity: 0.9;
 }

@@ -13,11 +13,14 @@ const strings = new LocalizedStrings({
     UPDATE_STATUS: "Modification du statut",
     NEW_STATUS: "Nouveau statut",
     DELETE_BOOKING: "Êtes-vous sûr de vouloir supprimer cette réservation ?",
-    DELETE_BOOKINGS:
-      "Êtes-vous sûr de vouloir supprimer les réservations sélectionnées ?",
+    DELETE_BOOKINGS: "Êtes-vous sûr de vouloir supprimer les réservations sélectionnées ?",
     EMPTY_LIST: "Pas de réservations.",
     DAYS: "Jours",
     COST: "Total",
+    PAYMENT_NOT_ENOUGH: "Le montant de la réservation est inférieur au montant des paiements.",
+    ADD_PAYMENT: "Ajouter un paiement",
+    AMOUNT: "Montant",
+    REF: "Référence",
   },
   en: {
     CAR: "Car",
@@ -34,6 +37,10 @@ const strings = new LocalizedStrings({
     EMPTY_LIST: "No bookings.",
     DAYS: "Days",
     COST: "COST",
+    PAYMENT_NOT_ENOUGH: "The booking amount is less than the payment amount.",
+    ADD_PAYMENT: "Add payment",
+    AMOUNT: "Amount",
+    REF: "Reference",
   },
   es: {
     CAR: "Vehículo",
@@ -46,11 +53,14 @@ const strings = new LocalizedStrings({
     UPDATE_STATUS: "Modificación de estado",
     NEW_STATUS: "Nuevo estado",
     DELETE_BOOKING: "¿Está seguro de que quiere eliminar esta reserva?",
-    DELETE_BOOKINGS:
-      "¿Está seguro de que quiere eliminar las reservas seleccionadas?",
+    DELETE_BOOKINGS: "¿Está seguro de que quiere eliminar las reservas seleccionadas?",
     EMPTY_LIST: "No hay reservas.",
     DAYS: "Días",
     COST: "Costo",
+    PAYMENT_NOT_ENOUGH: "El monto de la reserva es menor que el monto de los pagos.",
+    ADD_PAYMENT: "Añadir pago",
+    AMOUNT: "Monto",
+    REF: "Referencia",
   },
 });
 

@@ -580,7 +580,7 @@ const Checkout = () => {
       try {
         await BookingService.checkAvailability({ car: car._id, from, to });
       } catch (error) {
-        helper.error(null, "El vehiculo ya no se encuentra disponible.");
+        helper.error(null, strings.CAR_NOT_AVAILABLE);
         return;
       }
 
@@ -589,7 +589,7 @@ const Checkout = () => {
           await BookingService.checkWalletPayment({ transactionId: walletPaymentId });
         } catch (error) {
           // setWalletPaymentValid(false);
-          helper.error(null, "El ID de transacción proporcionado ya está registrado en el sistema.");
+          helper.error(null, strings.WALLET_PAYMENT_ALERADY_REGISTERED);
           return;
         }
         try {

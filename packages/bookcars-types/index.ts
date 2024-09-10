@@ -74,6 +74,8 @@ export enum PaymentType {
   PayLater = "payLater",
   MobilePayment = "mobilePayment",
   WalletPayment = "walletPayment",
+  Cash = "Cash",
+  PointOfSell = "PointOfSell",
 }
 
 export interface Booking {
@@ -104,13 +106,18 @@ export interface Booking {
   expireAt?: Date;
   beneficiary?: BookingBeneficiary;
   // paymentType?: string;
-  payments?: [
-    {
-      paymentType: string;
-      amount?: number;
-      ref?: string;
-    }
-  ];
+  payments?: [Payment];
+}
+
+export interface Payment {
+  _id?: string;
+  paymentType: string;
+  amount?: number;
+  ref?: string;
+  createdAt?: Date;
+}
+export interface InsertPaymentPayload extends Payment {
+  booking?: string;
 }
 
 export interface WalletAddress {
