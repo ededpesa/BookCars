@@ -222,7 +222,7 @@ const BookingList = ({
         headerName: strings.STATUS,
         flex: 1,
         renderCell: ({ value }: GridRenderCellParams<bookcarsTypes.Booking, bookcarsTypes.BookingStatus>) => (
-          <span className={`bs bs-${value?.toLowerCase()}`}>{helper.getBookingStatus(value)}</span>
+          <span className={`bs bs-${value?.toLowerCase()}`}>{helper.getBookingStatus(value).split(" ")[0]}</span>
         ),
         valueGetter: (value: string) => value,
       },
@@ -253,31 +253,31 @@ const BookingList = ({
             </div>
           );
         },
-        renderHeader: () =>
-          selectedIds.length > 0 ? (
-            <div>
-              <Tooltip title={strings.UPDATE_SELECTION}>
-                <IconButton
-                  onClick={() => {
-                    setOpenUpdateDialog(true);
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={strings.DELETE_SELECTION}>
-                <IconButton
-                  onClick={() => {
-                    setopenDeleteDialog(true);
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          ) : (
-            <></>
-          ),
+        // renderHeader: () =>
+        //   selectedIds.length > 0 ? (
+        //     <div>
+        //       <Tooltip title={strings.UPDATE_SELECTION}>
+        //         <IconButton
+        //           onClick={() => {
+        //             setOpenUpdateDialog(true);
+        //           }}
+        //         >
+        //           <EditIcon />
+        //         </IconButton>
+        //       </Tooltip>
+        //       <Tooltip title={strings.DELETE_SELECTION}>
+        //         <IconButton
+        //           onClick={() => {
+        //             setopenDeleteDialog(true);
+        //           }}
+        //         >
+        //           <DeleteIcon />
+        //         </IconButton>
+        //       </Tooltip>
+        //     </div>
+        //   ) : (
+        //     <></>
+        //   ),
       },
     ];
 
@@ -291,7 +291,7 @@ const BookingList = ({
         headerName: strings.CAR,
         flex: 1,
         renderCell: ({ row, value }: GridRenderCellParams<bookcarsTypes.Booking, string>) => (
-          <Link href={`/car?cr=${(row.car as bookcarsTypes.CarSupplier)._id}`}>{value}</Link>
+          <Link href={`/update-car-assign?cr=${(row.car as bookcarsTypes.CarSupplier)._id}`}>{value}</Link>
         ),
         valueGetter: (value: bookcarsTypes.Car) => value?.name,
       });
@@ -479,7 +479,7 @@ const BookingList = ({
               return (
                 <div key={booking._id} className="booking-details">
                   <div className={`bs bs-${booking.status}`}>
-                    <span>{helper.getBookingStatus(booking.status)}</span>
+                    <span>{helper.getBookingStatus(booking.status)} a</span>
                   </div>
                   <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                     <span className="booking-detail-title">{strings.CAR}</span>

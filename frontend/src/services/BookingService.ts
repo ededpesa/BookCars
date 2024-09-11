@@ -71,3 +71,39 @@ export const deleteTempBooking = (bookingId: string, sessionId: string): Promise
  */
 export const checkAvailability = (data: bookcarsTypes.CheckAvailabilityPayload): Promise<number> =>
   axiosInstance.post("/api/check-availability", data).then((exist) => exist.status);
+
+/**
+ * Check Wallet Payment.
+ *
+ * @param {bookcarsTypes.CheckWalletPaymentPayload} data
+ * @returns {Promise<number>}
+ */
+export const checkWalletPayment = (data: bookcarsTypes.CheckWalletPaymentPayload): Promise<number> =>
+  axiosInstance.post("/api/check-wallet-payment", data).then((exist) => exist.status);
+
+/**
+ * Check Wallet Tron Payment.
+ *
+ * @param {bookcarsTypes.CheckWalletPaymentPayload} data
+ * @returns {Promise<number>}
+ */
+export const checkWalletTronPayment = (data: bookcarsTypes.CheckWalletPaymentPayload): Promise<number> =>
+  axiosInstance.post("/api/check-tron-payment", data).then((exist) => exist.status);
+
+/**
+ * Check Wallet Eth Payment.
+ *
+ * @param {bookcarsTypes.CheckWalletPaymentPayload} data
+ * @returns {Promise<number>}
+ */
+export const checkWalletEthPayment = (data: bookcarsTypes.CheckWalletPaymentPayload): Promise<number> =>
+  axiosInstance.post("/api/check-eth-payment", data).then((exist) => exist.status);
+
+/**
+ * Get Wallet address by network.
+ *
+ * @param {string} network
+ * @returns {Promise<bookcarsTypes.WalletAddress>}
+ */
+export const getWalletAddress = (network: string): Promise<bookcarsTypes.WalletAddress> =>
+  axiosInstance.get(`/api/wallet-address/${network}`, { withCredentials: true }).then((res) => res.data);

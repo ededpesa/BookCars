@@ -69,6 +69,15 @@ export enum DocumentType {
   Passport = "2",
 }
 
+export enum PaymentType {
+  CardPayment = "cardPayment",
+  PayLater = "payLater",
+  MobilePayment = "mobilePayment",
+  WalletPayment = "walletPayment",
+  Cash = "Cash",
+  PointOfSell = "PointOfSell",
+}
+
 export interface Booking {
   _id?: string;
   supplier: string | User;
@@ -95,6 +104,31 @@ export interface Booking {
   paymentIntentId?: string;
   customerId?: string;
   expireAt?: Date;
+  beneficiary?: BookingBeneficiary;
+  // paymentType?: string;
+  payments?: [Payment];
+}
+
+export interface Payment {
+  _id?: string;
+  paymentType: string;
+  amount?: number;
+  ref?: string;
+  createdAt?: Date;
+}
+export interface InsertPaymentPayload extends Payment {
+  booking?: string;
+}
+
+export interface WalletAddress {
+  address?: string;
+}
+
+export interface BookingBeneficiary {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  birthDate?: Date;
 }
 
 export interface CheckoutPayload {
@@ -104,6 +138,7 @@ export interface CheckoutPayload {
   payLater?: boolean;
   sessionId?: string;
   paymentIntentId?: string;
+  paymentType?: string;
   customerId?: string;
 }
 
@@ -302,6 +337,11 @@ export interface CheckAvailabilityPayload {
   to: Date;
 }
 
+export interface CheckWalletPaymentPayload {
+  transactionId: string;
+  amountToValidate?: number;
+}
+
 export interface SignInPayload {
   email: string;
   password?: string;
@@ -396,6 +436,13 @@ export interface Location {
   _id: string;
   name?: string;
   values?: LocationValue[];
+}
+
+export interface MobilePaymentPayload {
+  reference?: string;
+  date?: Date;
+  phone?: string;
+  bankId?: string;
 }
 
 export interface Car {

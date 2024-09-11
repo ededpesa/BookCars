@@ -15,7 +15,7 @@ import {
 import { Info as InfoIcon, Person as DriverIcon } from "@mui/icons-material";
 import { DateTimeValidationError } from "@mui/x-date-pickers";
 import validator from "validator";
-import { intervalToDuration } from "date-fns";
+import { format, intervalToDuration } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import * as bookcarsTypes from ":bookcars-types";
 import * as bookcarsHelper from ":bookcars-helper";
@@ -44,6 +44,8 @@ import DatePicker from "../components/DatePicker";
 
 import "../assets/css/booking.css";
 import CarSupplierList from "../components/CarSupplierList";
+import { AddPaymentForm } from "../components/AddPaymentForm";
+import BookingPaymentList from "../components/BookingPaymentList";
 
 const UpdateBooking = () => {
   const navigate = useNavigate();
@@ -81,10 +83,13 @@ const UpdateBooking = () => {
   const [additionalDriverEmailValid, setAdditionalDriverEmailValid] = useState(true);
   const [additionalDriverPhoneValid, setAdditionalDriverPhoneValid] = useState(true);
   const [additionalDriverBirthDateValid, setAdditionalDriverBirthDateValid] = useState(true);
+  const [payments, setPayments] = useState<bookcarsTypes.Payment[]>([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [language, setLanguage] = useState(env.DEFAULT_LANGUAGE);
   const [fromError, setFromError] = useState(false);
   const [toError, setToError] = useState(false);
+
+  const [addPaymentModalOpen, setAddPaymentModalOpen] = useState(false);
 
   const handleSupplierChange = (values: bookcarsTypes.Option[]) => {
     setSupplier(values.length > 0 ? values[0] : undefined);
@@ -391,6 +396,34 @@ const UpdateBooking = () => {
     return true;
   };
 
+  const handleAddPayment = () => {
+    setAddPaymentModalOpen(true);
+  };
+
+  const reloadPayments = async () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("b")) {
+      const id = params.get("b");
+      if (id && id !== "") {
+        try {
+          const _booking = await BookingService.getBooking(id);
+
+          if (_booking) {
+            setPayments(_booking.payments || []);
+          }
+        } catch (err) {}
+      }
+    }
+  };
+
+  const handleDeletePaymentSuccess = () => {
+    reloadPayments();
+  };
+
+  const handleAddPaymentSuccess = () => {
+    reloadPayments();
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -420,6 +453,12 @@ const UpdateBooking = () => {
       }
 
       if (fromError || toError) {
+        return;
+      }
+
+      const paymentsAmount = booking.payments?.reduce((a, b) => a + (b?.amount ?? 0), 0) ?? 0;
+      if (status === bookcarsTypes.BookingStatus.Paid && price! > paymentsAmount) {
+        helper.error(null, blStrings.PAYMENT_NOT_ENOUGH);
         return;
       }
 
@@ -551,6 +590,7 @@ const UpdateBooking = () => {
               setCollisionDamageWaiver(_booking.collisionDamageWaiver || false);
               setFullInsurance(_booking.fullInsurance || false);
               setAdditionalDriver((_booking.additionalDriver && !!_booking._additionalDriver) || false);
+              setPayments(_booking.payments || []);
               if (_booking.additionalDriver && _booking._additionalDriver) {
                 const _additionalDriver = _booking._additionalDriver as bookcarsTypes.AdditionalDriver;
                 setAdditionalDriverFullName(_additionalDriver.fullName);
@@ -915,6 +955,10 @@ const UpdateBooking = () => {
               language={language}
               hidePrice
             />
+
+            {payments.length > 0 ? (
+              <BookingPaymentList payments={payments} language={language} onAddPayment={handleAddPayment} onDeletePaymentSuccess={handleDeletePaymentSuccess} />
+            ) : null}
           </div>
 
           <Dialog disableEscapeKeyDown maxWidth="xs" open={openDeleteDialog}>
@@ -928,6 +972,13 @@ const UpdateBooking = () => {
                 {commonStrings.DELETE}
               </Button>
             </DialogActions>
+          </Dialog>
+
+          <Dialog disableEscapeKeyDown maxWidth="xs" fullWidth open={addPaymentModalOpen} onClose={() => setAddPaymentModalOpen(false)}>
+            <DialogTitle className="dialog-header">{blStrings.ADD_PAYMENT}</DialogTitle>
+            <DialogContent>
+              <AddPaymentForm onClose={() => setAddPaymentModalOpen(false)} bookingId={booking._id!} onSuccess={handleAddPaymentSuccess} />
+            </DialogContent>
           </Dialog>
         </div>
       )}

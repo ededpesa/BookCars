@@ -5,8 +5,7 @@ import * as langHelper from "../common/langHelper";
 const strings = new LocalizedStrings({
   fr: {
     GENERIC_ERROR: "Une erreur non gérée s'est produite.",
-    CHANGE_LANGUAGE_ERROR:
-      "Une erreur s'est produite lors du changement de langue.",
+    CHANGE_LANGUAGE_ERROR: "Une erreur s'est produite lors du changement de langue.",
     UPDATED: "Modifications effectuées avec succès.",
     GO_TO_HOME: "Aller à la page d'accueil",
     FULL_NAME: "Nom complet",
@@ -125,7 +124,7 @@ const strings = new LocalizedStrings({
     CHECK_ALL: "Check all",
     CLOSE: "Close",
     BOOKING_STATUS_VOID: "Void",
-    BOOKING_STATUS_PENDING: "Pending",
+    BOOKING_STATUS_PENDING: "Pending to pay",
     BOOKING_STATUS_DEPOSIT: "Deposit",
     BOOKING_STATUS_PAID: "Paid",
     BOOKING_STATUS_RESERVED: "Reserved",
@@ -178,8 +177,7 @@ const strings = new LocalizedStrings({
     IDENTIFICATION_CARD: "Cédula de identidad",
     DOCUMENT_NUMBER: "Número de documento",
     PASSWORD: "Contraseña",
-    EMAIL_ALREADY_REGISTERED:
-      "Esta dirección de correo electrónico ya está registrada.",
+    EMAIL_ALREADY_REGISTERED: "Esta dirección de correo electrónico ya está registrada.",
     CONFIRM_PASSWORD: "Confirmar contraseña",
     PHONE: "Teléfono",
     LOCATION: "Ubicación",
@@ -207,7 +205,7 @@ const strings = new LocalizedStrings({
     CHECK_ALL: "Seleccionar todo",
     CLOSE: "Cerrar",
     BOOKING_STATUS_VOID: "Anulado",
-    BOOKING_STATUS_PENDING: "Pendiente",
+    BOOKING_STATUS_PENDING: "Pendiente por pagar",
     BOOKING_STATUS_DEPOSIT: "Depósito",
     BOOKING_STATUS_PAID: "Pagado",
     BOOKING_STATUS_RESERVED: "Reservado",

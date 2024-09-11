@@ -91,6 +91,7 @@ const strings = new LocalizedStrings({
     PASSPORT: "Passport",
     NEW_LOCATION: "New location",
     NEW_LOCATION_TEXT: "If you would like to add a new location, please contact the site administrator",
+    DATE: "Date",
   },
   en: {
     GENERIC_ERROR: "An unhandled error occurred.",
@@ -128,7 +129,7 @@ const strings = new LocalizedStrings({
     CHECK_ALL: "Check all",
     CLOSE: "Close",
     BOOKING_STATUS_VOID: "Void",
-    BOOKING_STATUS_PENDING: "Pending",
+    BOOKING_STATUS_PENDING: "Pending to pay",
     BOOKING_STATUS_DEPOSIT: "Deposit",
     BOOKING_STATUS_PAID: "Paid",
     BOOKING_STATUS_RESERVED: "Reserved",
@@ -181,6 +182,7 @@ const strings = new LocalizedStrings({
     PASSPORT: "Passport",
     NEW_LOCATION: "New location",
     NEW_LOCATION_TEXT: "If you would like to add a new location, please contact the site administrator",
+    DATE: "Date",
   },
   es: {
     GENERIC_ERROR: "Se produjo un error no controlado.",
@@ -218,7 +220,7 @@ const strings = new LocalizedStrings({
     CHECK_ALL: "Seleccionar todo",
     CLOSE: "Cerrar",
     BOOKING_STATUS_VOID: "Anulado",
-    BOOKING_STATUS_PENDING: "Pendiente",
+    BOOKING_STATUS_PENDING: "Pendiente por pagar",
     BOOKING_STATUS_DEPOSIT: "Depósito",
     BOOKING_STATUS_PAID: "Pagado",
     BOOKING_STATUS_RESERVED: "Reservado",
@@ -271,6 +273,7 @@ const strings = new LocalizedStrings({
     PASSPORT: "Pasaporte",
     NEW_LOCATION: "Nueva ubicación",
     NEW_LOCATION_TEXT: "Si desea agregar una nueva ubicación, por favor contacte al administrador del sitio",
+    DATE: "Fecha",
   },
 });
 

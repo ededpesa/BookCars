@@ -11,7 +11,8 @@ import * as bookcarsTypes from ":bookcars-types";
 export const formatNumber = (x: number, language: string): string => {
   if (typeof x === "number") {
     const parts: string[] = String(x % 1 !== 0 ? x.toFixed(2) : x).split(".");
-    const separator = language === "en" ? "," : " ";
+    // const separator = language === "en" ? "," : " ";
+    const separator = ",";
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
     return parts.join(".");
   }

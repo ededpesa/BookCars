@@ -30,6 +30,24 @@ div.booking div.col-2 div.col-2-header span.price-day {
   text-align: right;
 }
 
+table.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+table.payments-table thead tr th {
+  font-weight: bold;
+}
+
+table.payments-table tbody tr td {
+  text-align: center;
+}
+
+table.payments-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 /* Device width is less than or equal to 960px */
 
 @media only screen and (width <=960px) {

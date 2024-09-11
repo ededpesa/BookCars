@@ -246,6 +246,10 @@ const CreateUser = () => {
     setRif(e.target.value);
   };
 
+  const handleDocumentNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDocumentNumber(e.target.value);
+  };
+
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(e.target.value);
   };
@@ -350,7 +354,7 @@ const CreateUser = () => {
 
       if (type === bookcarsTypes.RecordType.Enterprise) {
         data.enterprise = {
-          name: enterpriseEmail,
+          name: enterpriseName,
           commercialActivity,
           web: webPage,
           email: enterpriseEmail,
@@ -584,13 +588,13 @@ const CreateUser = () => {
                   type="text"
                   //error={!emailValid || emailError}
                   //onBlur={handleEmailBlur}
-                  onChange={handleRifChange}
+                  onChange={handleDocumentNumberChange}
                   autoComplete="off"
                   variant="standard"
                   label={commonStrings.DOCUMENT_NUMBER}
                   style={{ flexGrow: 1 }}
                   inputProps={{ style: { textTransform: "uppercase" } }}
-                  // inputRef={inputRef}
+                  inputRef={maskCedRef}
                   required
                   fullWidth
                 />

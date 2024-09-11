@@ -185,7 +185,7 @@ export const checkout = async (req: Request, res: Response) => {
       throw new Error("Booking missing");
     }
 
-    if (!body.payLater) {
+    if (body.paymentType === bookcarsTypes.PaymentType.CardPayment) {
       const { paymentIntentId, sessionId } = body;
 
       if (!paymentIntentId && !sessionId) {
@@ -203,9 +203,10 @@ export const checkout = async (req: Request, res: Response) => {
           logger.error(message, body);
           return res.status(400).send(message);
         }
-
-        body.booking.paymentIntentId = paymentIntentId;
+        console.log(paymentIntentId);
+        // body.booking.paymentIntentId = paymentIntentId;
         body.booking.status = bookcarsTypes.BookingStatus.Paid;
+        body.booking.payments = [{ paymentType: bookcarsTypes.PaymentType.CardPayment, amount: body.booking.price, ref: paymentIntentId }];
       } else {
         //
         // Bookings created from checkout with Stripe are temporary
@@ -218,6 +219,17 @@ export const checkout = async (req: Request, res: Response) => {
         body.booking.status = bookcarsTypes.BookingStatus.Void;
         body.booking.expireAt = expireAt;
       }
+    } else if (body.paymentType === bookcarsTypes.PaymentType.WalletPayment) {
+      const { paymentIntentId } = body.booking;
+
+      if (!paymentIntentId) {
+        const message = "Payment intent missing";
+        logger.error(message, body);
+        return res.status(400).send(message);
+      }
+
+      body.booking.status = bookcarsTypes.BookingStatus.Paid;
+      body.booking.payments = [{ paymentType: bookcarsTypes.PaymentType.WalletPayment, amount: body.booking.price, ref: paymentIntentId }];
     }
 
     if (driver) {
@@ -277,13 +289,13 @@ export const checkout = async (req: Request, res: Response) => {
       body.booking._additionalDriver = additionalDriver._id.toString();
     }
 
+    // body.booking.paymentType = body.paymentType;
     const booking = new Booking(body.booking);
 
     await booking.save();
-
-    if (body.payLater) {
+    if (body.paymentType !== bookcarsTypes.PaymentType.CardPayment) {
       // Send confirmation email
-      if (!(await confirm(user, booking, body.payLater))) {
+      if (!(await confirm(user, booking, body.paymentType === bookcarsTypes.PaymentType.PayLater))) {
         return res.sendStatus(400);
       }
 
@@ -1101,6 +1113,65 @@ export const checkAvailability = async (req: Request, res: Response) => {
     return res.sendStatus(200);
   } catch (err) {
     logger.error(`[booking.checkAvailability] ${i18n.t("DB_ERROR")} ${car}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};
+
+/**
+ * Insert payment.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const insertPayment = async (req: Request, res: Response) => {
+  const { body }: { body: bookcarsTypes.InsertPaymentPayload } = req;
+  const { booking: bookingId, paymentType, amount, ref } = body;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+      logger.info(`Booking ${bookingId} not found`);
+      return res.sendStatus(204);
+    }
+
+    if (!booking.payments) booking.payments = [{ paymentType, amount: amount ?? 0, ref, createdAt: new Date() }];
+    else booking.payments.push({ paymentType, amount: amount ?? 0, ref, createdAt: new Date() });
+
+    await booking.save();
+
+    return res.sendStatus(200);
+  } catch (err) {
+    logger.error(`[booking.insertPayment] ${i18n.t("DB_ERROR")} ${JSON.stringify(req.body)}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};
+
+/**
+ * Delete payment.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const deletePayment = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await Booking.findOneAndUpdate(
+      { "payments._id": id }, // Encuentra el booking que contiene el payment con el _id especificado
+      { $pull: { payments: { _id: id } } }, // Elimina el elemento del arreglo payments con ese _id
+      { new: true } // Devuelve el documento actualizado
+    );
+
+    return res.sendStatus(200);
+  } catch (err) {
+    logger.error(`[booking.deletePayment] ${i18n.t("DB_ERROR")} ${id}`, err);
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };

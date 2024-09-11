@@ -3,6 +3,7 @@ import validator from "validator";
 import * as bookcarsTypes from ":bookcars-types";
 import * as bookcarsHelper from ":bookcars-helper";
 import { strings as commonStrings } from "../lang/common";
+import { strings as bookStrings } from "../lang/booking";
 import { strings } from "../lang/cars";
 import * as CarService from "../services/CarService";
 import env from "../config/env.config";
@@ -82,6 +83,34 @@ export const getCarTypeShort = (type: string) => {
 
     case bookcarsTypes.CarType.PlugInHybrid:
       return strings.PLUG_IN_HYBRID_SHORT;
+
+    default:
+      return "";
+  }
+};
+
+/**
+ * Get short car type label.
+ *
+ * @param {string} type
+ * @returns {string}
+ */
+export const getPaymentType = (type: string) => {
+  switch (type) {
+    case bookcarsTypes.PaymentType.CardPayment:
+      return bookStrings.CARD_PAYMENT;
+
+    case bookcarsTypes.PaymentType.MobilePayment:
+      return bookStrings.MOBILE_PAYMENT;
+
+    case bookcarsTypes.PaymentType.WalletPayment:
+      return bookStrings.WALLET_PAYMENT;
+
+    case bookcarsTypes.PaymentType.Cash:
+      return bookStrings.CASH;
+
+    case bookcarsTypes.PaymentType.PointOfSell:
+      return bookStrings.POINT_OF_SELL;
 
     default:
       return "";

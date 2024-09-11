@@ -20,7 +20,15 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import { DirectionsCar as CarIcon, Person as DriverIcon, EventSeat as BookingIcon, Settings as PaymentOptionsIcon } from "@mui/icons-material";
+import {
+  DirectionsCar as CarIcon,
+  Person as DriverIcon,
+  EventSeat as BookingIcon,
+  Settings as PaymentOptionsIcon,
+  MobileFriendly,
+  Wallet,
+  ContentCopy,
+} from "@mui/icons-material";
 import validator from "validator";
 import { format, intervalToDuration } from "date-fns";
 import { fr, enUS, es } from "date-fns/locale";
@@ -102,7 +110,8 @@ const Checkout = () => {
   const [addiontalDriverEmailValid, setAddiontalDriverEmailValid] = useState(true);
   const [addiontalDriverPhoneValid, setAddiontalDriverPhoneValid] = useState(true);
   const [addiontalDriverBirthDateValid, setAddiontalDriverBirthDateValid] = useState(true);
-  const [payLater, setPayLater] = useState(false);
+  // const [payLater, setPayLater] = useState(false);
+  const [paymentType, setPaymentType] = useState("cardPayment");
   const [recaptchaError, setRecaptchaError] = useState(false);
 
   const [adManuallyChecked, setAdManuallyChecked] = useState(false);
@@ -112,6 +121,12 @@ const Checkout = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [bookingId, setBookingId] = useState<string>();
   const [sessionId, setSessionId] = useState<string>();
+  const [mobilePaymentPayload, setMobilePaymentPayload] = useState<bookcarsTypes.MobilePaymentPayload | null>(null);
+  const [paymentDateValid, setPaymentDateValid] = useState(true);
+
+  const [walletPaymentValid, setWalletPaymentValid] = useState(true);
+  const [walletPaymentId, setWalletPaymentId] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
 
   const _fr = language === "fr";
   const _es = language === "es";
@@ -452,6 +467,16 @@ const Checkout = () => {
     return true;
   };
 
+  const _validatePaymentDate = (date?: Date) => {
+    if (car && date && bookcarsHelper.isDate(date)) {
+      const now = new Date();
+      const _dateValid = now >= date;
+      return _dateValid;
+    }
+    setPaymentDateValid(true);
+    return true;
+  };
+
   const handleTosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTosChecked(e.target.checked);
 
@@ -472,9 +497,37 @@ const Checkout = () => {
     }
   }, []);
 
+  // const walletAddress = "TULWdGLwHyT52MgrLDs5zpzzwgsKHGcSUf";
+  const createQr = async () => {
+    const QRCode = await import("qrcode");
+    var canvas = document.getElementById("canvas");
+
+    QRCode.toCanvas(canvas, walletAddress, { scale: 6 }, function (error: any) {
+      if (error) console.error(error);
+    });
+  };
+
+  const handlePaymentTypeChange = (type: string) => {
+    if (type === bookcarsTypes.PaymentType.WalletPayment) {
+      createQr();
+    }
+
+    setPaymentType(type);
+  };
+
+  const handleCopy = async (text: string, success: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      helper.info(success);
+    } catch (error) {
+      //helper.error("Error al copiar la dirección");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
+      setLoading(true);
 
       if (!car || !pickupLocation || !dropOffLocation || !from || !to) {
         helper.error();
@@ -527,14 +580,31 @@ const Checkout = () => {
       try {
         await BookingService.checkAvailability({ car: car._id, from, to });
       } catch (error) {
-        helper.error(null, "El vehiculo ya no se encuentra disponible.");
+        helper.error(null, strings.CAR_NOT_AVAILABLE);
         return;
       }
 
-      setLoading(true);
+      if (paymentType === bookcarsTypes.PaymentType.WalletPayment) {
+        try {
+          await BookingService.checkWalletPayment({ transactionId: walletPaymentId });
+        } catch (error) {
+          // setWalletPaymentValid(false);
+          helper.error(null, strings.WALLET_PAYMENT_ALERADY_REGISTERED);
+          return;
+        }
+        try {
+          await BookingService.checkWalletTronPayment({ transactionId: walletPaymentId, amountToValidate: price });
+        } catch (error) {
+          setWalletPaymentValid(false);
+          return;
+        }
+      }
+
+      // setLoading(true);
       setPaymentFailed(false);
 
       let driver: bookcarsTypes.User | undefined;
+      let beneficiary: bookcarsTypes.BookingBeneficiary | undefined;
       let _additionalDriver: bookcarsTypes.AdditionalDriver | undefined;
 
       if (!authenticated) {
@@ -544,6 +614,14 @@ const Checkout = () => {
           fullName,
           birthDate,
           language: UserService.getLanguage(),
+        };
+      }
+      if (user?.type === bookcarsTypes.UserType.Enterprise) {
+        beneficiary = {
+          email,
+          phone,
+          fullName,
+          birthDate,
         };
       }
 
@@ -566,6 +644,7 @@ const Checkout = () => {
         fullInsurance,
         additionalDriver,
         price,
+        beneficiary,
       };
 
       if (adRequired && additionalDriver && addiontalDriverBirthDate) {
@@ -582,7 +661,7 @@ const Checkout = () => {
       //
       let _customerId: string | undefined;
       let _sessionId: string | undefined;
-      if (!payLater) {
+      if (paymentType === bookcarsTypes.PaymentType.CardPayment) {
         const payload: bookcarsTypes.CreatePaymentPayload = {
           amount: price,
           currency: env.STRIPE_CURRENCY_CODE,
@@ -598,24 +677,30 @@ const Checkout = () => {
         setClientSecret(res.clientSecret);
         _sessionId = res.sessionId;
         _customerId = res.customerId;
+        //console.log("StripeService", res);
+      }
+
+      if (paymentType === bookcarsTypes.PaymentType.WalletPayment) {
+        booking.paymentIntentId = walletPaymentId;
       }
 
       const payload: bookcarsTypes.CheckoutPayload = {
         driver,
         booking,
         additionalDriver: _additionalDriver,
-        payLater,
+        payLater: paymentType === "payLater",
+        paymentType,
         sessionId: _sessionId,
         customerId: _customerId,
       };
 
-      console.log("payload", payload);
+      //console.log("CheckoutPayload", payload);
 
       const { status, bookingId: _bookingId } = await BookingService.checkout(payload);
       setLoading(false);
 
       if (status === 200) {
-        if (payLater) {
+        if (paymentType === "payLater" || paymentType === "walletPayment") {
           setVisible(false);
           setSuccess(true);
         }
@@ -656,6 +741,7 @@ const Checkout = () => {
     let _car;
     let _pickupLocation;
     let _dropOffLocation;
+    let _address;
 
     try {
       _car = await CarService.getCar(carId);
@@ -666,8 +752,9 @@ const Checkout = () => {
       }
 
       _pickupLocation = await LocationService.getLocation(pickupLocationId);
+      _address = await BookingService.getWalletAddress(env.WALLET_NETWORK);
 
-      if (!_pickupLocation) {
+      if (!_pickupLocation || !_address?.address) {
         setNoMatch(true);
         return;
       }
@@ -708,7 +795,9 @@ const Checkout = () => {
       setTheftProtection(included(_car.theftProtection));
       setCollisionDamageWaiver(included(_car.collisionDamageWaiver));
       setFullInsurance(included(_car.fullInsurance));
+      // createQr();
       setVisible(true);
+      setWalletAddress(_address.address);
     } catch (err) {
       helper.error(err);
     }
@@ -891,7 +980,7 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  {!authenticated && (
+                  {(!authenticated || user?.type === bookcarsTypes.UserType.Enterprise) && (
                     <div className="driver-details">
                       <div className="booking-info">
                         <DriverIcon />
@@ -1105,13 +1194,15 @@ const Checkout = () => {
                       <div className="payment-options">
                         <FormControl>
                           <RadioGroup
-                            defaultValue="payOnline"
+                            defaultValue={bookcarsTypes.PaymentType.CardPayment}
                             onChange={(event) => {
-                              setPayLater(event.target.value === "payLater");
+                              //setPayLater(event.target.value === "payLater");
+                              handlePaymentTypeChange(event.target.value);
+                              // setPaymentType(event.target.value);
                             }}
                           >
                             <FormControlLabel
-                              value="payLater"
+                              value={bookcarsTypes.PaymentType.PayLater}
                               control={<Radio />}
                               label={
                                 <span className="payment-button">
@@ -1121,11 +1212,31 @@ const Checkout = () => {
                               }
                             />
                             <FormControlLabel
-                              value="payOnline"
+                              value={bookcarsTypes.PaymentType.CardPayment}
                               control={<Radio />}
                               label={
                                 <span className="payment-button">
-                                  <span>{strings.PAY_ONLINE}</span>
+                                  <span>{strings.CARD_PAYMENT}</span>
+                                  <span className="payment-info">{`(${strings.PAY_ONLINE_INFO})`}</span>
+                                </span>
+                              }
+                            />
+                            {/* <FormControlLabel
+                              value={bookcarsTypes.PaymentType.MobilePayment}
+                              control={<Radio />}
+                              label={
+                                <span className="payment-button">
+                                  <span>{strings.MOBILE_PAYMENT}</span>
+                                  <span className="payment-info">{`(${strings.PAY_ONLINE_INFO})`}</span>
+                                </span>
+                              }
+                            /> */}
+                            <FormControlLabel
+                              value={bookcarsTypes.PaymentType.WalletPayment}
+                              control={<Radio />}
+                              label={
+                                <span className="payment-button">
+                                  <span>{strings.WALLET_PAYMENT}</span>
                                   <span className="payment-info">{`(${strings.PAY_ONLINE_INFO})`}</span>
                                 </span>
                               }
@@ -1136,7 +1247,161 @@ const Checkout = () => {
                     </div>
                   )}
 
-                  {(!car.supplier.payLater || !payLater) && clientSecret && (
+                  {paymentType === "mobilePayment" && (
+                    <div className="payment-wallet-container">
+                      <div className="booking-info">
+                        <MobileFriendly />
+                        <span>{strings.MOBILE_PAYMENT}</span>
+                      </div>
+                      <p>{strings.MOBILE_PAYMENT_COPY_INFO}</p>
+                      <ul>
+                        <li>
+                          {strings.AMOUNT}: <strong>Bs 7,986.56</strong>{" "}
+                          <ContentCopy className="copy-icon" onClick={() => handleCopy("7986.56", strings.COPIED_AMOUNT)} />
+                        </li>
+                        <li>
+                          {commonStrings.PHONE}: <strong>0412-1234567</strong>{" "}
+                          <ContentCopy className="copy-icon" onClick={() => handleCopy("4121234567", strings.COPIED_PHONE)} />
+                        </li>
+                        <li>
+                          RIF: <strong>J456123456</strong> <ContentCopy className="copy-icon" onClick={() => handleCopy("J456123456", strings.COPIED_RIF)} />
+                        </li>
+                        <li>
+                          {strings.BANK}: <strong>Banesco</strong>{" "}
+                          <ContentCopy className="copy-icon" onClick={() => handleCopy("Banesco", strings.COPIED_BANK)} />
+                        </li>
+                      </ul>
+                      <p>{strings.MOBILE_PAYMENT_AFTER_PAYMENT}</p>
+                      <div className="mobile-payment-container">
+                        <div className="mobile-payment-form">
+                          <FormControl fullWidth margin="dense">
+                            <InputLabel className="required">{strings.REFERENCE_NUMBER}</InputLabel>
+                            <OutlinedInput
+                              type="text"
+                              label={strings.REFERENCE_NUMBER}
+                              required
+                              onChange={(e) => {
+                                setMobilePaymentPayload((data: bookcarsTypes.MobilePaymentPayload | null) => {
+                                  return { ...data, reference: e.target.value };
+                                });
+                              }}
+                              autoComplete="off"
+                            />
+                          </FormControl>
+                          <FormControl fullWidth margin="dense">
+                            <DatePicker
+                              label={strings.PAYMENT_DATE}
+                              variant="outlined"
+                              required
+                              onChange={(_date) => {
+                                if (_date) {
+                                  const _dateValid = _validatePaymentDate(_date);
+                                  setMobilePaymentPayload((data: bookcarsTypes.MobilePaymentPayload | null) => {
+                                    return { ...data, date: _date };
+                                  });
+                                  setPaymentDateValid(_dateValid);
+                                }
+                              }}
+                              language={language}
+                            />
+                            <FormHelperText error={!addiontalDriverBirthDateValid}>
+                              {(!addiontalDriverBirthDateValid && helper.getBirthDateError(car.minimumAge ?? 0)) || ""}
+                            </FormHelperText>
+                          </FormControl>
+                          <FormControl fullWidth margin="dense">
+                            <InputLabel className="required">{commonStrings.PHONE}</InputLabel>
+                            <OutlinedInput
+                              type="text"
+                              label={commonStrings.PHONE}
+                              error={!addiontalDriverPhoneValid}
+                              onChange={(e) => {
+                                setMobilePaymentPayload((data: bookcarsTypes.MobilePaymentPayload | null) => {
+                                  return { ...data, phone: e.target.value };
+                                });
+                              }}
+                              required
+                              autoComplete="off"
+                            />
+                            <FormHelperText error={!addiontalDriverPhoneValid}>
+                              {(!addiontalDriverPhoneValid && commonStrings.PHONE_NOT_VALID) || ""}
+                            </FormHelperText>
+                          </FormControl>
+                          <FormControl fullWidth margin="dense">
+                            <InputLabel className="required">{commonStrings.EMAIL}</InputLabel>
+                            <OutlinedInput
+                              type="text"
+                              label={commonStrings.EMAIL}
+                              error={!addiontalDriverEmailValid}
+                              onBlur={(e) => {
+                                _validateEmail(e.target.value);
+                              }}
+                              onChange={(e) => {
+                                setAddiontalDriverEmail(e.target.value);
+
+                                if (!e.target.value) {
+                                  setAddiontalDriverEmailValid(true);
+                                }
+                              }}
+                              required={adRequired}
+                              autoComplete="off"
+                            />
+                            <FormHelperText error={!addiontalDriverEmailValid}>
+                              {(!addiontalDriverEmailValid && commonStrings.EMAIL_NOT_VALID) || ""}
+                            </FormHelperText>
+                          </FormControl>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentType === "walletPayment" && (
+                    <div className="payment-wallet-container">
+                      <div className="booking-info">
+                        <Wallet />
+                        <span>{strings.WALLET_PAYMENT}</span>
+                      </div>
+                      <div className="wallet-payment-body">
+                        <canvas id="canvas" style={{ width: "100%" }}></canvas>
+                        <div className="wallet-form">
+                          <ul>
+                            <li>
+                              {strings.OBTATIN_WALLET_ADDRESS}{" "}
+                              <span className="copy-link" onClick={() => handleCopy(walletAddress, strings.COPIED_ADDRESS)}>
+                                {strings.HERE}
+                              </span>{" "}
+                            </li>
+                            <li>
+                              {strings.NETROWK}: <strong>{env.WALLET_NETWORK === "TRX" ? "Tron (TRC20)" : "Ethereum (ERC20)"}</strong>
+                            </li>
+                            <li>
+                              {strings.AMOUNT}: <strong>{bookcarsHelper.formatPrice(price, "USDT", language)}</strong>
+                            </li>
+                            <li>{strings.TX_ID_HELP}:</li>
+                          </ul>
+                          <FormControl fullWidth margin="dense">
+                            <InputLabel className="required">TxID</InputLabel>
+                            <OutlinedInput
+                              type="text"
+                              label={"TxID"}
+                              required
+                              error={!walletPaymentValid}
+                              onChange={(e) => {
+                                setWalletPaymentId(e.target.value);
+                                setWalletPaymentValid(true);
+                                // if (!e.target.value) {
+                                //   setWalletPaymentValid(true);
+                                // }
+                              }}
+                              autoComplete="off"
+                            />
+                            <FormHelperText error={!walletPaymentValid}>{(!walletPaymentValid && strings.WALLET_PAYMENT_ID_FAILED) || ""}</FormHelperText>
+                          </FormControl>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {(!car.supplier.payLater || !(paymentType === "payLater")) && clientSecret && (
                     <div className="payment-options-container">
                       <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
                         <EmbeddedCheckout />
@@ -1144,7 +1409,7 @@ const Checkout = () => {
                     </div>
                   )}
                   <div className="booking-buttons">
-                    {(!clientSecret || payLater) && (
+                    {(!clientSecret || paymentType === "payLater") && (
                       <Button type="submit" variant="contained" className="btn-checkout btn-margin-bottom" size="small" disabled={loading}>
                         {loading ? <CircularProgress color="inherit" size={24} /> : strings.BOOK}
                       </Button>
@@ -1185,7 +1450,7 @@ const Checkout = () => {
           </div>
         )}
         {noMatch && <NoMatch hideHeader />}
-        {success && <Info message={payLater ? strings.PAY_LATER_SUCCESS : strings.SUCCESS} />}
+        {success && <Info message={paymentType === "payLater" ? strings.PAY_LATER_SUCCESS : strings.SUCCESS} />}
       </Layout>
     </ReCaptchaProvider>
   );
