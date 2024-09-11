@@ -1149,3 +1149,29 @@ export const insertPayment = async (req: Request, res: Response) => {
     return res.status(400).send(i18n.t("DB_ERROR") + err);
   }
 };
+
+/**
+ * Delete payment.
+ *
+ * @export
+ * @async
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {unknown}
+ */
+export const deletePayment = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await Booking.findOneAndUpdate(
+      { "payments._id": id }, // Encuentra el booking que contiene el payment con el _id especificado
+      { $pull: { payments: { _id: id } } }, // Elimina el elemento del arreglo payments con ese _id
+      { new: true } // Devuelve el documento actualizado
+    );
+
+    return res.sendStatus(200);
+  } catch (err) {
+    logger.error(`[booking.deletePayment] ${i18n.t("DB_ERROR")} ${id}`, err);
+    return res.status(400).send(i18n.t("DB_ERROR") + err);
+  }
+};

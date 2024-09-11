@@ -253,31 +253,31 @@ const BookingList = ({
             </div>
           );
         },
-        renderHeader: () =>
-          selectedIds.length > 0 ? (
-            <div>
-              <Tooltip title={strings.UPDATE_SELECTION}>
-                <IconButton
-                  onClick={() => {
-                    setOpenUpdateDialog(true);
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={strings.DELETE_SELECTION}>
-                <IconButton
-                  onClick={() => {
-                    setopenDeleteDialog(true);
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          ) : (
-            <></>
-          ),
+        // renderHeader: () =>
+        //   selectedIds.length > 0 ? (
+        //     <div>
+        //       <Tooltip title={strings.UPDATE_SELECTION}>
+        //         <IconButton
+        //           onClick={() => {
+        //             setOpenUpdateDialog(true);
+        //           }}
+        //         >
+        //           <EditIcon />
+        //         </IconButton>
+        //       </Tooltip>
+        //       <Tooltip title={strings.DELETE_SELECTION}>
+        //         <IconButton
+        //           onClick={() => {
+        //             setopenDeleteDialog(true);
+        //           }}
+        //         >
+        //           <DeleteIcon />
+        //         </IconButton>
+        //       </Tooltip>
+        //     </div>
+        //   ) : (
+        //     <></>
+        //   ),
       },
     ];
 

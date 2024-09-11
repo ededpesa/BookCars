@@ -65,3 +65,12 @@ export const getBookings = (payload: bookcarsTypes.GetBookingsPayload, page: num
  */
 export const insertPayment = (payload: bookcarsTypes.InsertPaymentPayload): Promise<number> =>
   axiosInstance.post("/api/insert-payment", payload, { withCredentials: true }).then((res) => res.status);
+
+/**
+ * Delete a Booking payment by ID.
+ *
+ * @param {string} id
+ * @returns {Promise<number>}
+ */
+export const deletePayment = (id: string): Promise<number> =>
+  axiosInstance.delete(`/api/booking-payment/${encodeURIComponent(id)}`, { withCredentials: true }).then((res) => res.status);

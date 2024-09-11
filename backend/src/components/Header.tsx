@@ -14,6 +14,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Link,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -42,6 +43,7 @@ import Avatar from "./Avatar";
 import * as langHelper from "../common/langHelper";
 import * as helper from "../common/helper";
 import { useGlobalContext, GlobalContextType } from "../context/GlobalContext";
+import logo from "../assets/img/upyrental_azul_fondo_oscuro.svg";
 
 import "../assets/css/header.css";
 
@@ -270,12 +272,20 @@ const Header = ({ user, hidden }: HeaderProps) => {
 
   return (
     <div style={hidden ? { display: "none" } : classes.grow} className="header">
-      <AppBar position="fixed" sx={{ bgcolor: "#121212" }}>
+      <AppBar position="fixed" sx={{ bgcolor: "#455fee" }}>
         <Toolbar className="toolbar">
           {isLoaded && !loading && isSignedIn && (
-            <IconButton edge="start" sx={classes.menuButton} color="inherit" aria-label="open drawer" onClick={handleSideMenuOpen}>
-              <MenuIcon />
-            </IconButton>
+            <>
+              <IconButton edge="start" sx={classes.menuButton} color="inherit" aria-label="open drawer" onClick={handleSideMenuOpen}>
+                <MenuIcon />
+              </IconButton>
+              <Link href="/" className="logo">
+                {/* <i>
+                    <span style={{ color: "#b90202" }}>QUALITY</span>CARS
+                  </i> */}
+                <img src={logo} alt="logo" width="100" />
+              </Link>
+            </>
           )}
           <>
             <Drawer open={isSideMenuOpen} onClose={handleSideMenuClose} className="menu">
@@ -347,7 +357,7 @@ const Header = ({ user, hidden }: HeaderProps) => {
               </IconButton>
             )}
             {isLoaded && !loading && (
-              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary black">
+              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary">
                 {lang?.label}
               </Button>
             )}
@@ -359,7 +369,7 @@ const Header = ({ user, hidden }: HeaderProps) => {
           </div>
           <div className="header-mobile">
             {!isSignedIn && !loading && (
-              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary black">
+              <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn-primary">
                 {lang?.label}
               </Button>
             )}

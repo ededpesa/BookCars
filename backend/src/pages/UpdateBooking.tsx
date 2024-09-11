@@ -400,7 +400,7 @@ const UpdateBooking = () => {
     setAddPaymentModalOpen(true);
   };
 
-  const handleAddPaymentSuccess = async () => {
+  const reloadPayments = async () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("b")) {
       const id = params.get("b");
@@ -414,6 +414,14 @@ const UpdateBooking = () => {
         } catch (err) {}
       }
     }
+  };
+
+  const handleDeletePaymentSuccess = () => {
+    reloadPayments();
+  };
+
+  const handleAddPaymentSuccess = () => {
+    reloadPayments();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -948,7 +956,9 @@ const UpdateBooking = () => {
               hidePrice
             />
 
-            {payments.length > 0 ? <BookingPaymentList payments={payments} language={language} onAddPayment={handleAddPayment} /> : null}
+            {payments.length > 0 ? (
+              <BookingPaymentList payments={payments} language={language} onAddPayment={handleAddPayment} onDeletePaymentSuccess={handleDeletePaymentSuccess} />
+            ) : null}
           </div>
 
           <Dialog disableEscapeKeyDown maxWidth="xs" open={openDeleteDialog}>
