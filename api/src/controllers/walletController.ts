@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
-import TronWeb from "tronweb";
 import Web3 from "web3";
-import Booking from "src/models/Booking";
-import Wallet from "src/models/Wallet";
+import Booking from "../models/Booking";
+import Wallet from "../models/Wallet";
 import i18n from "../lang/i18n";
 import * as logger from "../common/logger";
 import * as env from "../config/env.config";
 import * as bookcarsTypes from ":bookcars-types";
-
 /**
  * Verifica una transacción en la red de TRON.
  * @async
@@ -19,6 +17,7 @@ export const checkTronPayment = async (req: Request, res: Response) => {
   try {
     const { transactionId, amountToValidate } = req.body;
 
+    const { default: TronWeb } = await import("tronweb");
     const tronWeb = new TronWeb({
       fullHost: "https://api.trongrid.io", // Puedes usar 'https://api.shasta.trongrid.io' para la red de pruebas
       // headers: { "TRON-PRO-API-KEY": "732ad4c6-dc38-4b51-a1eb-bc85d15ca1d8" }, // Opcional, si tienes una API Key
@@ -41,14 +40,11 @@ export const checkTronPayment = async (req: Request, res: Response) => {
     const dataHex = contractData.data;
     const receiverHex = `41${dataHex.slice(32, 72)}`; // La dirección está en los bytes 8 a 48
     const receiverAddress = tronWeb.address.fromHex(receiverHex);
-    console.log("🚀 ~ checkTronPayment ~ receiverAddress:", receiverAddress);
 
     // Decodifica el monto en SUN (1 USDT = 1,000,000 SUN)
     const amountHex = `0x${dataHex.slice(72, 136)}`; // El monto está en los bytes 48 a 136
 
-    console.log("🚀 ~ checkTronPayment ~ amountHex:", amountHex);
     const amount = parseInt(amountHex, 16);
-    console.log("🚀 ~ checkTronPayment ~ amount:", amount);
     // const amount = parseInt(contractData.amount || 0, 10);
     // const receiverAddress = tronWeb.address.fromHex(contractData.to_address);
 
