@@ -38,45 +38,26 @@ const LocationSelectList = ({
   const [fetch, setFetch] = useState(true);
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
-  const [selectedOptions, setSelectedOptions] = useState<
-    bookcarsTypes.Location[]
-  >([]);
+  const [selectedOptions, setSelectedOptions] = useState<bookcarsTypes.Location[]>([]);
 
   useEffect(() => {
-    const _value = multiple
-      ? (value as bookcarsTypes.Location[])
-      : [value as bookcarsTypes.Location];
+    const _value = multiple ? (value as bookcarsTypes.Location[]) : [value as bookcarsTypes.Location];
     if (value && !bookcarsHelper.arrayEqual(selectedOptions, _value)) {
       setSelectedOptions(_value);
     }
   }, [value, multiple, selectedOptions]);
 
-  const fetchData = async (
-    _page: number,
-    _keyword: string,
-    onFetch?: bookcarsTypes.DataEvent<bookcarsTypes.Location>,
-  ) => {
+  const fetchData = async (_page: number, _keyword: string, onFetch?: bookcarsTypes.DataEvent<bookcarsTypes.Location>) => {
     try {
       if (fetch || _page === 1) {
         setLoading(true);
-        const data = await LocationService.getLocations(
-          _keyword,
-          _page,
-          env.PAGE_SIZE,
-        );
-        const _data =
-          data && data.length > 0
-            ? data[0]
-            : { pageInfo: { totalRecord: 0 }, resultData: [] };
+        const data = await LocationService.getLocations(_keyword, _page, env.PAGE_SIZE);
+        const _data = data && data.length > 0 ? data[0] : { pageInfo: { totalRecord: 0 }, resultData: [] };
         if (!_data) {
           return;
         }
-        const totalRecords =
-          Array.isArray(_data.pageInfo) && _data.pageInfo.length > 0
-            ? _data.pageInfo[0].totalRecords
-            : 0;
-        const _rows =
-          _page === 1 ? _data.resultData : [...rows, ..._data.resultData];
+        const totalRecords = Array.isArray(_data.pageInfo) && _data.pageInfo.length > 0 ? _data.pageInfo[0].totalRecords : 0;
+        const _rows = _page === 1 ? _data.resultData : [...rows, ..._data.resultData];
 
         setRows(_rows);
         setFetch(_data.resultData.length > 0);
@@ -115,12 +96,7 @@ const LocationSelectList = ({
       ListboxProps={{
         onScroll: (event) => {
           const listboxNode = event.currentTarget;
-          if (
-            fetch &&
-            !loading &&
-            listboxNode.scrollTop + listboxNode.clientHeight >=
-              listboxNode.scrollHeight - env.PAGE_OFFSET
-          ) {
+          if (fetch && !loading && listboxNode.scrollTop + listboxNode.clientHeight >= listboxNode.scrollHeight - env.PAGE_OFFSET) {
             const p = page + 1;
             setPage(p);
             fetchData(p, keyword);
@@ -139,13 +115,7 @@ const LocationSelectList = ({
         }
       }}
       onInputChange={(event, val) => {
-        const _value =
-          (event &&
-            event.target &&
-            "value" in event.target &&
-            (event.target.value as string)) ||
-          val ||
-          "";
+        const _value = (event && event.target && "value" in event.target && (event.target.value as string)) || val || "";
 
         // if (event.target.type === 'text' && value !== keyword) {
         if (_value !== keyword) {

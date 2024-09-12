@@ -35,15 +35,9 @@ const CarFilter = ({
   const [to, setTo] = useState<Date | undefined>(filterTo);
   const [minDate, setMinDate] = useState<Date>();
   const [maxDate, setMaxDate] = useState<Date>();
-  const [pickupLocation, setPickupLocation] = useState<
-    bookcarsTypes.Location | null | undefined
-  >(filterPickupLocation);
-  const [dropOffLocation, setDropOffLocation] = useState<
-    bookcarsTypes.Location | null | undefined
-  >(filterDropOffLocation);
-  const [sameLocation, setSameLocation] = useState(
-    filterPickupLocation === filterDropOffLocation,
-  );
+  const [pickupLocation, setPickupLocation] = useState<bookcarsTypes.Location | null | undefined>(filterPickupLocation);
+  const [dropOffLocation, setDropOffLocation] = useState<bookcarsTypes.Location | null | undefined>(filterDropOffLocation);
+  const [sameLocation, setSameLocation] = useState(filterPickupLocation === filterDropOffLocation);
   const [fromError, setFromError] = useState(false);
   const [toError, setToError] = useState(false);
 
@@ -88,14 +82,7 @@ const CarFilter = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (
-      !pickupLocation ||
-      !dropOffLocation ||
-      !from ||
-      !to ||
-      fromError ||
-      toError
-    ) {
+    if (!pickupLocation || !dropOffLocation || !from || !to || fromError || toError) {
       return;
     }
 
@@ -204,12 +191,7 @@ const CarFilter = ({
           </Button>
         </FormControl>
         <FormControl fullWidth className="chk-same-location">
-          <input
-            id="chk-same-location"
-            type="checkbox"
-            checked={sameLocation}
-            onChange={handleSameLocationChange}
-          />
+          <input id="chk-same-location" type="checkbox" checked={sameLocation} onChange={handleSameLocationChange} />
           <label htmlFor="chk-same-location">{strings.DROP_OFF}</label>
         </FormControl>
       </form>
