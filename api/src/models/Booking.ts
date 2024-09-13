@@ -169,6 +169,7 @@ const bookingSchema = new Schema<env.Booking>(
         },
       },
     ],
+    payLaterFee: Number,
   },
   {
     timestamps: true,

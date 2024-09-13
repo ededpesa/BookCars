@@ -15,7 +15,7 @@ import {
 import { Info as InfoIcon, Person as DriverIcon } from "@mui/icons-material";
 import { DateTimeValidationError } from "@mui/x-date-pickers";
 import validator from "validator";
-import { format, intervalToDuration } from "date-fns";
+import { intervalToDuration } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import * as bookcarsTypes from ":bookcars-types";
 import * as bookcarsHelper from ":bookcars-helper";

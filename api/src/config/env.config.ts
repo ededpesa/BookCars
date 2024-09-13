@@ -482,6 +482,7 @@ export interface Booking extends Document {
       createdAt?: Date;
     },
   ];
+  payLaterFee?: number;
 }
 
 /**
@@ -616,6 +617,7 @@ export interface CarSupplier extends Document {
   babyChair: number;
   inventory: number;
   status: string;
+  payLaterFee?: number;
 }
 
 /**

@@ -88,6 +88,7 @@ const carSupplierSchema = new Schema<env.CarSupplier>(
       enum: [bookcarsTypes.CarStatus.Active, bookcarsTypes.CarStatus.Deleted],
       default: bookcarsTypes.CarStatus.Active,
     },
+    payLaterFee: Number,
   },
   {
     timestamps: true,

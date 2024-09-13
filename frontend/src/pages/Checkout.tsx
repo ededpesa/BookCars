@@ -154,6 +154,7 @@ const Checkout = () => {
         gps,
         homeDelivery,
         babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -193,6 +194,7 @@ const Checkout = () => {
         gps,
         homeDelivery,
         babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -214,6 +216,7 @@ const Checkout = () => {
         gps,
         homeDelivery,
         babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -235,6 +238,7 @@ const Checkout = () => {
         gps,
         homeDelivery,
         babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -256,6 +260,7 @@ const Checkout = () => {
         gps,
         homeDelivery,
         babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -278,6 +283,7 @@ const Checkout = () => {
         gps: _gps,
         homeDelivery,
         babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -299,6 +305,7 @@ const Checkout = () => {
         gps,
         homeDelivery: _HomeDelivery,
         babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -320,6 +327,7 @@ const Checkout = () => {
         gps,
         homeDelivery,
         babyChair: _babyChair,
+        paylater: paymentType === bookcarsTypes.PaymentType.PayLater,
       };
       const _price = helper.price(car, from, to, options);
 
@@ -512,6 +520,23 @@ const Checkout = () => {
       createQr();
     }
 
+    if (car && from && to) {
+      const options: bookcarsTypes.CarOptions = {
+        cancellation,
+        //amendments,
+        theftProtection,
+        collisionDamageWaiver,
+        fullInsurance,
+        additionalDriver,
+        gps,
+        homeDelivery,
+        babyChair,
+        paylater: type === bookcarsTypes.PaymentType.PayLater,
+      };
+      const _price = helper.price(car, from, to, options);
+      setPrice(_price);
+    }
+
     setPaymentType(type);
   };
 
@@ -645,6 +670,7 @@ const Checkout = () => {
         additionalDriver,
         price,
         beneficiary,
+        payLaterFee: paymentType === bookcarsTypes.PaymentType.PayLater ? car.payLaterFee : 0,
       };
 
       if (adRequired && additionalDriver && addiontalDriverBirthDate) {

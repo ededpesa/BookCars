@@ -536,6 +536,10 @@ export const price = (car: bookcarsTypes.Car | bookcarsTypes.CarSupplier, from: 
     if (options.additionalDriver && car.additionalDriver > 0) {
       _price += car.additionalDriver * _days;
     }
+    if (options.paylater && car.payLaterFee && car.payLaterFee > 0) {
+      _price *= 1 + car.payLaterFee / 100;
+      _price = Math.ceil(Number(_price.toFixed(4)) * 100) / 100;
+    }
   }
 
   return _price;

@@ -107,6 +107,7 @@ export interface Booking {
   beneficiary?: BookingBeneficiary;
   // paymentType?: string;
   payments?: [Payment];
+  payLaterFee?: number;
 }
 
 export interface Payment {
@@ -231,6 +232,7 @@ export interface AssignCarPayload {
   homeDelivery: number;
   babyChair: number;
   inventory: number;
+  payLaterFee?: number;
 }
 
 export interface UpdateCarPayload extends CreateCarPayload {
@@ -472,6 +474,7 @@ export interface Car {
   homeDelivery: number;
   babyChair: number;
   inventory: number;
+  payLaterFee?: number;
   [propKey: string]: any;
 }
 
@@ -497,6 +500,7 @@ export interface CarSupplier {
   name?: string;
   minimumAge?: number;
   image?: string;
+  payLaterFee?: number;
   [propKey: string]: any;
 }
 
@@ -605,4 +609,5 @@ export interface CarOptions {
   collisionDamageWaiver?: boolean;
   fullInsurance?: boolean;
   additionalDriver?: boolean;
+  paylater: boolean;
 }

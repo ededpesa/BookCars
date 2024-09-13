@@ -237,6 +237,7 @@ export const updateAssign = async (req: Request, res: Response) => {
         fullInsurance,
         additionalDriver,
         inventory,
+        payLaterFee,
       } = body;
 
       carSupplier.car = new mongoose.Types.ObjectId(car);
@@ -256,6 +257,7 @@ export const updateAssign = async (req: Request, res: Response) => {
       carSupplier.homeDelivery = homeDelivery;
       carSupplier.babyChair = babyChair;
       carSupplier.inventory = inventory;
+      carSupplier.payLaterFee = payLaterFee;
 
       await carSupplier.save();
       return res.json(carSupplier);

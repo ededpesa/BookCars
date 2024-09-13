@@ -49,6 +49,7 @@ const AssignCar = () => {
   const [babyChair, setBabyChair] = useState("");
   const [deposit, setDeposit] = useState("");
   const [inventory, setInventory] = useState("");
+  const [payLaterFee, setPayLaterFee] = useState("");
 
   const [formError, setFormError] = useState(false);
 
@@ -153,6 +154,10 @@ const AssignCar = () => {
     setBabyChair(e.target.value);
   };
 
+  const handlePayLaterFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPayLaterFee(e.target.value);
+  };
+
   const handleTheftProtectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTheftProtection(e.target.value);
   };
@@ -234,6 +239,7 @@ const AssignCar = () => {
         fullInsurance: extraToNumber(fullInsurance),
         additionalDriver: extraToNumber(additionalDriver),
         inventory: Number(inventory),
+        payLaterFee: Number(payLaterFee),
       };
 
       const carResult = await CarService.assign(data);
@@ -429,6 +435,17 @@ const AssignCar = () => {
                   variant="standard"
                   autoComplete="off"
                   value={babyChair}
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="dense">
+                <TextField
+                  label={`${csStrings.PAY_LATER_FEE} (${csStrings.PERCENTAGE_FINAL_PRICE})`}
+                  inputProps={{ inputMode: "numeric", pattern: "^\\d+(.\\d+)?$" }}
+                  onChange={handlePayLaterFeeChange}
+                  variant="standard"
+                  autoComplete="off"
+                  value={payLaterFee}
                 />
               </FormControl>
 

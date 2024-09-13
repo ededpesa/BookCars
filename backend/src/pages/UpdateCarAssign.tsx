@@ -53,6 +53,7 @@ const UpdateAssignCar = () => {
   const [babyChair, setBabyChair] = useState("");
   const [deposit, setDeposit] = useState("");
   const [inventory, setInventory] = useState("");
+  const [payLaterFee, setPayLaterFee] = useState("");
 
   const [formError, setFormError] = useState(false);
 
@@ -106,6 +107,7 @@ const UpdateAssignCar = () => {
               setCollisionDamageWaiver(extraToString(_carSupplier.collisionDamageWaiver));
               setFullInsurance(extraToString(_carSupplier.fullInsurance));
               setAdditionalDriver(extraToString(_carSupplier.additionalDriver));
+              setPayLaterFee(_carSupplier.payLaterFee?.toString() ?? "");
 
               if (_user.type === bookcarsTypes.RecordType.Supplier) {
                 setIsSupplier(true);
@@ -180,6 +182,10 @@ const UpdateAssignCar = () => {
 
   const handleBabyChairChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBabyChair(e.target.value);
+  };
+
+  const handlePayLaterFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPayLaterFee(e.target.value);
   };
 
   const handleTheftProtectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -265,8 +271,9 @@ const UpdateAssignCar = () => {
         fullInsurance: extraToNumber(fullInsurance),
         additionalDriver: extraToNumber(additionalDriver),
         inventory: Number(inventory),
+        payLaterFee: Number(payLaterFee),
       };
-
+      console.log(data);
       const status = await CarService.updateAssign(data);
 
       if (status === 200) {
@@ -461,6 +468,17 @@ const UpdateAssignCar = () => {
                   variant="standard"
                   autoComplete="off"
                   value={babyChair}
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="dense">
+                <TextField
+                  label={`${csStrings.PAY_LATER_FEE} (${csStrings.PERCENTAGE_FINAL_PRICE})`}
+                  inputProps={{ inputMode: "numeric", pattern: "^\\d+(.\\d+)?$" }}
+                  onChange={handlePayLaterFeeChange}
+                  variant="standard"
+                  autoComplete="off"
+                  value={payLaterFee}
                 />
               </FormControl>
 

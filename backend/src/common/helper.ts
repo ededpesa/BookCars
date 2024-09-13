@@ -590,6 +590,10 @@ export const price = async (
       if (booking.additionalDriver && car.additionalDriver > 0) {
         _price += car.additionalDriver * days;
       }
+      if (booking.payLaterFee) {
+        _price *= 1 + booking.payLaterFee / 100;
+        _price = Math.ceil(Number(_price.toFixed(4)) * 100) / 100;
+      }
 
       if (onSucess) {
         onSucess(_price);
