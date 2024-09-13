@@ -11,7 +11,7 @@ const Footer = () => {
 
   return (
     <div className="footer">
-      <div className="header">QualityCars</div>
+      <div className="header">Upyrental</div>
       <section className="main">
         <div className="main-section">
           <div className="title">{strings.CORPORATE}</div>

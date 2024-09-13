@@ -609,5 +609,5 @@ export interface CarOptions {
   collisionDamageWaiver?: boolean;
   fullInsurance?: boolean;
   additionalDriver?: boolean;
-  paylater: boolean;
+  paylater?: boolean;
 }
