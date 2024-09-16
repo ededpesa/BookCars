@@ -286,23 +286,81 @@ const Header = ({ user, hidden, hideSignin, headerTitle }: HeaderProps) => {
             borderBottom: "1px solid #ddd",
           }}
         >
-          <Toolbar className="toolbar">
-            {isLoaded && !loading && (
-              <>
-                <IconButton edge="start" sx={classes.menuButton} aria-label="open drawer" onClick={handleSideMenuOpen}>
-                  <MenuIcon />
-                </IconButton>
+          <Toolbar className="toolbar parent">
+            <div className="div1">
+              {isLoaded && !loading && (
+                <>
+                  <IconButton edge="start" sx={classes.menuButton} aria-label="open drawer" onClick={handleSideMenuOpen}>
+                    <MenuIcon />
+                  </IconButton>
 
-                <Link href="/" className="logo">
-                  {/* <i>
+                  {!env.isMobile() && headerTitle && <div className="header-title">{headerTitle}</div>}
+                </>
+              )}
+            </div>
+            <div className="div2">
+              <Link href="/" className="logo">
+                {/* <i>
                     <span style={{ color: "#b90202" }}>QUALITY</span>CARS
                   </i> */}
-                  <img src={logo} alt="logo" width="100" />
-                </Link>
+                <img src={logo} alt="logo" />
+              </Link>
+            </div>
+            <div className="div3">
+              {(env.isMobile() || !headerTitle) && <div style={classes.grow} />}
+              <div className="header-desktop">
+                {isSignedIn && (
+                  <IconButton aria-label="" onClick={handleNotificationsClick} className="btn">
+                    <Badge badgeContent={notificationCount > 0 ? notificationCount : null} color="info">
+                      <NotificationsIcon />
+                    </Badge>
+                  </IconButton>
+                )}
+                {!hideSignin && !isSignedIn && isLoaded && !loading && (
+                  <Button
+                    variant="contained"
+                    startIcon={<LoginIcon />}
+                    href="/sign-in"
+                    disableElevation
+                    fullWidth
+                    className="btn"
+                    style={{ minWidth: "180px" }}
+                  >
+                    {strings.SIGN_IN}
+                  </Button>
+                )}
+                {isLoaded && !loading && (
+                  <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn">
+                    {lang?.label}
+                  </Button>
+                )}
+                {isSignedIn && (
+                  <IconButton edge="end" aria-label="account" aria-controls={menuId} aria-haspopup="true" onClick={handleAccountMenuOpen} className="btn">
+                    <Avatar loggedUser={user} user={user} size="small" readonly />
+                  </IconButton>
+                )}
+              </div>
+              <div className="header-mobile">
+                {!isSignedIn && !loading && (
+                  <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn">
+                    {lang?.label}
+                  </Button>
+                )}
+                {isSignedIn && (
+                  <IconButton onClick={handleNotificationsClick} className="btn">
+                    <Badge badgeContent={notificationCount > 0 ? notificationCount : null} color="info">
+                      <NotificationsIcon />
+                    </Badge>
+                  </IconButton>
+                )}
+                {isSignedIn && (
+                  <IconButton aria-label="show more" aria-controls={mobileMenuId} aria-haspopup="true" onClick={handleMobileMenuOpen} className="btn">
+                    <MoreIcon />
+                  </IconButton>
+                )}
+              </div>
+            </div>
 
-                {!env.isMobile() && headerTitle && <div className="header-title">{headerTitle}</div>}
-              </>
-            )}
             <Drawer open={isSideMenuOpen} onClose={handleSideMenuClose} className="menu">
               <List sx={classes.list}>
                 <ListItemLink href="/">
@@ -319,12 +377,12 @@ const Header = ({ user, hidden, hideSignin, headerTitle }: HeaderProps) => {
                     <ListItemText primary={strings.BOOKINGS} />
                   </ListItemLink>
                 )}
-                <ListItemLink href="/suppliers">
+                {/* <ListItemLink href="/suppliers">
                   <ListItemIcon>
                     <SupplierIcon />
                   </ListItemIcon>
                   <ListItemText primary={strings.SUPPLIERS} />
-                </ListItemLink>
+                </ListItemLink> */}
                 <ListItemLink href="/locations">
                   <ListItemIcon>
                     <LocationIcon />
@@ -359,50 +417,6 @@ const Header = ({ user, hidden, hideSignin, headerTitle }: HeaderProps) => {
                 )}
               </List>
             </Drawer>
-            {(env.isMobile() || !headerTitle) && <div style={classes.grow} />}
-            <div className="header-desktop">
-              {isSignedIn && (
-                <IconButton aria-label="" onClick={handleNotificationsClick} className="btn">
-                  <Badge badgeContent={notificationCount > 0 ? notificationCount : null} color="info">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton>
-              )}
-              {!hideSignin && !isSignedIn && isLoaded && !loading && (
-                <Button variant="contained" startIcon={<LoginIcon />} href="/sign-in" disableElevation fullWidth className="btn" style={{ minWidth: "180px" }}>
-                  {strings.SIGN_IN}
-                </Button>
-              )}
-              {isLoaded && !loading && (
-                <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn">
-                  {lang?.label}
-                </Button>
-              )}
-              {isSignedIn && (
-                <IconButton edge="end" aria-label="account" aria-controls={menuId} aria-haspopup="true" onClick={handleAccountMenuOpen} className="btn">
-                  <Avatar loggedUser={user} user={user} size="small" readonly />
-                </IconButton>
-              )}
-            </div>
-            <div className="header-mobile">
-              {!isSignedIn && !loading && (
-                <Button variant="contained" startIcon={<LanguageIcon />} onClick={handleLangMenuOpen} disableElevation fullWidth className="btn">
-                  {lang?.label}
-                </Button>
-              )}
-              {isSignedIn && (
-                <IconButton onClick={handleNotificationsClick} className="btn">
-                  <Badge badgeContent={notificationCount > 0 ? notificationCount : null} color="info">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton>
-              )}
-              {isSignedIn && (
-                <IconButton aria-label="show more" aria-controls={mobileMenuId} aria-haspopup="true" onClick={handleMobileMenuOpen} className="btn">
-                  <MoreIcon />
-                </IconButton>
-              )}
-            </div>
           </Toolbar>
         </AppBar>
 

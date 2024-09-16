@@ -34,6 +34,25 @@
   font-weight: 800;
   color: #121212;
   display: flex;
+  width: 150px;
+}
+
+.parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Centra verticalmente los hijos */
+  position: relative;
+}
+
+.div1,
+.div3 {
+  flex: 0 0 auto; /* Evita que div1 y div3 crezcan automáticamente */
+}
+
+.div2 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Device width is greater than or equal to 960px */
@@ -62,5 +81,18 @@
 
   .toolbar {
     min-height: 56px !important;
+  }
+}
+
+@media (width <= 400px) {
+  .header .logo {
+    width: 100px;
+  }
+}
+
+@media (width <= 350px) {
+  .div2 {
+    position: static;
+    transform: none;
   }
 }
