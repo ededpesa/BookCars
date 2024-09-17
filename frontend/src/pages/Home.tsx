@@ -251,11 +251,11 @@ const Home = () => {
         </div> */}
 
         <div className="home-map">
-          <h1 className="title">{strings.OUR_CARS}</h1>
+          <h1 className="title text-blue">{strings.OUR_CARS}</h1>
           <div className="car-slide">
-            <img src="https://qualitycars.legendsoft.com/cdn/cars/628b4c1207188687127f3128_1653296146453.jpg" />
-            <img src="https://qualitycars.legendsoft.com/cdn/cars/628b4aa007188687127f3094_1653295776619.jpg" />
-            <img src="https://qualitycars.legendsoft.com/cdn/cars/628bd18107188687127f3e2c_1653330305177.jpg" />
+            <img src="https://upyrental.com/cdn/cars/628b4c1207188687127f3128_1653296146453.jpg" />
+            <img src="https://upyrental.com/cdn/cars/628b4aa007188687127f3094_1653295776619.jpg" />
+            <img src="https://upyrental.com/cdn/cars/628bd18107188687127f3e2c_1653330305177.jpg" />
           </div>
         </div>
 
