@@ -122,8 +122,7 @@ export const joinURL = (part1: string, part2: string): string => {
  * @param {string} filename
  * @returns {string}
  */
-export const getFilenameWithoutExtension = (filename: string): string =>
-  path.parse(filename).name;
+export const getFilenameWithoutExtension = (filename: string): string => path.parse(filename).name;
 
 /**
  * Clone an object or an array.
@@ -131,8 +130,7 @@ export const getFilenameWithoutExtension = (filename: string): string =>
  * @param {*} obj
  * @returns {*}
  */
-export const clone = (obj: any) =>
-  Array.isArray(obj) ? Array.from(obj) : { ...obj };
+export const clone = (obj: any) => (Array.isArray(obj) ? Array.from(obj) : { ...obj });
 
 /**
  * Check ObjectId.
@@ -148,8 +146,7 @@ export const isValidObjectId = (id?: string) => mongoose.isValidObjectId(id);
  * @param {string} email
  * @returns {boolean}
  */
-export const isValidEmail = (email?: string) =>
-  !!email && validator.isEmail(email);
+export const isValidEmail = (email?: string) => !!email && validator.isEmail(email);
 
 /**
  * Generate user token.
@@ -164,9 +161,7 @@ export const generateToken = () => `${uuid()}-${Date.now()}`;
  * @param {string} locale
  * @returns {Stripe.Checkout.SessionCreateParams.Locale}
  */
-export const getStripeLocale = (
-  locale: string,
-): Stripe.Checkout.SessionCreateParams.Locale => {
+export const getStripeLocale = (locale: string): Stripe.Checkout.SessionCreateParams.Locale => {
   const locales = [
     "bg",
     "cs",
