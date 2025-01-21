@@ -43,7 +43,7 @@ import Avatar from "./Avatar";
 import * as langHelper from "../common/langHelper";
 import * as helper from "../common/helper";
 import { useGlobalContext, GlobalContextType } from "../context/GlobalContext";
-import logo from "../assets/img/logo_legendsoft.png";
+import logo from "../assets/img/legendtravel.png";
 
 import "../assets/css/header.css";
 
@@ -90,7 +90,7 @@ const Header = ({ user, hidden, hideSignin, headerTitle }: HeaderProps) => {
     },
     menuButton: {
       marginRight: 2,
-      color: "#121212",
+      color: "#fff",
     },
   };
 
@@ -281,9 +281,9 @@ const Header = ({ user, hidden, hideSignin, headerTitle }: HeaderProps) => {
         <AppBar
           position="relative"
           sx={{
-            bgcolor: "#fff",
+            bgcolor: "#000",
             boxShadow: "none",
-            borderBottom: "1px solid #ddd",
+            borderBottom: "1px solid #000",
           }}
         >
           <Toolbar className="toolbar parent">

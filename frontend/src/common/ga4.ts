@@ -11,7 +11,7 @@ export const init = () =>
 
 export const sendEvent = (name: string) =>
   ga4.event("screen_view", {
-    app_name: "Upyrental",
+    app_name: "Legendtravel",
     screen_name: name,
   });
 

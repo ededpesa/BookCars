@@ -43,7 +43,7 @@ import Avatar from "./Avatar";
 import * as langHelper from "../common/langHelper";
 import * as helper from "../common/helper";
 import { useGlobalContext, GlobalContextType } from "../context/GlobalContext";
-import logo from "../assets/img/upyrental_azul_fondo_oscuro.svg";
+import logo from "../assets/img/legendtravel.png";
 
 import "../assets/css/header.css";
 
@@ -272,7 +272,7 @@ const Header = ({ user, hidden }: HeaderProps) => {
 
   return (
     <div style={hidden ? { display: "none" } : classes.grow} className="header">
-      <AppBar position="fixed" sx={{ bgcolor: "#455fee" }}>
+      <AppBar position="fixed" sx={{ bgcolor: "#000" }}>
         <Toolbar className="toolbar">
           {isLoaded && !loading && isSignedIn && (
             <>

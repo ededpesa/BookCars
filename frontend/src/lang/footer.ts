@@ -1,7 +1,7 @@
 import LocalizedStrings from "react-localization";
 import * as langHelper from "../common/langHelper";
 
-const COPYRIGHT_PART1 = `Copyright © ${new Date().getFullYear()} Upyrental`;
+const COPYRIGHT_PART1 = `Copyright © ${new Date().getFullYear()} Legendtravel`;
 
 const strings = new LocalizedStrings({
   fr: {
@@ -16,7 +16,7 @@ const strings = new LocalizedStrings({
     LOCATIONS: "Lieux",
     SUPPORT: "Support",
     CONTACT: "Contact",
-    SECURE_PAYMENT: "Paiement 100% sécurisé avec Upyrental",
+    SECURE_PAYMENT: "Paiement 100% sécurisé avec Legendtravel",
   },
   en: {
     COPYRIGHT_PART1,
@@ -30,7 +30,7 @@ const strings = new LocalizedStrings({
     LOCATIONS: "Locations",
     SUPPORT: "Support",
     CONTACT: "Contact",
-    SECURE_PAYMENT: "100% secure payment with Upyrental",
+    SECURE_PAYMENT: "100% secure payment with Legendtravel",
   },
   es: {
     COPYRIGHT_PART1,
@@ -44,7 +44,7 @@ const strings = new LocalizedStrings({
     LOCATIONS: "Ubicaciones",
     SUPPORT: "Soporte",
     CONTACT: "Contacto",
-    SECURE_PAYMENT: "Pago 100% seguro con Upyrental",
+    SECURE_PAYMENT: "Pago 100% seguro con Legendtravel",
   },
 });
 
