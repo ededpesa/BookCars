@@ -41,7 +41,5 @@ if (
     });
   };
 
-  ["SIGINT", "SIGTERM", "SIGQUIT"].forEach((signal) =>
-    process.on(signal, close),
-  );
+  ["SIGINT", "SIGTERM", "SIGQUIT"].forEach((signal) => process.on(signal, close));
 }
