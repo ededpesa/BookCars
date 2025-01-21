@@ -43,7 +43,7 @@ import Avatar from "./Avatar";
 import * as langHelper from "../common/langHelper";
 import * as helper from "../common/helper";
 import { useGlobalContext, GlobalContextType } from "../context/GlobalContext";
-import logo from "../assets/img/upyrental_azul.svg";
+import logo from "../assets/img/logo_legendsoft.png";
 
 import "../assets/css/header.css";
 
