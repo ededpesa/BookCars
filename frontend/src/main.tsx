@@ -4,17 +4,9 @@ import { ToastContainer } from "react-toastify";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import {
-  frFR as corefrFR,
-  enUS as coreenUS,
-  elGR as coreelGR,
-} from "@mui/material/locale";
+import { frFR as corefrFR, enUS as coreenUS, elGR as coreelGR } from "@mui/material/locale";
 import { frFR, enUS, elGR } from "@mui/x-date-pickers/locales";
-import {
-  frFR as dataGridfrFR,
-  enUS as dataGridenUS,
-  elGR as dataGridelGR,
-} from "@mui/x-data-grid/locales";
+import { frFR as dataGridfrFR, enUS as dataGridenUS, elGR as dataGridelGR } from "@mui/x-data-grid/locales";
 import { disableDevTools } from ":disable-react-devtools";
 import * as helper from "./common/helper";
 import * as UserService from "./services/UserService";
@@ -238,7 +230,7 @@ const theme = createTheme(
   },
   isFr ? frFR : isEL ? elGR : enUS,
   isFr ? dataGridfrFR : isEL ? dataGridelGR : dataGridenUS,
-  isFr ? corefrFR : isEL ? coreelGR : coreenUS,
+  isFr ? corefrFR : isEL ? coreelGR : coreenUS
 );
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -257,5 +249,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         theme="dark"
       />
     </CssBaseline>
-  </ThemeProvider>,
+  </ThemeProvider>
 );

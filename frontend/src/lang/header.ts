@@ -14,6 +14,7 @@ const strings = new LocalizedStrings({
     SIGN_OUT: "Déconnexion",
     SUPPLIERS: "Fournisseurs",
     LOCATIONS: "Lieux",
+    DIRECT_PAYMENT: "Paiement direct",
   },
   en: {
     SIGN_IN: "Sign in",
@@ -27,6 +28,7 @@ const strings = new LocalizedStrings({
     SIGN_OUT: "Sign out",
     SUPPLIERS: "Suppliers",
     LOCATIONS: "Locations",
+    DIRECT_PAYMENT: "Direct payment",
   },
   es: {
     SIGN_IN: "Iniciar sesión",
@@ -40,6 +42,7 @@ const strings = new LocalizedStrings({
     SIGN_OUT: "Cerrar sesión",
     SUPPLIERS: "Proveedores",
     LOCATIONS: "Ubicaciones",
+    DIRECT_PAYMENT: "Pago directo",
   },
 });
 

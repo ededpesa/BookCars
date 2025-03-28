@@ -20,7 +20,7 @@ import * as bookingController from "./bookingController";
  * @returns {unknown}
  */
 export const createCheckoutSession = async (req: Request, res: Response) => {
-  const { amount, currency, locale, receiptEmail, name, description, customerName }: bookcarsTypes.CreatePaymentPayload = req.body;
+  const { amount, currency, locale, receiptEmail, name, description, customerName, isDirect }: bookcarsTypes.CreatePaymentPayload = req.body;
 
   try {
     //
@@ -58,7 +58,9 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         },
       ],
       mode: "payment",
-      return_url: `${helper.trimEnd(env.FRONTEND_HOST, "/")}/checkout-session/{CHECKOUT_SESSION_ID}`,
+      return_url: isDirect
+        ? `${helper.trimEnd(env.FRONTEND_HOST, "/")}/payment-success`
+        : `${helper.trimEnd(env.FRONTEND_HOST, "/")}/checkout-session/{CHECKOUT_SESSION_ID}`,
       customer: customer.id,
       locale: helper.getStripeLocale(locale),
       payment_intent_data: {

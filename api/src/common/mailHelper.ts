@@ -9,9 +9,7 @@ import * as env from "../config/env.config";
  * @param {nodemailer.SendMailOptions} mailOptions
  * @returns {Promise<unknown>}
  */
-export const sendMail = (
-  mailOptions: nodemailer.SendMailOptions,
-): Promise<nodemailer.SentMessageInfo> => {
+export const sendMail = (mailOptions: nodemailer.SendMailOptions): Promise<nodemailer.SentMessageInfo> => {
   const transporterOptions: SMTPTransport.Options = {
     host: env.SMTP_HOST,
     port: env.SMTP_PORT,
@@ -21,19 +19,15 @@ export const sendMail = (
     },
   };
 
-  const transporter: nodemailer.Transporter =
-    nodemailer.createTransport(transporterOptions);
+  const transporter: nodemailer.Transporter = nodemailer.createTransport(transporterOptions);
 
   return new Promise((resolve, reject) => {
-    transporter.sendMail(
-      mailOptions,
-      (err: Error | null, info: nodemailer.SentMessageInfo) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(info);
-        }
-      },
-    );
+    transporter.sendMail(mailOptions, (err: Error | null, info: nodemailer.SentMessageInfo) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(info);
+      }
+    });
   });
 };

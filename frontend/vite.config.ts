@@ -11,18 +11,9 @@ export default ({ mode }: { mode: string }) => {
 
     resolve: {
       alias: {
-        ":bookcars-types": path.resolve(
-          __dirname,
-          "../packages/bookcars-types",
-        ),
-        ":bookcars-helper": path.resolve(
-          __dirname,
-          "../packages/bookcars-helper",
-        ),
-        ":disable-react-devtools": path.resolve(
-          __dirname,
-          "../packages/disable-react-devtools",
-        ),
+        ":bookcars-types": path.resolve(__dirname, "../packages/bookcars-types"),
+        ":bookcars-helper": path.resolve(__dirname, "../packages/bookcars-helper"),
+        ":disable-react-devtools": path.resolve(__dirname, "../packages/disable-react-devtools"),
       },
     },
 

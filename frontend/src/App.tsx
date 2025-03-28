@@ -28,6 +28,8 @@ const Contact = lazy(() => import("./pages/Contact"));
 const NoMatch = lazy(() => import("./pages/NoMatch"));
 const Locations = lazy(() => import("./pages/Locations"));
 const Suppliers = lazy(() => import("./pages/Suppliers"));
+const Payment = lazy(() => import("./pages/Payment"));
+const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 
 const App = () => (
   <GlobalProvider>
@@ -43,10 +45,8 @@ const App = () => (
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route
-              path="/checkout-session/:sessionId"
-              element={<CheckoutSession />}
-            />
+            <Route path="/checkout-session/:sessionId" element={<CheckoutSession />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/settings" element={<Settings />} />
@@ -57,6 +57,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/locations" element={<Locations />} />
             <Route path="/suppliers" element={<Suppliers />} />
+            <Route path="/payment" element={<Payment />} />
 
             <Route path="*" element={<NoMatch />} />
           </Routes>

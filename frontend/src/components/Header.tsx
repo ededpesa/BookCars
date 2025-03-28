@@ -31,6 +31,7 @@ import {
   EventSeat as BookingsIcon,
   CarRental as SupplierIcon,
   LocationOn as LocationIcon,
+  Payment as PaymentIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import * as bookcarsTypes from ":bookcars-types";
@@ -407,6 +408,15 @@ const Header = ({ user, hidden, hideSignin, headerTitle }: HeaderProps) => {
                   </ListItemIcon>
                   <ListItemText primary={strings.CONTACT} />
                 </ListItemLink>
+                {user?.email == env.PAYMENT_EMAIL && (
+                  <ListItemLink href="/payment">
+                    <ListItemIcon>
+                      <PaymentIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={strings.DIRECT_PAYMENT} />
+                  </ListItemLink>
+                )}
+
                 {env.isMobile() && !hideSignin && !isSignedIn && isLoaded && !loading && (
                   <ListItemLink href="/sign-in">
                     <ListItemIcon>

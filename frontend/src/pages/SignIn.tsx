@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Paper,
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Link,
-} from "@mui/material";
+import { Paper, FormControl, InputLabel, Input, Button, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { strings as commonStrings } from "../lang/common";
 import { strings } from "../lang/sign-in";
@@ -16,6 +9,7 @@ import Layout from "../components/Layout";
 import * as bookcarsTypes from ":bookcars-types";
 
 import "../assets/css/signin.css";
+import env from "../config/env.config";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -34,9 +28,7 @@ const SignIn = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLElement>,
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLElement>) => {
     try {
       e.preventDefault();
 
@@ -50,6 +42,9 @@ const SignIn = () => {
           setBlacklisted(true);
         } else {
           setError(false);
+          if (email === env.PAYMENT_EMAIL) {
+            navigate("/payment");
+          }
 
           const params = new URLSearchParams(window.location.search);
           if (params.has("from")) {
@@ -106,22 +101,11 @@ const SignIn = () => {
               <h1 className="signin-form-title">{strings.SIGN_IN_HEADING}</h1>
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.EMAIL}</InputLabel>
-                <Input
-                  type="text"
-                  onChange={handleEmailChange}
-                  autoComplete="email"
-                  required
-                />
+                <Input type="text" onChange={handleEmailChange} autoComplete="email" required />
               </FormControl>
               <FormControl fullWidth margin="dense">
                 <InputLabel>{commonStrings.PASSWORD}</InputLabel>
-                <Input
-                  onChange={handlePasswordChange}
-                  onKeyDown={handlePasswordKeyDown}
-                  autoComplete="password"
-                  type="password"
-                  required
-                />
+                <Input onChange={handlePasswordChange} onKeyDown={handlePasswordKeyDown} autoComplete="password" type="password" required />
               </FormControl>
 
               <div className="stay-connected">
@@ -140,20 +124,10 @@ const SignIn = () => {
               </div>
 
               <div className="signin-buttons">
-                <Button
-                  variant="contained"
-                  size="small"
-                  href="/sign-up"
-                  className="btn-secondary btn-margin btn-margin-bottom"
-                >
+                <Button variant="contained" size="small" href="/sign-up" className="btn-secondary btn-margin btn-margin-bottom">
                   {strings.SIGN_UP}
                 </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="small"
-                  className="btn-primary btn-margin btn-margin-bottom"
-                >
+                <Button type="submit" variant="contained" size="small" className="btn-primary btn-margin btn-margin-bottom">
                   {strings.SIGN_IN}
                 </Button>
               </div>

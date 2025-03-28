@@ -7,12 +7,8 @@ import axiosInstance from "./axiosInstance";
  * @param {bookcarsTypes.CreatePaymentPayload} payload
  * @returns {Promise<bookcarsTypes.PaymentResult>}
  */
-export const createCheckoutSession = (
-  payload: bookcarsTypes.CreatePaymentPayload,
-): Promise<bookcarsTypes.PaymentResult> =>
-  axiosInstance
-    .post("/api/create-checkout-session", payload)
-    .then((res) => res.data);
+export const createCheckoutSession = (payload: bookcarsTypes.CreatePaymentPayload): Promise<bookcarsTypes.PaymentResult> =>
+  axiosInstance.post("/api/create-checkout-session", payload).then((res) => res.data);
 
 /**
  * Check Checkout Session.
@@ -21,9 +17,7 @@ export const createCheckoutSession = (
  * @returns {Promise<number>}
  */
 export const checkCheckoutSession = (sessionId: string): Promise<number> =>
-  axiosInstance
-    .post(`/api/check-checkout-session/${sessionId}`, null)
-    .then((res) => res.status);
+  axiosInstance.post(`/api/check-checkout-session/${sessionId}`, null).then((res) => res.status);
 
 /**
  * Create Payment Intent.
@@ -31,9 +25,5 @@ export const checkCheckoutSession = (sessionId: string): Promise<number> =>
  * @param {bookcarsTypes.CreatePaymentPayload} payload
  * @returns {Promise<bookcarsTypes.CreatePaymentIntentResult>}
  */
-export const createPaymentIntent = (
-  payload: bookcarsTypes.CreatePaymentPayload,
-): Promise<bookcarsTypes.PaymentResult> =>
-  axiosInstance
-    .post("/api/create-payment-intent", payload)
-    .then((res) => res.data);
+export const createPaymentIntent = (payload: bookcarsTypes.CreatePaymentPayload): Promise<bookcarsTypes.PaymentResult> =>
+  axiosInstance.post("/api/create-payment-intent", payload).then((res) => res.data);

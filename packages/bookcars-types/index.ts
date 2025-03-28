@@ -561,6 +561,7 @@ export interface CreatePaymentPayload {
   customerName: string;
   name: string;
   description?: string;
+  isDirect?: boolean;
 }
 
 export interface PaymentResult {

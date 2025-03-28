@@ -71,6 +71,7 @@ const env = {
   DEPOSIT_FILTER_VALUE_2: Number.parseInt(String(import.meta.env.VITE_BC_DEPOSIT_FILTER_VALUE_2), 10),
   DEPOSIT_FILTER_VALUE_3: Number.parseInt(String(import.meta.env.VITE_BC_DEPOSIT_FILTER_VALUE_3), 10),
   WALLET_NETWORK: String(import.meta.env.VITE_BC_WALLET_NETWORK),
+  PAYMENT_EMAIL: String(import.meta.env.VITE_BC_PAYMENT_EMAIL),
 };
 
 export default env;
