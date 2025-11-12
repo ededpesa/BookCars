@@ -285,9 +285,14 @@ export const checkCar = async (req: Request, res: Response) => {
 
   try {
     const _id = new mongoose.Types.ObjectId(id);
-    const count = await Booking.find({ car: _id }).limit(1).countDocuments();
+    const count = await Booking.find({ car: _id, status: { $nin: [bookcarsTypes.BookingStatus.Cancelled, bookcarsTypes.BookingStatus.Deleted] } })
+      .limit(1)
+      .countDocuments();
+    const carSuppliers = await CarSupplier.find({ car: _id, status: { $ne: bookcarsTypes.CarStatus.Deleted } })
+      .limit(1)
+      .countDocuments();
 
-    if (count === 1) {
+    if (count === 1 || carSuppliers > 0) {
       return res.sendStatus(200);
     }
 
@@ -322,6 +327,7 @@ export const deleteCar = async (req: Request, res: Response) => {
         }
       }
       await Booking.deleteMany({ car: car._id });
+      await CarSupplier.deleteMany({ car: car._id });
     } else {
       return res.sendStatus(204);
     }

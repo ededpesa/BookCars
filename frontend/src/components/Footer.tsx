@@ -24,7 +24,7 @@ const Footer = () => {
           <div className="title">{strings.RENT}</div>
           <ul className="links">
             <li onClick={() => navigate("/suppliers")}>{strings.SUPPLIERS}</li>
-            <li onClick={() => navigate("/locations")}>{strings.LOCATIONS}</li>
+            {/* <li onClick={() => navigate("/locations")}>{strings.LOCATIONS}</li> */}
           </ul>
         </div>
         <div className="main-section">
@@ -34,7 +34,7 @@ const Footer = () => {
           </ul>
           <div className="contact">
             <MailOutline className="icon" />
-            <a href="mailto:info@qualitycars.ma">info@qualitycars.ma</a>
+            <a href="mailto:info@qualitycars.ma">contacto@legendtravel.com</a>
           </div>
         </div>
       </section>

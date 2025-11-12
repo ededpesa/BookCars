@@ -148,8 +148,8 @@ const Home = () => {
                 <LocationSelectList
                   label={commonStrings.PICK_UP_LOCATION}
                   hidePopupIcon
-                  customOpen={env.isMobile()}
-                  init={!env.isMobile()}
+                  customOpen={false}
+                  init={true}
                   required
                   variant="outlined"
                   value={selectedPickupLocation}
